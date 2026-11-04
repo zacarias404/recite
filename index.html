@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>生物专业英语卡片 · 细胞生物学 / 生物化学</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Ma+Shan+Zheng&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* —— 手账纸感配色 —— */
+    --paper:#F7F9F4;          /* 柔和浅米底色 */
+    --card:#FCFDFA;           /* 卡片纸 */
+    --ink:#37402f;            /* 墨绿黑 */
+    --ink-soft:#7c8572;       /* 次要文字 */
+    --green:#429958;          /* 主色 清新自然绿 */
+    --green-deep:#2f7d4f;
+    --orange:#E67A38;         /* 点缀暖橘 */
+    --bad:#d9594c;            /* 答错/没记住 红 */
+    --line:#c9d3c2;           /* 手绘细线 */
+    --tape:#42995826;         /* 胶带绿 */
+    --tape-o:#E67A3822;       /* 胶带橘 */
+    --hl:#fdf2b0;             /* 荧光高亮 */
+    --hand:"Ma Shan Zheng", "Kalam", "Caveat", cursive;
+    --hand-en:"Caveat", "Kalam", cursive;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink);
+    background-color:var(--paper);
+    /* 淡淡笔记压痕（横线）+ 极淡网格 */
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 30px, #6e8a6e10 30px, #6e8a6e10 31px),
+      repeating-linear-gradient(90deg, transparent, transparent 30px, #6e8a6e08 30px, #6e8a6e08 31px);
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:contain;
+  }
+  #app{max-width:680px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;
+    padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+  /* 宽屏（平板横屏）容器加宽，两侧留白交给装饰层 */
+  @media (min-width:760px){
+    #app{max-width:880px;}
+    .hero{padding:24px 30px 6px;}
+    .hero h1{font-size:30px;}
+    .hero .sub{font-size:15px;max-width:70%;}
+    .bookcard{margin:20px 30px;padding:24px 26px;}
+    .bookcard .bt .bn{font-size:21px;}
+    .bookcard .bt .ba{font-size:12.5px;}
+    .bookcard .badge{width:58px;height:58px;font-size:28px;}
+    .bookcard .illbox{width:64px;height:80px;right:26px;top:18px;}
+    .chap{margin:13px 30px;padding:17px 20px;}
+    .chap .cn .t{font-size:16.5px;}
+    .home-actions{margin:8px 30px 0;}
+    .ghost{font-size:14.5px;padding:14px;}
+    .topbar{padding:18px 26px 6px;}
+    .topbar .title{font-size:19px;}
+    .progwrap{padding:10px 30px 0;}
+    .wordcard{margin:14px 30px;padding:34px 34px 28px;}
+    .wordcard .en{font-size:44px;}
+    .wordcard .en.m{font-size:33px;}
+    .wordcard .en.l{font-size:26px;}
+    .wordcard .kicker{font-size:17px;}
+    .wordcard .ph{font-size:17px;}
+    .wordcard .illcorner{width:76px;height:94px;right:26px;bottom:20px;}
+    .opt{margin:13px 30px 0;padding:18px 22px 18px 26px;font-size:17.5px;}
+    .opt::before{width:25px;height:25px;line-height:25px;font-size:15px;}
+    .dontknow{width:calc(100% - 60px);margin:16px 30px 0;padding:15px;font-size:15px;}
+    .reveal{margin:16px 30px 0;padding:18px 22px;}
+    .reveal .rm{font-size:17px;}
+    .nextrow{margin:18px 30px 8px;gap:14px;}
+    .btn{padding:17px;font-size:17px;}
+    .banner{margin:14px 30px;}
+    .favitem{margin:13px 30px;padding:16px 18px;}
+    .chaphead{margin:8px 30px 2px;}
+    .reset{margin:22px 30px;}
+  }
+
+
+  /* —— 通用手账纸卡（随性手绘边线） —— */
+  .paper{
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    box-shadow:0 1px 0 #00000003, 0 7px 20px #3c5a3c0d;
+    position:relative;
+  }
+  /* 胶带贴纸 */
+  .tape{position:absolute;width:90px;height:26px;top:-13px;left:22px;z-index:3;
+    background:var(--tape);
+    background-image:repeating-linear-gradient(90deg,#ffffff22 0 6px,transparent 6px 12px);
+    border-left:1px dashed #ffffff88;border-right:1px dashed #ffffff88;
+    transform:rotate(-3deg);box-shadow:0 1px 2px #0000000d;}
+  .tape.o{background:var(--tape-o);background-image:repeating-linear-gradient(90deg,#ffffff22 0 6px,transparent 6px 12px);}
+  .tape.r{right:-14px;left:auto;top:24px;width:24px;height:78px;transform:rotate(4deg);
+    background-image:repeating-linear-gradient(0deg,#ffffff22 0 6px,transparent 6px 12px);}
+
+  /* 大写知识点分类标签 */
+  .tag{display:inline-block;font-family:var(--hand-en);font-weight:700;letter-spacing:2.5px;
+    text-transform:uppercase;font-size:13px;color:#fff;background:var(--green);
+    padding:3px 11px;border-radius:4px;transform:rotate(-2deg);box-shadow:0 1px 2px #00000012;}
+  .tag.o{background:var(--orange);}
+  .tag.ghost{background:transparent;color:var(--green);border:1.5px solid var(--green);}
+
+  /* 手写批注 */
+  .scribble{font-family:var(--hand);color:var(--ink-soft);font-size:15px;line-height:1.5;
+    transform:rotate(-1.5deg);}
+  .scribble.o{color:var(--orange);}
+
+  /* —— 便利贴（sticky note） —— */
+  .sticky{
+    position:relative;padding:14px 16px 16px;font-size:13.5px;line-height:1.65;
+    background:#FBF7C9;color:#5d5a34;
+    box-shadow:0 6px 14px #00000012, inset 0 -18px 22px #00000005;
+    transform:rotate(-1.2deg);
+  }
+  /* 左下折角 */
+  .sticky::after{content:"";position:absolute;right:0;bottom:0;width:16px;height:16px;
+    background:linear-gradient(135deg, transparent 50%, #e0daa8 50%);}
+  .sticky.green{background:#E4F2E5;color:#2f5a37;}
+  .sticky.green::after{background:linear-gradient(135deg, transparent 50%, #c4ddc8 50%);}
+  .sticky.orange{background:#FCEADB;color:#8a4a1f;}
+  .sticky.orange::after{background:linear-gradient(135deg, transparent 50%, #f0d0b2 50%);}
+  .sticky.pink{background:#FBE3E4;color:#8a4040;}
+  .sticky.pink::after{background:linear-gradient(135deg, transparent 50%, #f0c6c8 50%);}
+  /* 图钉 */
+  .pin{position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #ff8a5c, var(--orange) 62%, #b8571f);
+    box-shadow:0 2px 4px #0000002e;}
+  .sticky .pin-t{display:block;font-family:var(--hand);font-size:15px;font-weight:700;margin-bottom:4px;}
+
+  /* —— 错词本 / 复习卡 —— */
+  .panel{margin:14px 16px;padding:16px 18px;}
+  .panel .ph2{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .panel .ph2 .ttl{font-weight:800;font-size:15px;}
+  .panel .ph2 .num{font-family:var(--hand-en);font-size:14px;color:var(--ink-soft);}
+  .wrongrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+  .chip{font-size:12.5px;padding:5px 10px;border-radius:20px;border:1.5px solid var(--line);
+    color:var(--ink-soft);background:var(--card);font-family:var(--hand-en);letter-spacing:.3px;}
+  .chip b{color:var(--bad);font-family:inherit;}
+  .chip.ok b{color:var(--green-deep);}
+
+
+  /* 线描插画 */
+  .ill{display:block;}
+  .ill svg{display:block;width:100%;height:100%;}
+  .deco{position:absolute;pointer-events:none;opacity:.85;}
+
+  /* —— 顶栏 —— */
+  .topbar{display:flex;align-items:center;gap:10px;padding:14px 16px 4px;}
+  .topbar .back{font-size:22px;color:var(--green-deep);background:none;border:none;cursor:pointer;
+    width:38px;height:38px;line-height:34px;text-align:center;border-radius:50%;flex:0 0 auto;font-weight:700;}
+  .topbar .back:active{background:#42995814;}
+  .topbar .title{font-size:17px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.5px;}
+  .topbar .meta{font-size:12px;color:var(--ink-soft);flex:0 0 auto;font-family:var(--hand-en);letter-spacing:1px;}
+
+  .pad{padding:0 16px;}
+  .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+
+  /* —— 首页 —— */
+  .hero{padding:16px 18px 2px;position:relative;}
+  .hero h1{font-size:25px;margin:0 0 6px;font-weight:900;letter-spacing:.5px;}
+  .hero .sub{color:var(--ink-soft);font-size:13.5px;line-height:1.7;margin:0;max-width:88%;}
+  .hero .deco{right:14px;top:6px;width:62px;height:78px;color:var(--green);opacity:.55;}
+  .hero .stamp{position:absolute;right:16px;bottom:-6px;color:var(--orange);opacity:.85;transform:rotate(8deg);width:54px;height:54px;}
+
+  .bookcard{margin:16px;padding:18px 16px 16px;cursor:pointer;display:flex;flex-direction:column;gap:12px;transition:.12s;}
+  .bookcard:active{transform:scale(.99);}
+  .bookcard .row1{display:flex;align-items:center;gap:13px;}
+  .badge{width:50px;height:50px;border-radius:15px 6px 15px 6px/6px 15px 6px 15px;display:flex;align-items:center;justify-content:center;
+    font-size:24px;color:#fff;flex:0 0 auto;box-shadow:0 2px 6px #0000001a;transform:rotate(-2deg);}
+  .bookcard .bt{flex:1;min-width:0;}
+  .bookcard .bt .bn{font-size:18px;font-weight:800;letter-spacing:.3px;}
+  .bookcard .bt .ba{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+  .bookcard .illbox{position:absolute;right:16px;top:14px;width:48px;height:60px;color:var(--green);opacity:.5;}
+  .bar{height:9px;border-radius:7px;background:#e7ebe2;overflow:hidden;border:1px solid #dde3d6;}
+  .bar > i{display:block;height:100%;border-radius:7px;
+    background:repeating-linear-gradient(45deg,var(--green) 0 6px,#5bb072 6px 12px);}
+  .bookcard .stat{display:flex;gap:16px;font-size:12px;color:var(--ink-soft);font-family:var(--hand-en);letter-spacing:.5px;}
+  .bookcard .stat b{color:var(--ink);font-weight:700;font-family:inherit;}
+  .bookcard .tagline{display:flex;align-items:center;gap:8px;}
+
+  /* —— 章节列表 —— */
+  .chaphead{display:flex;align-items:center;justify-content:space-between;margin:6px 16px 2px;}
+  .chap{margin:11px 16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:.12s;}
+  .chap:active{transform:scale(.99);}
+  .chap .dot{width:30px;height:30px;flex:0 0 auto;color:var(--green);opacity:.7;}
+  .chap .cn{flex:1;min-width:0;}
+  .chap .cn .t{font-size:15px;font-weight:700;}
+  .chap .cn .s{font-size:12px;color:var(--ink-soft);margin-top:4px;font-family:var(--hand-en);letter-spacing:.5px;}
+  .chap .go{color:var(--green-deep);font-size:20px;flex:0 0 auto;font-weight:700;}
+
+  .home-actions{display:flex;gap:10px;margin:6px 16px 0;flex-wrap:wrap;}
+  .ghost{flex:1;min-width:140px;background:var(--card);border:2px solid var(--line);border-radius:14px 5px 14px 5px/5px 14px 5px 14px;
+    padding:12px;font-size:13.5px;color:var(--ink-soft);text-align:center;cursor:pointer;font-weight:600;}
+  .ghost:active{background:#42995810;}
+
+  /* —— 学习页 —— */
+  .progwrap{padding:8px 16px 0;}
+  .prog{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-soft);margin-bottom:6px;
+    font-family:var(--hand-en);letter-spacing:.8px;}
+  .prog .mode{font-family:var(--hand);font-size:14px;color:var(--green-deep);}
+
+  .wordcard{margin:10px 16px;padding:26px 22px 22px;}
+  .wordcard .kicker{font-family:var(--hand-en);font-size:15px;color:var(--orange);letter-spacing:2px;text-transform:uppercase;}
+  .wordcard .en{font-size:33px;font-weight:800;line-height:1.15;margin:4px 0 4px;letter-spacing:.3px;word-break:break-word;}
+  /* 长术语自适应字号，避免挤成一团 */
+  .wordcard .en.m{font-size:25px;line-height:1.28;}
+  .wordcard .en.l{font-size:20px;line-height:1.32;font-weight:700;}
+  .wordcard .ph{font-size:15px;color:var(--ink-soft);margin-bottom:4px;font-family:var(--hand-en);}
+  .wordcard .illcorner{position:absolute;right:16px;bottom:14px;width:54px;height:68px;color:var(--green);opacity:.42;}
+  .star{position:absolute;top:16px;right:16px;font-size:26px;cursor:pointer;color:#c4ccc0;background:none;border:none;line-height:1;
+    transition:.15s;filter:drop-shadow(0 1px 1px #00000010);}
+  .star.on{color:var(--orange);transform:rotate(8deg) scale(1.05);}
+
+  .opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:14px 5px 14px 6px/6px 14px 5px 14px;
+    padding:15px 16px;margin:11px 16px 0;font-size:16px;color:var(--ink);cursor:pointer;transition:.12s;line-height:1.4;position:relative;}
+  .opt:active{background:#4299580d;transform:translateY(1px);}
+  .opt::before{content:attr(data-k);position:absolute;left:-9px;top:50%;transform:translateY(-50%) rotate(-4deg);
+    font-family:var(--hand-en);font-weight:700;font-size:14px;color:#fff;background:var(--green);
+    width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;box-shadow:0 1px 2px #00000022;}
+  .opt.ok{border-color:var(--green);background:#ecf6ee;color:#1f6b3a;font-weight:700;}
+  .opt.ok::before{background:var(--green);}
+  .opt.bad{border-color:var(--bad);background:#fbecea;color:#b23a2c;font-weight:700;}
+  .opt.bad::before{background:var(--bad);}
+  .opt.miss{border-color:var(--bad);background:#fdf0ec;color:#c0492f;font-weight:700;
+    background-image:repeating-linear-gradient(45deg,#fbecea 0 7px,#fdf0ec 7px 14px);}
+  .opt.miss::before{background:var(--bad);}
+  .opt.dim{opacity:.5;}
+  .opt:disabled{cursor:default;}
+
+  .dontknow{width:calc(100% - 32px);margin:13px 16px 0;background:#fffaf0;border:2px dashed var(--orange);border-radius:13px;
+    padding:13px;font-size:14px;color:var(--orange);cursor:pointer;font-weight:700;letter-spacing:.5px;}
+  .dontknow:active{background:#fff3e2;}
+
+  .reveal{margin:13px 16px 0;padding:14px 16px;background:#f4f8ef;border:2px solid var(--line);
+    border-radius:14px 6px 14px 6px/6px 14px 6px 14px;font-size:14px;line-height:1.65;position:relative;}
+  .reveal .rt{font-weight:800;color:var(--green-deep);margin-bottom:5px;font-size:15px;}
+  .reveal .rt.bad{color:var(--bad);}
+  .reveal .rm{font-size:15.5px;}
+  .reveal .rn{color:var(--ink-soft);font-size:13px;margin-top:7px;font-family:var(--hand-en);letter-spacing:.5px;}
+  mark{background:linear-gradient(transparent 52%, var(--hl) 52%);color:inherit;padding:0 3px;border-radius:2px;font-weight:700;}
+
+  .nextrow{display:flex;gap:10px;margin:15px 16px 6px;}
+  .btn{flex:1;border:none;border-radius:14px 5px 14px 5px/5px 14px 5px 14px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.5px;}
+  .btn.primary{background:var(--green);color:#fff;box-shadow:0 3px 0 #2f7d4f;}
+  .btn.primary:active{transform:translateY(2px);box-shadow:0 1px 0 #2f7d4f;}
+  .btn.sec{flex:0 0 44%;background:var(--card);border:2px solid var(--line);color:var(--ink);}
+  .btn.sec:active{background:#4299580d;}
+  .btn:disabled{opacity:.4;cursor:default;box-shadow:none;transform:none;}
+
+  /* 复习提示条 */
+  .banner{margin:12px 16px;padding:12px 14px;border-radius:12px 4px 12px 4px/4px 12px 4px 12px;
+    background:#fff4e2;color:#a9601f;font-size:13px;line-height:1.55;border:2px dashed var(--orange);position:relative;}
+
+  /* 收藏列表 */
+  .favitem{margin:11px 16px;padding:13px 15px;display:flex;align-items:center;gap:12px;}
+  .favitem .fe{flex:1;min-width:0;}
+  .favitem .fe .e{font-size:16px;font-weight:800;}
+  .favitem .fe .m{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .favitem .x{color:var(--bad);font-size:20px;cursor:pointer;background:none;border:none;width:34px;height:34px;}
+
+  .done{text-align:center;padding:30px 24px;}
+  .done .em{font-size:50px;}
+  .done h2{font-size:22px;margin:10px 0 4px;font-weight:900;}
+  .done p{color:var(--ink-soft);font-size:14px;margin:5px 0 16px;font-family:var(--hand-en);letter-spacing:.5px;}
+  .center-note{text-align:center;color:var(--ink-soft);padding:40px 24px;font-size:14px;line-height:1.7;}
+  .reset{margin:18px 16px;font-size:12px;color:#aeb6a4;text-align:center;cursor:pointer;font-family:var(--hand-en);letter-spacing:1px;}
+  .reset:active{color:var(--bad);}
+
+  .spacer{height:22px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ============ 线描生物插画（手绘风） ============ */
+const ILL = {
+  dna:`<svg viewBox="0 0 40 70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 4 C 30 16,10 22,26 34 C 10 46,30 52,14 66"/><path d="M26 4 C 10 16,30 22,14 34 C 30 46,10 52,26 66"/><path d="M15 10 H25"/><path d="M12 20 H28"/><path d="M12 32 H28"/><path d="M12 44 H28"/><path d="M15 54 H25"/></svg>`,
+  leaf:`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 38 C 10 14 34 6 42 6 C 42 30 18 38 10 38 Z"/><path d="M12 36 L 33 15"/></svg>`,
+  microscope:`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M30 8 C 36 12,36 20,30 24 C 24 20,24 12,30 8 Z"/><path d="M27 22 L 16 33"/><path d="M14 31 L 19 36"/><path d="M11 40 L 33 40"/><path d="M22 17 L 18 21"/></svg>`,
+  petri:`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="24" cy="24" r="18"/><circle cx="24" cy="24" r="14" opacity=".35"/><circle cx="18" cy="20" r="1.7" fill="currentColor" stroke="none"/><circle cx="28" cy="26" r="1.7" fill="currentColor" stroke="none"/><circle cx="22" cy="31" r="1.7" fill="currentColor" stroke="none"/><circle cx="31" cy="17" r="1.5" fill="currentColor" stroke="none"/></svg>`,
+  colony:`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2"><circle cx="20" cy="22" r="6"/><circle cx="29" cy="19" r="4.5"/><circle cx="31" cy="28" r="5"/><circle cx="22" cy="30" r="4"/></svg>`,
+  chloro:`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="24" cy="24" rx="20" ry="12"/><path d="M15 19 v10 M21 17 v14 M27 17 v14 M33 19 v10"/></svg>`,
+  flask:`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 6 H29 M21 6 V20 L12 40 a3 3 0 0 0 3 4 H33 a3 3 0 0 0 3 -4 L27 20 V6"/><path d="M16 32 H32" stroke-width="2.4"/></svg>`,
+  arrow:`<svg viewBox="0 0 60 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8 C 20 2,36 6,52 26"/><path d="M44 24 L54 28 L46 34"/></svg>`,
+  circle:`<svg viewBox="0 0 70 50" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 30 C 6 14,28 8,40 14 C 56 22,58 38,46 42 C 30 48,12 44,8 30 Z"/></svg>`
+};
+function ill(name, cls, w, h, color){
+  return `<span class="ill ${cls||''}" style="width:${w||40}px;height:${h||40}px;${color?`color:${color};`:''}">${ILL[name]||''}</span>`;
+}
+
+/* ============ 数据：两本书的常考英文名词（按章节） ============ */
+const DATA = {
+  cell:{
+    title:"细胞生物学",
+    author:"2027 求臻生物考研 · 中英互译训练",
+    emoji:"🧫",
+    accent:"#429958",
+    tag:"CELL",
+    chapters:[
+      {name:"一、绪论与细胞概述", terms:[
+        {e:"cytobiology",p:"/",m:"细胞生物学"},
+        {e:"cell theory",p:"/",m:"细胞学说"},
+        {e:"prokaryotic cell",p:"/",m:"原核细胞"},
+        {e:"eukaryotic cell",p:"/",m:"真核细胞"},
+        {e:"virus",p:"/",m:"病毒"},
+        {e:"ultrastructure",p:"/",m:"超微结构"},
+        {e:"plasmid",p:"/",m:"质粒"},
+        {e:"karyoid",p:"/",m:"类核"},
+        {e:"mycoplasma",p:"/",m:"支原体"},
+        {e:"archaebacteria",p:"/",m:"古细菌/古核细胞"},
+        {e:"Prion",p:"/",m:"朊病毒"},
+        {e:"protoplast",p:"/",m:"原生质体"},
+        {e:"viroid",p:"/",m:"类病毒"},
+        {e:"protoplasm theory",p:"/",m:"原生质理论"},
+        {e:"mesosome",p:"/",m:"中膜体"},
+        {e:"Capsule",p:"/",m:"荚膜"},
+      ]},
+      {name:"二、细胞生物学研究方法", terms:[
+        {e:"immunofluorescence",p:"/",m:"免疫荧光技术"},
+        {e:"fluorescence recovery after photobleaching (FRAP) / fluorescence photobleaching",p:"/",m:"光脱色恢复技术/荧光漂白恢复技术"},
+        {e:"cell line",p:"/",m:"细胞系"},
+        {e:"cell strain",p:"/",m:"细胞株"},
+        {e:"primary cell culture",p:"/",m:"原代细胞培养"},
+        {e:"subculture",p:"/",m:"传代细胞培养"},
+        {e:"flow cytometry",p:"/",m:"流式细胞术"},
+        {e:"model organism",p:"/",m:"模式生物"},
+        {e:"monoclonal antibody technique",p:"/",m:"单克隆抗体技术"},
+        {e:"in situ hybridization，ISH",p:"/",m:"原位杂交"},
+        {e:"FRET",p:"/",m:"荧光共振能量转移技术"},
+        {e:"cell fusion",p:"/",m:"细胞融合"},
+        {e:"finite cell lines",p:"/",m:"有限细胞系"},
+        {e:"Immortalized cell lines",p:"/",m:"永生细胞系"},
+        {e:"contact inhibition",p:"/",m:"接触抑制"},
+        {e:"negative staining",p:"/",m:"负染色技术"},
+        {e:"immunoelectron microscopy",p:"/",m:"免疫电镜技术"},
+        {e:"yeast two-hybrid system",p:"/",m:"酵母双杂交技术"},
+        {e:"autoradiography",p:"/",m:"放射自显影技术"},
+        {e:"Density gradient centrifugation",p:"/",m:"密度梯度离心"},
+        {e:"velocity sedimentation",p:"/",m:"速度沉降"},
+        {e:"isopycnic sedimentation",p:"/",m:"等密度沉降"},
+        {e:"phase-contrast microscope",p:"/",m:"相差显微镜"},
+        {e:"Cell culture",p:"/",m:"细胞培养"},
+        {e:"Fluorescence microscope",p:"/",m:"荧光显微镜"},
+        {e:"cell clone",p:"/",m:"细胞克隆"},
+        {e:"western blotting",p:"/",m:"免疫印迹"},
+        {e:"enzyme-linked immunosorbent assay，ELISA",p:"/",m:"酶联免疫吸附测定"},
+        {e:"laser scanning confocal microscope (LSCM)",p:"/",m:"激光扫描共焦显微镜"},
+        {e:"Hybridoma technology",p:"/",m:"杂交瘤技术"},
+        {e:"resolution",p:"/",m:"分辨率"},
+        {e:"Protoplast culture",p:"/",m:"原生质体培养"},
+        {e:"cell engineering",p:"/",m:"细胞工程"},
+        {e:"Scanning tunneling microscope，STM",p:"/",m:"扫描隧道显微镜"},
+        {e:"RNAi",p:"/",m:"RNA干扰"},
+        {e:"Fluorescence in situ hybridization，FISH",p:"/",m:"荧光原位杂交"},
+        {e:"cell attachment",p:"/",m:"细胞贴壁"},
+        {e:"micromanipulation",p:"/",m:"显微操作技术"},
+        {e:"monoclonal antibody",p:"/",m:"单克隆抗体"},
+        {e:"protein chip",p:"/",m:"蛋白质芯片"},
+        {e:"green fluorescent protein/GFP",p:"/",m:"绿色荧光蛋白"},
+        {e:"gene knockout",p:"/",m:"基因敲除"},
+        {e:"gene targeting",p:"/",m:"基因打靶"},
+        {e:"cell-free system",p:"/",m:"非细胞体系"},
+        {e:"cell monolayer",p:"/",m:"单层细胞"},
+        {e:"chromatographic technique",p:"/",m:"色谱技术"},
+        {e:"Single molecule technology",p:"/",m:"单分子技术"},
+        {e:"immunocytochemical technique",p:"/",m:"免疫细胞化学技术"},
+        {e:"tissue culture",p:"/",m:"组织培养（狭义指组织块培养）"},
+        {e:"primary cultured cell",p:"/",m:"原代细胞"},
+        {e:"electron microscope",p:"/",m:"电子显微镜"},
+        {e:"homokaryon",p:"/",m:"同核体"},
+        {e:"Polyclonal antibody",p:"/",m:"多克隆抗体"},
+        {e:"siRNA",p:"/",m:"小干扰RNA"},
+        {e:"scanning electron microscope (SEM)",p:"/",m:"扫描电镜"},
+        {e:"freeze-etching",p:"/",m:"冷冻蚀刻技术"},
+        {e:"hybridomas",p:"/",m:"杂交瘤"},
+        {e:"fluorescent protein",p:"/",m:"荧光蛋白"},
+        {e:"atomic force microscope",p:"/",m:"原子力显微镜"},
+      ]},
+      {name:"三、细胞质膜", terms:[
+        {e:"biomembrane",p:"/",m:"生物膜"},
+        {e:"Unit membrane",p:"/",m:"单位膜"},
+        {e:"integral membrane protein",p:"/",m:"膜整合蛋白/内在膜蛋白"},
+        {e:"lipid raft model",p:"/",m:"脂筏模型"},
+        {e:"membrane associated cytoskeleton",p:"/",m:"膜骨架"},
+        {e:"fluid mosaic model",p:"/",m:"流动镶嵌模型"},
+        {e:"plasma membrane",p:"/",m:"细胞质膜"},
+        {e:"lipid-anchored membrane protein",p:"/",m:"脂锚定膜蛋白"},
+        {e:"detergent",p:"/",m:"去垢剂"},
+        {e:"Liposome",p:"/",m:"脂质体"},
+        {e:"extrinsic membrane protein",p:"/",m:"外在膜蛋白/周边膜蛋白"},
+        {e:"patching",p:"/",m:"成斑现象"},
+        {e:"ghost",p:"/",m:"红细胞血影"},
+        {e:"spectrin",p:"/",m:"血影蛋白"},
+        {e:"band 3 protein",p:"/",m:"带3蛋白"},
+        {e:"Phospholipid",p:"/",m:"磷脂"},
+        {e:"critical micelle concentration,CMC",p:"/",m:"微团临界浓度"},
+        {e:"band 4.1 protein",p:"/",m:"带4.1蛋白"},
+        {e:"porin",p:"/",m:"孔蛋白"},
+        {e:"glycophorin",p:"/",m:"血型糖蛋白"},
+        {e:"cholesterol",p:"/",m:"胆固醇"},
+        {e:"membrane fluidity",p:"/",m:"膜的流动性"},
+      ]},
+      {name:"四、物质的跨膜运输", terms:[
+        {e:"simple diffusion",p:"/",m:"简单扩散"},
+        {e:"facilitated diffusion",p:"/",m:"协助扩散"},
+        {e:"passive transport",p:"/",m:"被动运输"},
+        {e:"active transport",p:"/",m:"主动运输"},
+        {e:"ATP-driven pump",p:"/",m:"ATP驱动泵"},
+        {e:"endocytosis",p:"/",m:"胞吞作用"},
+        {e:"exocytosis",p:"/",m:"胞吐作用"},
+        {e:"P-type pump",p:"/",m:"P型泵"},
+        {e:"carrier protein",p:"/",m:"载体蛋白"},
+        {e:"cotransporter",p:"/",m:"协同转运蛋白"},
+        {e:"ion channel",p:"/",m:"离子通道"},
+        {e:"phagocytosis",p:"/",m:"吞噬作用"},
+        {e:"pinocytosis",p:"/",m:"胞饮作用"},
+        {e:"Na+-K+ pump",p:"/",m:"Na+-K+泵"},
+        {e:"co-transport",p:"/",m:"协同转运"},
+        {e:"ABC superfamily",p:"/",m:"ABC超家族"},
+        {e:"Ca2+ pump",p:"/",m:"Ca2+泵"},
+        {e:"constitutive exocytosis pathway",p:"/",m:"组成型胞吐途径"},
+        {e:"Regulated exocytosis pathway",p:"/",m:"调节型胞吐途径"},
+        {e:"V-type proton pump",p:"/",m:"V型质子泵"},
+        {e:"F-type proton pump",p:"/",m:"F型质子泵"},
+        {e:"channel protein",p:"/",m:"通道蛋白"},
+        {e:"Action potential",p:"/",m:"动作电位"},
+        {e:"Membrane potential",p:"/",m:"膜电位"},
+        {e:"Resting potential",p:"/",m:"静息电位"},
+        {e:"membrane transport protein",p:"/",m:"膜转运蛋白"},
+        {e:"transcytosis",p:"/",m:"跨细胞转运"},
+        {e:"aquaporin",p:"/",m:"水孔蛋白"},
+        {e:"symport",p:"/",m:"同向转运"},
+        {e:"caveolae",p:"/",m:"胞膜窖"},
+        {e:"endosome",p:"/",m:"胞内体"},
+        {e:"receptor-mediated endocytosis",p:"/",m:"受体介导的胞吞作用"},
+        {e:"GLUT",p:"/",m:"葡糖转运蛋白家族"},
+        {e:"vesicular transport",p:"/",m:"膜泡运输"},
+        {e:"symporter",p:"/",m:"同向协同转运蛋白"},
+        {e:"proton pump",p:"/",m:"质子泵"},
+        {e:"light-driven pump",p:"/",m:"光驱动泵"},
+      ]},
+      {name:"五、细胞质基质与内膜系统", terms:[
+        {e:"endomembrane system",p:"/",m:"细胞内膜系统"},
+        {e:"N-linked glycosylation",p:"/",m:"N-连接的糖基化"},
+        {e:"O-linked glycosylation",p:"/",m:"O-连接的糖基化"},
+        {e:"peroxisome",p:"/",m:"过氧化物酶体"},
+        {e:"molecular chaperone",p:"/",m:"分子伴侣"},
+        {e:"cytoplasmic matrix",p:"/",m:"细胞质基质"},
+        {e:"proteasome",p:"/",m:"蛋白酶体"},
+        {e:"endoplasmic reticulum stress，ERS",p:"/",m:"内质网应激反应"},
+        {e:"ubiquitin-dependent pathway",p:"/",m:"泛素依赖性降解途径"},
+        {e:"glycosylation",p:"/",m:"糖基化（包括蛋白质糖基化）"},
+        {e:"lysosome",p:"/",m:"溶酶体"},
+        {e:"primary lysosome",p:"/",m:"初级溶酶体"},
+        {e:"secondary lysosome",p:"/",m:"次级溶酶体"},
+        {e:"residual body",p:"/",m:"残质体"},
+        {e:"autophagy",p:"/",m:"自噬作用"},
+        {e:"rough endoplasmic reticulum",p:"/",m:"糙面内质网"},
+        {e:"smooth endoplasmic reticulum",p:"/",m:"滑面内质网"},
+        {e:"autolysosome",p:"/",m:"自噬溶酶体"},
+        {e:"heterophagolysosome",p:"/",m:"异噬溶酶体"},
+        {e:"TGN",p:"/",m:"反面高尔基网状结构"},
+        {e:"medial Golgi",p:"/",m:"高尔基体中间膜囊"},
+        {e:"Ubiquitination",p:"/",m:"泛素化"},
+        {e:"ubiquitin",p:"/",m:"泛素"},
+        {e:"endoplasmic reticulum，ER",p:"/",m:"内质网"},
+        {e:"ER retention signal",p:"/",m:"内质网滞留信号"},
+        {e:"detoxification",p:"/",m:"解毒作用"},
+        {e:"glyoxysome",p:"/",m:"乙醛酸循环体"},
+        {e:"heat shock protein，HSP",p:"/",m:"热休克蛋白"},
+        {e:"signal patch",p:"/",m:"信号斑"},
+        {e:"microsome",p:"/",m:"微粒体"},
+        {e:"protein disulfide isomerase，PDI",p:"/",m:"蛋白二硫键异构酶"},
+        {e:"immunoglobulin heavy-chain binding protein (BiP)",p:"/",m:"免疫球蛋白重链结合蛋白"},
+        {e:"Golgi apparatus",p:"/",m:"高尔基体"},
+        {e:"heat shock protein, HSP",p:"/",m:"热激蛋白"},
+        {e:"regulated secretion",p:"/",m:"调节型分泌"},
+        {e:"Constitutive secretion",p:"/",m:"组成型分泌"},
+        {e:"translocon",p:"/",m:"移位子"},
+        {e:"ubiquitin-proteasome degradation pathway",p:"/",m:"泛素-蛋白酶体降解途径"},
+        {e:"cis Golgi network，CGN",p:"/",m:"高尔基体顺面网状结构（顺面膜囊）"},
+        {e:"inclusion cell disease",p:"/",m:"I细胞病"},
+      ]},
+      {name:"六、蛋白质分选与膜泡运输", terms:[
+        {e:"protein sorting",p:"/",m:"蛋白质分选"},
+        {e:"signal hypothesis",p:"/",m:"信号假说"},
+        {e:"signal peptide / signal sequence",p:"/",m:"信号肽/信号序列"},
+        {e:"leader/Transit peptide",p:"/",m:"导肽"},
+        {e:"post-translational translocation pathway",p:"/",m:"后翻译转运途径"},
+        {e:"cotranslational translocation pathway",p:"/",m:"共翻译转运途径"},
+        {e:"COPⅡ coated vesicle",p:"/",m:"COPⅡ被膜小泡"},
+        {e:"COPⅠ coated vesicle",p:"/",m:"COPⅠ被膜小泡"},
+        {e:"SRP",p:"/",m:"信号识别颗粒"},
+        {e:"clathrin/adaptor protein coated vesicles",p:"/",m:"网格蛋白/接头蛋白包被膜泡"},
+        {e:"retrieval signal",p:"/",m:"回收信号序列"},
+        {e:"start-transfer signal",p:"/",m:"起始转移信号"},
+        {e:"STA",p:"/",m:"内在停止转移锚定序列"},
+        {e:"SNAREs",p:"/",m:"可溶性NSF偶联蛋白质受体"},
+        {e:"adaptin protein，AP",p:"/",m:"衔接蛋白"},
+        {e:"clathrin protein",p:"/",m:"网格蛋白"},
+        {e:"dynamin protein",p:"/",m:"发动蛋白"},
+        {e:"protein Sar",p:"/",m:"Sar蛋白"},
+        {e:"stop transfer sequence",p:"/",m:"停止转移序列"},
+      ]},
+      {name:"七、线粒体与叶绿体", terms:[
+        {e:"semiautonomous organelle",p:"/",m:"半自主性细胞器"},
+        {e:"ATP synthase",p:"/",m:"ATP合酶"},
+        {e:"electron transport chain",p:"/",m:"电子传递链"},
+        {e:"endosymbiotic hypothesis",p:"/",m:"内共生学说"},
+        {e:"oxidative phosphorylation",p:"/",m:"氧化磷酸化"},
+        {e:"photophosphorylation",p:"/",m:"光合磷酸化"},
+        {e:"Thylakoid",p:"/",m:"类囊体"},
+        {e:"Granum，复数Grana",p:"/",m:"基粒"},
+        {e:"light reaction",p:"/",m:"光反应"},
+        {e:"Calvin cycle",p:"/",m:"卡尔文循环"},
+        {e:"nucleocytoplasmic interaction",p:"/",m:"核质互作"},
+        {e:"nuclear-cytoplasmic conflict",p:"/",m:"核质冲突"},
+        {e:"mitochondrial matrix",p:"/",m:"线粒体基质"},
+        {e:"mitochondrial intermembrane space",p:"/",m:"线粒体膜间隙"},
+        {e:"inner mitochondrial membrane",p:"/",m:"线粒体内膜"},
+        {e:"outer mitochondrial membrane",p:"/",m:"线粒体外膜"},
+        {e:"mitochondrion",p:"/",m:"线粒体"},
+        {e:"chloroplast",p:"/",m:"叶绿体"},
+        {e:"semiautonomous",p:"/",m:"半自主性"},
+        {e:"carbon assimilation reaction",p:"/",m:"碳同化反应"},
+        {e:"primary reaction",p:"/",m:"原初反应"},
+        {e:"chemiosmotic theory",p:"/",m:"化学渗透学说"},
+        {e:"C4 pathway",p:"/",m:"C4途径"},
+        {e:"cristae",p:"/",m:"嵴"},
+        {e:"photosynthesis",p:"/",m:"光合作用"},
+        {e:"cellular respiration",p:"/",m:"细胞呼吸"},
+      ]},
+      {name:"八、细胞质骨架", terms:[
+        {e:"microfilament，MF",p:"/",m:"微丝"},
+        {e:"microtubule，MT",p:"/",m:"微管"},
+        {e:"intermediate filament，IF",p:"/",m:"中间丝又称中间纤维"},
+        {e:"cytoskeleton",p:"/",m:"细胞骨架"},
+        {e:"treadmilling",p:"/",m:"踏车行为"},
+        {e:"MTOC",p:"/",m:"微管组织中心"},
+        {e:"Molecular motor protein",p:"/",m:"分子马达蛋白"},
+        {e:"kinesin",p:"/",m:"驱动蛋白"},
+        {e:"cytoplasmic dyneins",p:"/",m:"细胞质动力蛋白"},
+        {e:"Dynein",p:"/",m:"动力蛋白"},
+        {e:"myosin",p:"/",m:"肌球蛋白"},
+        {e:"microvilli",p:"/",m:"微绒毛"},
+        {e:"stress fiber",p:"/",m:"应力纤维"},
+        {e:"cell cortex",p:"/",m:"细胞皮层"},
+        {e:"cytokinetic ring",p:"/",m:"胞质分裂环/收缩环"},
+        {e:"Motor domain",p:"/",m:"马达结构域"},
+        {e:"sarcomere",p:"/",m:"肌节"},
+        {e:"thick filament",p:"/",m:"粗肌丝"},
+        {e:"thin filament",p:"/",m:"细肌丝"},
+        {e:"cytochalasin B",p:"/",m:"细胞松弛素B"},
+        {e:"phalloidin",p:"/",m:"鬼笔环肽"},
+        {e:"actin",p:"/",m:"肌动蛋白"},
+        {e:"Cc",p:"/",m:"单体临界浓度"},
+        {e:"basal body",p:"/",m:"基体"},
+        {e:"centrosome",p:"/",m:"中心体"},
+        {e:"centrioles",p:"/",m:"中心粒"},
+        {e:"cross-linking protein",p:"/",m:"交联蛋白"},
+        {e:"capping proteins",p:"/",m:"加帽蛋白"},
+        {e:"filament-severing protein",p:"/",m:"纤维切割蛋白"},
+        {e:"lamellipodium",p:"/",m:"片状伪足"},
+        {e:"filopodium",p:"/",m:"丝状伪足"},
+        {e:"ciliary dynein",p:"/",m:"纤毛动力蛋白"},
+        {e:"γ tubulin",p:"/",m:"γ微管蛋白"},
+        {e:"tropomyosin",p:"/",m:"原肌球蛋白"},
+        {e:"troponin，Tn",p:"/",m:"肌钙蛋白"},
+        {e:"MAP",p:"/",m:"微管相关蛋白"},
+        {e:"cytoplasmic streaming",p:"/",m:"胞质环流"},
+        {e:"dynein arm",p:"/",m:"动力蛋白臂"},
+        {e:"nucleation",p:"/",m:"成核反应"},
+        {e:"G-actin",p:"/",m:"G-肌动蛋白"},
+        {e:"hand over hand model",p:"/",m:"“步行”模型"},
+        {e:"Inchworm crawling model",p:"/",m:"“尺蠖”爬行模型"},
+      ]},
+      {name:"九、细胞核与染色质", terms:[
+        {e:"nuclear envelope",p:"/",m:"核被膜"},
+        {e:"nuclear pore complexes，NPCs",p:"/",m:"核孔复合体"},
+        {e:"chromatin",p:"/",m:"染色质"},
+        {e:"chromosome",p:"/",m:"染色体"},
+        {e:"histone",p:"/",m:"组蛋白"},
+        {e:"nonhistone protein",p:"/",m:"非组蛋白"},
+        {e:"nucleosome",p:"/",m:"核小体"},
+        {e:"euchromatin",p:"/",m:"常染色质"},
+        {e:"Autosome",p:"/",m:"常染色体"},
+        {e:"heterochromatin",p:"/",m:"异染色质"},
+        {e:"constitutive heterochromatin",p:"/",m:"结构性异染色质"},
+        {e:"facultative heterochromatin",p:"/",m:"兼性异染色质"},
+        {e:"centromere",p:"/",m:"着丝粒"},
+        {e:"telomere",p:"/",m:"端粒"},
+        {e:"telomerase",p:"/",m:"端粒酶"},
+        {e:"karyophilic protein",p:"/",m:"亲核蛋白"},
+        {e:"NLS",p:"/",m:"核定位信号"},
+        {e:"nuclear lamina",p:"/",m:"核纤层"},
+        {e:"lamin",p:"/",m:"核纤层蛋白"},
+        {e:"epigenetics",p:"/",m:"表观遗传学"},
+        {e:"NOR",p:"/",m:"核仁组织区"},
+        {e:"nucleolar cycle",p:"/",m:"核仁周期"},
+        {e:"polytene chromosome",p:"/",m:"多线染色体"},
+        {e:"lampbrush chromosome",p:"/",m:"灯刷染色体"},
+        {e:"nucleus",p:"/",m:"细胞核"},
+        {e:"fibrillar center，FC",p:"/",m:"纤维中心"},
+        {e:"dense fibrillar component，DFC",p:"/",m:"致密纤维组分"},
+        {e:"granular component，GC",p:"/",m:"颗粒组分"},
+        {e:"secondary constriction",p:"/",m:"次缢痕"},
+        {e:"satellite",p:"/",m:"随体"},
+        {e:"centromeric DNA sequence,CEN",p:"/",m:"着丝粒DNA序列"},
+        {e:"autonomously replicating sequence (ARS)",p:"/",m:"自主复制DNA序列"},
+        {e:"telomeric DNA sequence，TEL",p:"/",m:"端粒DNA序列"},
+        {e:"nucleoskeleton",p:"/",m:"核骨架"},
+        {e:"nucleolus",p:"/",m:"核仁"},
+        {e:"kinetochore",p:"/",m:"动粒/着丝点"},
+        {e:"sister chromatids",p:"/",m:"姐妹染色单体"},
+        {e:"DNase I hypersensitive sites",p:"/",m:"DNaseI超敏感位点"},
+        {e:"Barr body",p:"/",m:"巴氏小体"},
+        {e:"genome",p:"/",m:"基因组"},
+        {e:"histone acetylation",p:"/",m:"组蛋白乙酰化"},
+        {e:"four-level model of chromatin organization",p:"/",m:"染色质组装的四级结构模型"},
+        {e:"position-effect variegation (PEV)",p:"/",m:"位置花斑效应"},
+        {e:"karyotype",p:"/",m:"核型"},
+        {e:"idiogram",p:"/",m:"核型模式图"},
+        {e:"chromosome banding pattern",p:"/",m:"染色体带型"},
+        {e:"Chromatin Remodeling",p:"/",m:"染色质重塑"},
+        {e:"nuclear bodies，NBs",p:"/",m:"核体"},
+        {e:"transcription factor",p:"/",m:"转录因子"},
+      ]},
+      {name:"十、核糖体", terms:[
+        {e:"ribosome",p:"/",m:"核糖体"},
+        {e:"polyribosome或polysome",p:"/",m:"多核糖体"},
+        {e:"ribozyme",p:"/",m:"核酶"},
+        {e:"genetic code",p:"/",m:"遗传密码"},
+        {e:"RNA World hypothesis",p:"/",m:"“RNA世界”假说"},
+        {e:"attached ribosome",p:"/",m:"附着核糖体"},
+        {e:"free ribosome",p:"/",m:"游离核糖体"},
+        {e:"SD sequence",p:"/",m:"SD序列"},
+      ]},
+      {name:"十一、细胞信号转导", terms:[
+        {e:"cell communication",p:"/",m:"细胞通讯/细胞通信"},
+        {e:"cell signaling pathway / cellular signaling pathway",p:"/",m:"细胞信号通路"},
+        {e:"G protein coupled receptor，GPCR",p:"/",m:"G蛋白偶联受体"},
+        {e:"receptor",p:"/",m:"受体"},
+        {e:"signal transduction",p:"/",m:"细胞信号转导"},
+        {e:"second messenger theory",p:"/",m:"第二信使学说"},
+        {e:"second messenger",p:"/",m:"第二信使"},
+        {e:"signal molecule",p:"/",m:"信号分子"},
+        {e:"enzyme linked receptor",p:"/",m:"酶联受体"},
+        {e:"receptor tyrosine kinase (RTK)",p:"/",m:"受体酪氨酸激酶"},
+        {e:"Contact-dependent communication between cells",p:"/",m:"细胞间接触依赖性通讯"},
+        {e:"signaling cascade",p:"/",m:"信号级联（可产生信号放大）"},
+        {e:"endocrine signaling",p:"/",m:"内分泌信号"},
+        {e:"paracrine signaling",p:"/",m:"旁分泌信号"},
+        {e:"autocrine signaling",p:"/",m:"自分泌信号"},
+        {e:"gaseous signal molecule",p:"/",m:"气体信号分子"},
+        {e:"molecular switch",p:"/",m:"分子开关"},
+        {e:"GTP-binding protein",p:"/",m:"GTP结合蛋白（G蛋白）"},
+        {e:"cell recognition",p:"/",m:"细胞识别"},
+        {e:"Dual-messenger signaling pathway",p:"/",m:"双信使信号通路"},
+        {e:"CaM",p:"/",m:"钙调蛋白"},
+        {e:"intracellular receptor",p:"/",m:"细胞内受体"},
+        {e:"surface receptor",p:"/",m:"表面受体"},
+        {e:"protein kinase C，PKC",p:"/",m:"蛋白激酶C"},
+        {e:"protein kinase A，PKA",p:"/",m:"蛋白激酶A"},
+        {e:"Receptor desensitization",p:"/",m:"受体脱敏"},
+        {e:"Receptor sequestration",p:"/",m:"受体隐蔽（受体没收）"},
+        {e:"Receptor down-regulation",p:"/",m:"受体下调"},
+        {e:"Receptor inactivation",p:"/",m:"受体失活"},
+        {e:"ion channel-coupled receptor",p:"/",m:"离子通道偶联受体"},
+        {e:"inactivation of signaling protein",p:"/",m:"信号蛋白失活"},
+        {e:"Small G proteins",p:"/",m:"小G蛋白"},
+        {e:"local mediators",p:"/",m:"局部介质"},
+        {e:"Ca2+ spark",p:"/",m:"钙火花"},
+      ]},
+      {name:"十二、细胞周期与细胞分裂", terms:[
+        {e:"cell cycle",p:"/",m:"细胞周期"},
+        {e:"mitosis",p:"/",m:"有丝分裂"},
+        {e:"meiosis",p:"/",m:"减数分裂"},
+        {e:"mitotic apparatus",p:"/",m:"有丝分裂器"},
+        {e:"spindle",p:"/",m:"纺锤体"},
+        {e:"synapsis",p:"/",m:"联会"},
+        {e:"Synaptonemal complex，SC",p:"/",m:"联会复合体"},
+        {e:"cell cycle synchronization",p:"/",m:"细胞周期同步化"},
+        {e:"tetrad",p:"/",m:"四分体"},
+        {e:"restriction point，R点",p:"/",m:"限制点"},
+        {e:"DNA synthesis blocking",p:"/",m:"DNA合成阻断法"},
+        {e:"metaphase blocking",p:"/",m:"分裂中期阻断法"},
+        {e:"cleavage furrow",p:"/",m:"分裂沟"},
+        {e:"contractile ring",p:"/",m:"收缩环"},
+        {e:"chromosome alignment",p:"/",m:"染色体整列"},
+        {e:"cell synchronization by selection",p:"/",m:"人工选择同步化"},
+        {e:"artificially induced cell synchronization",p:"/",m:"人工诱导同步化"},
+        {e:"natural synchronization",p:"/",m:"自然同步化"},
+        {e:"genetic recombination",p:"/",m:"基因重组"},
+        {e:"diplotene，diplonema",p:"/",m:"双线期"},
+        {e:"diakinesis",p:"/",m:"终变期"},
+        {e:"G2 phase",p:"/",m:"G2期"},
+        {e:"terminally differentiated cells",p:"/",m:"终末分化细胞"},
+        {e:"G0 phase cell",p:"/",m:"G0期细胞"},
+        {e:"equatorial plate",p:"/",m:"赤道板"},
+        {e:"cell plate",p:"/",m:"细胞板"},
+        {e:"cytokinesis",p:"/",m:"胞质分裂"},
+        {e:"homologous chromosomes",p:"/",m:"同源染色体"},
+        {e:"chromatin condensation",p:"/",m:"染色质凝缩"},
+        {e:"centrosome cycle",p:"/",m:"中心体循环"},
+        {e:"kinetochore microtubule",p:"/",m:"动粒微管"},
+        {e:"astral microtubule",p:"/",m:"星体微管"},
+        {e:"recombination nodule",p:"/",m:"重组节"},
+        {e:"S phase-promoting factor，SPF",p:"/",m:"S期促进因子"},
+        {e:"mitosis-promoting factor, MPF",p:"/",m:"细胞有丝分裂促进因子"},
+        {e:"oncogene",p:"/",m:"癌基因"},
+        {e:"proto-oncogene",p:"/",m:"原癌基因"},
+        {e:"anti-oncogene",p:"/",m:"抑癌基因"},
+        {e:"checkpoint",p:"/",m:"检验点"},
+        {e:"cyclin",p:"/",m:"周期蛋白"},
+        {e:"cyclin-dependent kinase,CDK",p:"/",m:"周期蛋白依赖性蛋白激酶"},
+        {e:"G1-phase cyclin",p:"/",m:"G1期周期蛋白"},
+        {e:"M-phase cyclin",p:"/",m:"M期周期蛋白"},
+        {e:"tumor cells",p:"/",m:"肿瘤细胞"},
+        {e:"Cancer cell",p:"/",m:"癌细胞"},
+        {e:"premature chromosome condensation, PCC",p:"/",m:"早熟染色体凝缩"},
+        {e:"CKI",p:"/",m:"CDK抑制因子"},
+        {e:"anaphase-promoting complex，APC",p:"/",m:"后期促进复合物"},
+        {e:"cancer stem cell",p:"/",m:"肿瘤干细胞"},
+        {e:"Retinoblastoma gene",p:"/",m:"视网膜母细胞瘤基因（Rb基因）"},
+        {e:"replication checkpoint",p:"/",m:"DNA复制检验点"},
+        {e:"cyclin box",p:"/",m:"周期蛋白框"},
+        {e:"destruction box",p:"/",m:"破坏框"},
+        {e:"cell division cycle genes (cdc genes)",p:"/",m:"细胞分裂周期基因"},
+      ]},
+      {name:"十三、细胞分化、衰老与干细胞", terms:[
+        {e:"cell differentiation",p:"/",m:"细胞分化"},
+        {e:"house-keeping gene",p:"/",m:"管家基因"},
+        {e:"luxury gene",p:"/",m:"奢侈基因"},
+        {e:"tissue-specific gene",p:"/",m:"组织特异性基因"},
+        {e:"totipotency",p:"/",m:"细胞的全能性"},
+        {e:"cell determination",p:"/",m:"细胞决定"},
+        {e:"Cell memory",p:"/",m:"细胞记忆"},
+        {e:"stem cells，SC",p:"/",m:"干细胞"},
+        {e:"totipotent stem cell",p:"/",m:"全能干细胞"},
+        {e:"induced pluripotent stem cell，iPS cell",p:"/",m:"诱导性多潜能干细胞"},
+        {e:"chemically induced pluripotent stem cell (CiPSC)",p:"/",m:"化学诱导的多潜能干细胞"},
+        {e:"pluripotent stem cell",p:"/",m:"多潜能干细胞"},
+        {e:"multipotent stem cells",p:"/",m:"多能干细胞"},
+        {e:"unipotent stem cell",p:"/",m:"单能干细胞"},
+        {e:"multipotency",p:"/",m:"细胞的多能性"},
+        {e:"Monopotency",p:"/",m:"单能性"},
+        {e:"transdifferentiation",p:"/",m:"转分化"},
+        {e:"dedifferentiation",p:"/",m:"去分化"},
+        {e:"embryonic stem cell",p:"/",m:"胚胎干细胞"},
+        {e:"adult stem cell",p:"/",m:"成体干细胞/组织干细胞"},
+        {e:"determinant",p:"/",m:"决定子"},
+        {e:"masked mRNA",p:"/",m:"隐蔽mRNA"},
+        {e:"embryonic induction",p:"/",m:"胚胎诱导"},
+        {e:"regeneration",p:"/",m:"再生现象"},
+        {e:"cell lineage",p:"/",m:"细胞谱系"},
+        {e:"position effect",p:"/",m:"位置效应"},
+        {e:"organoids",p:"/",m:"类器官"},
+        {e:"combinational control",p:"/",m:"组合调控"},
+        {e:"pluripotency",p:"/",m:"多潜能性"},
+        {e:"Regenerative medicine",p:"/",m:"再生医学"},
+      ]},
+      {name:"十四、细胞连接与细胞外基质", terms:[
+        {e:"cell junction",p:"/",m:"细胞连接"},
+        {e:"occluding junction",p:"/",m:"封闭连接"},
+        {e:"communicating junction",p:"/",m:"通信连接"},
+        {e:"anchoring junction",p:"/",m:"锚定连接"},
+        {e:"tight junction",p:"/",m:"紧密连接"},
+        {e:"gap junction",p:"/",m:"间隙连接"},
+        {e:"plasmodesma",p:"/",m:"胞间连丝"},
+        {e:"Chemical synapse",p:"/",m:"化学突触"},
+        {e:"desmosome",p:"/",m:"桥粒"},
+        {e:"hemidesmosome",p:"/",m:"半桥粒"},
+        {e:"adhesion belt",p:"/",m:"黏着带"},
+        {e:"focal adhesion",p:"/",m:"黏着斑"},
+        {e:"cell adhesion molecule，CAM",p:"/",m:"细胞黏着分子"},
+        {e:"extracellular matrix，ECM",p:"/",m:"细胞外基质"},
+        {e:"cadherin",p:"/",m:"钙黏蛋白"},
+        {e:"selectin",p:"/",m:"选择素/选凝素"},
+        {e:"IgSF",p:"/",m:"免疫球蛋白超家族"},
+        {e:"integrin",p:"/",m:"整联蛋白"},
+        {e:"laminin，LN",p:"/",m:"层粘连蛋白"},
+        {e:"fibronectin，FN",p:"/",m:"纤连蛋白"},
+        {e:"collagen",p:"/",m:"胶原"},
+        {e:"elastin",p:"/",m:"弹性蛋白"},
+        {e:"basal lamina，basement membrane",p:"/",m:"基膜"},
+        {e:"cell coat",p:"/",m:"细胞外被"},
+        {e:"connexon",p:"/",m:"连接子"},
+        {e:"glycosaminoglycan，GAG",p:"/",m:"糖胺聚糖"},
+        {e:"proteoglycan",p:"/",m:"蛋白聚糖"},
+        {e:"homophilic binding",p:"/",m:"同亲型结合"},
+        {e:"heterophilic binding",p:"/",m:"异亲型结合"},
+        {e:"cell adhesion",p:"/",m:"细胞黏着"},
+        {e:"fibroblast",p:"/",m:"成纤维细胞"},
+      ]},
+    
+    ]
+  },
+  bio:{
+    title:"生物化学",
+    author:"朱圣庚 等 · 高等教育出版社",
+    emoji:"⚗️",
+    accent:"#E67A38",
+    tag:"BIOCHEM",
+    chapters:[
+      {name:"一、氨基酸与肽", terms:[
+        {e:"amino acid",p:"/əˈmiːnəʊ ˈæsɪd/",m:"氨基酸"},
+        {e:"peptide bond",p:"/ˈpɛptaɪd bɒnd/",m:"肽键"},
+        {e:"primary structure",p:"/ˈpraɪməri ˈstrʌktʃə/",m:"一级结构"},
+        {e:"residue",p:"/ˈrɛzɪdjuː/",m:"残基"},
+        {e:"zwitterion",p:"/ˈtsvɪtərɪɒn/",m:"兼性离子（两性离子）"},
+        {e:"isoelectric point",p:"/",m:"等电点"},
+        {e:"disulfide bond",p:"/daɪˈsʌlfaɪd bɒnd/",m:"二硫键"},
+        {e:"polypeptide",p:"/ˌpɒlɪˈpɛptaɪd/",m:"多肽"},
+        {e:"dipeptide",p:"/daɪˈpɛptaɪd/",m:"二肽"}
+      ]},
+      {name:"二、蛋白质的空间结构", terms:[
+        {e:"secondary structure",p:"/ˈsɛkəndəri ˈstrʌktʃə/",m:"二级结构"},
+        {e:"α-helix",p:"/ˈælfə ˈhiːlɪks/",m:"α-螺旋"},
+        {e:"β-sheet",p:"/ˈbeɪtə ʃiːt/",m:"β-折叠"},
+        {e:"random coil",p:"/ˈrændəm kɔɪl/",m:"无规卷曲"},
+        {e:"tertiary structure",p:"/ˈtɜːʃəri ˈstrʌktʃə/",m:"三级结构"},
+        {e:"quaternary structure",p:"/",m:"四级结构"},
+        {e:"domain",p:"/dəˈmeɪn/",m:"结构域"},
+        {e:"motif",p:"/məʊˈtiːf/",m:"模体（基序）"},
+        {e:"denaturation",p:"/diːˌnætʃəˈreɪʃən/",m:"变性"},
+        {e:"renaturation",p:"/ˌriːˌnætʃəˈreɪʃən/",m:"复性"},
+        {e:"hydrogen bond",p:"/ˈhaɪdrədʒən bɒnd/",m:"氢键"},
+        {e:"hydrophobic interaction",p:"/",m:"疏水相互作用"},
+        {e:"salt bridge",p:"/sɔːlt brɪdʒ/",m:"盐桥"}
+      ]},
+      {name:"三、蛋白质的功能与代表", terms:[
+        {e:"myoglobin",p:"/ˈmaɪəɡləʊbɪn/",m:"肌红蛋白"},
+        {e:"hemoglobin",p:"/ˈhiːməɡləʊbɪn/",m:"血红蛋白"},
+        {e:"collagen",p:"/ˈkɒlədʒən/",m:"胶原"},
+        {e:"actin",p:"/ˈæktɪn/",m:"肌动蛋白"},
+        {e:"antibody",p:"/ˈæntɪbɒdi/",m:"抗体"},
+        {e:"allosteric effect",p:"/ˌæləˈstɛrɪk ɪˈfɛkt/",m:"别构效应（变构效应）"},
+        {e:"cooperative effect",p:"/",m:"协同效应"},
+        {e:"sickle-cell anemia",p:"/",m:"镰刀型红细胞贫血"}
+      ]},
+      {name:"四、酶", terms:[
+        {e:"enzyme",p:"/ˈɛnzaɪm/",m:"酶"},
+        {e:"substrate",p:"/ˈsʌbstreɪt/",m:"底物"},
+        {e:"active site",p:"/ˈæktɪv saɪt/",m:"活性中心（活性部位）"},
+        {e:"cofactor",p:"/ˈkəʊfæktə/",m:"辅因子"},
+        {e:"coenzyme",p:"/kəʊˈɛnzɪm/",m:"辅酶"},
+        {e:"apoenzyme",p:"/ˌæpəʊˈɛnzaɪm/",m:"脱辅酶（酶蛋白）"},
+        {e:"holoenzyme",p:"/ˌhɒləʊˈɛnzaɪm/",m:"全酶"},
+        {e:"zymogen",p:"/ˈzaɪmədʒən/",m:"酶原"},
+        {e:"induced-fit",p:"/ɪnˈdjuːst fɪt/",m:"诱导契合"},
+        {e:"specificity",p:"/ˌspɛsɪˈfɪsɪti/",m:"专一性"},
+        {e:"competitive inhibition",p:"/",m:"竞争性抑制"},
+        {e:"noncompetitive inhibition",p:"/",m:"非竞争性抑制"},
+        {e:"allosteric enzyme",p:"/ˌæləˈstɛrɪk ˈɛnzaɪm/",m:"别构酶"},
+        {e:"Michaelis constant",p:"/mɪˈtʃeɪlɪs ˈkɒnstənt/",m:"米氏常数（Km）"},
+        {e:"Vmax",p:"/",m:"最大反应速率"},
+        {e:"activator",p:"/ˈæktɪveɪtə/",m:"激活剂"},
+        {e:"inhibitor",p:"/ɪnˈhɪbɪtə/",m:"抑制剂"},
+        {e:"ribozyme",p:"/ˈraɪbəzaɪm/",m:"核酶"}
+      ]},
+      {name:"五、维生素与辅酶", terms:[
+        {e:"vitamin",p:"/ˈvɪtəmɪn/",m:"维生素"},
+        {e:"coenzyme A",p:"/kəʊˈɛnzɪm eɪ/",m:"辅酶 A"},
+        {e:"NAD⁺",p:"/",m:"烟酰胺腺嘌呤二核苷酸（辅酶）"},
+        {e:"NADH",p:"/",m:"还原型 NAD"},
+        {e:"FAD",p:"/",m:"黄素腺嘌呤二核苷酸"},
+        {e:"FADH₂",p:"/",m:"还原型 FAD"}
+      ]},
+      {name:"六、核酸", terms:[
+        {e:"nucleotide",p:"/ˈnjuːklɪətaɪd/",m:"核苷酸"},
+        {e:"base",p:"/beɪs/",m:"碱基"},
+        {e:"purine",p:"/ˈpjʊəriːn/",m:"嘌呤"},
+        {e:"pyrimidine",p:"/paɪˈrɪmɪdiːn/",m:"嘧啶"},
+        {e:"DNA",p:"/",m:"脱氧核糖核酸"},
+        {e:"RNA",p:"/",m:"核糖核酸"},
+        {e:"double helix",p:"/ˈdʌbəl ˈhiːlɪks/",m:"双螺旋"},
+        {e:"replication",p:"/ˌrɛplɪˈkeɪʃən/",m:"复制"},
+        {e:"transcription",p:"/trænsˈkrɪpʃən/",m:"转录"},
+        {e:"translation",p:"/trænsˈleɪʃən/",m:"翻译"},
+        {e:"codon",p:"/ˈkəʊdɒn/",m:"密码子"},
+        {e:"anticodon",p:"/ˌæntɪˈkəʊdɒn/",m:"反密码子"},
+        {e:"mRNA",p:"/",m:"信使 RNA"},
+        {e:"tRNA",p:"/",m:"转运 RNA"},
+        {e:"rRNA",p:"/",m:"核糖体 RNA"},
+        {e:"mutation",p:"/mjuːˈteɪʃən/",m:"突变"}
+      ]},
+      {name:"七、糖类", terms:[
+        {e:"monosaccharide",p:"/ˌmɒnəʊˈsækəraɪd/",m:"单糖"},
+        {e:"disaccharide",p:"/daɪˈsækəraɪd/",m:"二糖"},
+        {e:"polysaccharide",p:"/ˌpɒlɪˈsækəraɪd/",m:"多糖"},
+        {e:"glucose",p:"/ˈɡluːkəʊz/",m:"葡萄糖"},
+        {e:"glycogen",p:"/ˈɡlaɪkədʒən/",m:"糖原"},
+        {e:"starch",p:"/stɑːtʃ/",m:"淀粉"},
+        {e:"cellulose",p:"/ˈsɛljʊləʊs/",m:"纤维素"},
+        {e:"glycosidic bond",p:"/ˌɡlaɪkəˈsɪdɪk bɒnd/",m:"糖苷键"}
+      ]},
+      {name:"八、脂质与生物膜", terms:[
+        {e:"lipid",p:"/ˈlɪpɪd/",m:"脂质"},
+        {e:"fatty acid",p:"/ˈfæti ˈæsɪd/",m:"脂肪酸"},
+        {e:"triglyceride",p:"/traɪˈɡlɪsəraɪd/",m:"甘油三酯"},
+        {e:"phospholipid",p:"/ˌfɒsfəʊˈlɪpɪd/",m:"磷脂"},
+        {e:"steroid",p:"/ˈstɪərɔɪd/",m:"类固醇（甾体）"},
+        {e:"cholesterol",p:"/kəˈlɛstərɒl/",m:"胆固醇"},
+        {e:"micelle",p:"/mɪˈsɛl/",m:"微团（胶束）"},
+        {e:"bilayer",p:"/ˈbaɪleɪə/",m:"双分子层"}
+      ]},
+      {name:"九、糖代谢", terms:[
+        {e:"glycolysis",p:"/ɡlaɪˈkɒlɪsɪs/",m:"糖酵解"},
+        {e:"gluconeogenesis",p:"/ˌɡluːkəʊniːəʊˈdʒɛnɪsɪs/",m:"糖异生"},
+        {e:"glycogenolysis",p:"/ɡlaɪˌkɒdʒɪˈnɒlɪsɪs/",m:"糖原分解"},
+        {e:"pentose phosphate pathway",p:"/",m:"磷酸戊糖途径"},
+        {e:"pyruvate",p:"/paɪˈruːveɪt/",m:"丙酮酸"},
+        {e:"lactate",p:"/ˈlækteɪt/",m:"乳酸"},
+        {e:"fermentation",p:"/ˌfɜːmɛnˈteɪʃən/",m:"发酵"}
+      ]},
+      {name:"十、三羧酸循环与生物氧化", terms:[
+        {e:"tricarboxylic acid cycle",p:"/",m:"三羧酸循环（TCA 循环）"},
+        {e:"citric acid cycle",p:"/ˈsɪtrɪk ˈæsɪd ˈsaɪkəl/",m:"柠檬酸循环"},
+        {e:"acetyl-CoA",p:"/əˈsiːtɪl koʊ eɪ/",m:"乙酰辅酶 A"},
+        {e:"electron transport chain",p:"/",m:"电子传递链"},
+        {e:"oxidative phosphorylation",p:"/",m:"氧化磷酸化"},
+        {e:"ATP synthase",p:"/eɪ tiː piː ˈsɪnθeɪz/",m:"ATP 合酶"},
+        {e:"chemiosmosis",p:"/ˌkɛmɪɒzˈməʊsɪs/",m:"化学渗透"},
+        {e:"proton motive force",p:"/",m:"质子动力势"}
+      ]},
+      {name:"十一、脂代谢", terms:[
+        {e:"β-oxidation",p:"/beɪtə ˌɒksɪˈdeɪʃən/",m:"β-氧化"},
+        {e:"ketone body",p:"/ˈkiːtəʊn ˈbɒdi/",m:"酮体"},
+        {e:"lipogenesis",p:"/ˌlaɪpəʊˈdʒɛnɪsɪs/",m:"脂肪生成"}
+      ]},
+      {name:"十二、氨基酸代谢", terms:[
+        {e:"transamination",p:"/trænsˌæmɪˈneɪʃən/",m:"转氨基作用"},
+        {e:"urea cycle",p:"/ˈjʊəriə ˈsaɪkəl/",m:"尿素循环"},
+        {e:"deamination",p:"/diːˌæmɪˈneɪʃən/",m:"脱氨基作用"}
+      ]},
+      {name:"十三、光合作用", terms:[
+        {e:"photosynthesis",p:"/ˌfəʊtəʊˈsɪnθɪsɪs/",m:"光合作用"},
+        {e:"light reaction",p:"/laɪt riˈækʃən/",m:"光反应"},
+        {e:"Calvin cycle",p:"/ˈkælvɪn ˈsaɪkəl/",m:"卡尔文循环"},
+        {e:"thylakoid",p:"/ˈθaɪləkɔɪd/",m:"类囊体"},
+        {e:"chlorophyll",p:"/ˈklɒrəfɪl/",m:"叶绿素"},
+        {e:"photophosphorylation",p:"/",m:"光合磷酸化"}
+      ]},
+      {name:"十四、激素与细胞信号", terms:[
+        {e:"hormone",p:"/ˈhɔːməʊn/",m:"激素"},
+        {e:"insulin",p:"/ˈɪnsjʊlɪn/",m:"胰岛素"},
+        {e:"glucagon",p:"/ˈɡluːkəɡɒn/",m:"胰高血糖素"},
+        {e:"receptor",p:"/rɪˈsɛptə/",m:"受体"},
+        {e:"second messenger",p:"/",m:"第二信使"},
+        {e:"cAMP",p:"/",m:"环磷酸腺苷"},
+        {e:"G protein",p:"/dʒiː ˈprəʊtiːn/",m:"G 蛋白"},
+        {e:"signal transduction",p:"/ˈsɪɡnəl trænzˈdʌkʃən/",m:"信号转导"}
+      ]}
+    ]
+  }
+};
+
+/* ============ 状态（localStorage 持久化，两本书独立） ============ */
+const STORE_KEY = "bioFlashcardsState_v1";
+const CELL_LIB_VER = 2;   // 细胞生物学词库版本（换成求臻词表后 +1）
+let state = loadState();
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORE_KEY));
+    if(s && s.cell && s.bio){
+      // 词库整体替换后，旧 cell 的词条 id 会错位映射到新词上：
+      // 只清空细胞生物学的旧进度，生物化学进度原样保留。
+      if(s.cellVer !== CELL_LIB_VER){
+        s.cell = {p:{}};
+        s.cellVer = CELL_LIB_VER;
+        localStorage.setItem(STORE_KEY, JSON.stringify(s));
+      }
+      return s;
+    }
+  }catch(e){}
+  return { cell:{p:{}}, bio:{p:{}}, cellVer:CELL_LIB_VER };
+}
+function saveState(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* 为每个 term 生成稳定 id */
+function buildIndex(){
+  for(const bid in DATA){
+    DATA[bid]._terms = [];
+    DATA[bid].chapters.forEach((ch,ci)=>{
+      ch.terms.forEach((t,ti)=>{
+        t._id = bid+"_"+ci+"_"+ti;
+        t._bid = bid; t._ch = ch.name;
+        DATA[bid]._terms.push(t);
+      });
+    });
+  }
+}
+buildIndex();
+
+function getP(bid,id){
+  return state[bid].p[id] || {c:0,w:0,box:0,due:0,fav:false,last:0,streak:0,wrong:false,lastWrong:0};
+}
+function INTERVAL(box){ const t=[0,1,2,4,7,15]; return (box>=0&&box<t.length)? t[box] : 15; } // 天
+function record(bid,id,correct){
+  const p = getP(bid,id);
+  if(correct){
+    p.c++; p.box = Math.min(p.box+1,5);
+    p.streak = (p.streak||0)+1;
+    // 连续答对 2 次 → 移出错词本
+    if(p.wrong && p.streak>=2) p.wrong = false;
+  } else {
+    p.w++; p.box = Math.max(p.box-2,0);
+    p.streak = 0;
+    p.wrong = true;            // 答错 / 选不会 → 进入错词本
+    p.lastWrong = Date.now();
+  }
+  p.due = Date.now() + INTERVAL(p.box)*86400000;
+  p.last = Date.now();
+  state[bid].p[id] = p;
+  saveState();
+}
+function wrongIds(bid){
+  return DATA[bid]._terms.filter(t=>getP(bid,t._id).wrong).map(t=>t._id);
+}
+/* 某本书的错词统计 */
+function wrongStat(bid){
+  let n=0, weak=0;
+  DATA[bid]._terms.forEach(t=>{
+    const p=getP(bid,t._id);
+    if(p.wrong){ n++; if((p.streak||0)===0) weak++; }
+  });
+  return {n, weak};
+}
+function masteryOf(bid){
+  const terms = DATA[bid]._terms;
+  let ans=0, tot=0;
+  terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0){ ans += p.c/(p.c+p.w); tot++; } });
+  return tot? Math.round(ans/tot*100) : 0;
+}
+function favIds(bid){
+  return DATA[bid]._terms.filter(t=>getP(bid,t._id).fav).map(t=>t._id);
+}
+
+/* ============ 工具 ============ */
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function $(sel){ return document.querySelector(sel); }
+
+/* ============ 当前学习会话 ============ */
+let sess = null;
+function startSession(bid, mode, ids){
+  // opts 缓存每题的 4 个选项：保证答题前/后、切收藏、上一题来回时选项顺序不变
+  sess = { bid, mode, queue: ids, pos: 0, answered:{}, revealed:false, opts:{} };
+  renderStudy();
+}
+function currentTerm(){ return DATA[sess.bid]._terms.find(t=>t._id===sess.queue[sess.pos]); }
+
+/* 生成 4 个选项（1 正确 + 3 干扰） */
+function buildOptions(term){
+  const bid = term._bid;
+  const pool = DATA[bid]._terms.filter(t=>t._id!==term._id && t.m!==term.m).map(t=>t.m);
+  const wrongs = shuffle(pool).slice(0,3);
+  while(wrongs.length<3){ wrongs.push("（暂无更多干扰项）"); }
+  return shuffle([term.m, ...wrongs]);
+}
+/* 取某题选项：同一会话内只生成一次并缓存，顺序恒定 */
+function optionsFor(term){
+  if(!sess.opts) sess.opts = {};
+  if(!sess.opts[term._id]) sess.opts[term._id] = buildOptions(term);
+  return sess.opts[term._id];
+}
+
+/* ============ 渲染 ============ */
+const app = document.getElementById("app");
+function setAccent(bid){
+  const a = DATA[bid].accent;
+  document.documentElement.style.setProperty('--accent', a);
+}
+
+/* 艾宾浩斯遗忘曲线（SVG）：理论保持率 R = e^(-t/S)，S 随复习次数增大 */
+function renderHome(){
+  sess=null;
+  let books='';
+  for(const bid in DATA){
+    const b=DATA[bid];
+    const total=b._terms.length;
+    const m=masteryOf(bid);
+    const ws=wrongStat(bid);
+    const illName = bid==='cell' ? 'microscope' : 'dna';
+    books += `
+      <div class="paper bookcard" data-act="open" data-bid="${bid}">
+        <span class="tape ${bid==='bio'?'o':''}"></span>
+        <span class="ill illbox">${ILL[illName]}</span>
+        <div class="row1">
+          <div class="badge" style="background:${b.accent}">${b.emoji}</div>
+          <div class="bt">
+            <div class="tagline">
+              <span class="tag ${bid==='bio'?'o':''}">${b.tag}</span>
+              <span class="bn">${b.title}</span>
+            </div>
+            <div class="ba">${b.author}</div>
+          </div>
+        </div>
+        <div class="bar"><i style="width:${m}%"></i></div>
+        <div class="stat">
+          <span>掌握 <b>${m}%</b></span>
+          <span>词条 <b>${total}</b></span>
+          <span>错词 <b>${ws.n}</b></span>
+        </div>
+        <div class="scribble">${bid==='cell'?'细胞 · 微观世界的小宇宙':'生化 · 生命的分子语言'}</div>
+        ${ws.n?`<div class="wrongrow">
+          <span class="chip" style="border-color:#d9594c;color:#d9594c">📕 ${ws.n} 个词待巩固</span>
+          <span class="chip" data-act="wrong" data-bid="${bid}" style="cursor:pointer;border-color:#d9594c;color:#d9594c;font-weight:700">去复习 ›</span>
+        </div>`:''}
+      </div>`;
+  }
+
+  app.innerHTML = `
+    <div class="hero">
+      <span class="deco">${ILL.leaf}</span>
+      <span class="stamp">${ILL.circle}</span>
+      <h1>生物专业英语卡片</h1>
+      <p class="sub">两本辞书分开背：细胞生物学 &amp; 生物化学。<br>选择题模式——先看英文，想中文，再选；选对选错都给答案。</p>
+      <div class="scribble o" style="margin-top:8px">✎ 随身记 · 随手背 ~</div>
+    </div>
+
+    ${books}
+
+    <div class="reset" data-act="reset">— 清空全部学习进度 —</div>
+    <div class="spacer"></div>
+  `;
+}
+
+function renderChapters(bid){
+  setAccent(bid);
+  const b=DATA[bid];
+  let chs='';
+  b.chapters.forEach((ch,ci)=>{
+    const total=ch.terms.length;
+    let learned=0; ch.terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0) learned++; });
+    const pct = total? Math.round(learned/total*100):0;
+    const dot = (ci%3===0)?'leaf':(ci%3===1)?'chloro':'petri';
+    chs += `
+      <div class="paper chap" data-act="study" data-bid="${bid}" data-ci="${ci}">
+        <span class="ill dot">${ILL[dot]}</span>
+        <div class="cn">
+          <div class="t">${ch.name}</div>
+          <div class="s">${learned}/${total} 已学 · 掌握 ${pct}%</div>
+        </div>
+        <div class="go">›</div>
+      </div>`;
+  });
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="home">‹</button>
+      <div class="title">${b.emoji} ${b.title}</div>
+      <div class="meta">${b._terms.length} 词</div>
+    </div>
+    <div class="chaphead">
+      <span class="tag ${bid==='bio'?'o':''}">${b.tag}</span>
+      <span class="scribble">${bid==='cell'?'一章一章，慢慢啃':'从分子读懂生命'}</span>
+    </div>
+    <div class="scroll">
+      <div class="pad" style="padding-top:4px">
+        <div class="home-actions">
+          <div class="paper ghost" data-act="review" data-bid="${bid}">🔁 按掌握度复习</div>
+          <div class="paper ghost" data-act="wrong" data-bid="${bid}">📕 错词本 (${wrongStat(bid).n})</div>
+          <div class="paper ghost" data-act="fav" data-bid="${bid}">⭐ 收藏夹 (${favIds(bid).length})</div>
+        </div>
+      </div>
+      ${chs}
+      <div class="spacer"></div>
+    </div>
+  `;
+}
+
+function renderStudy(){
+  const bid=sess.bid;
+  setAccent(bid);
+  const b=DATA[bid];
+  const term=currentTerm();
+  if(!term){ return renderDone(); }
+  const id=term._id;
+  const p=getP(bid,id);
+  const total=sess.queue.length;
+  const pos=sess.pos+1;
+  const isFav=p.fav;
+
+  const ans = sess.answered[id];
+  const opts = optionsFor(term);
+  const correctIdx = opts.indexOf(term.m);
+  const keys=['A','B','C','D'];
+
+  let optHtml='', revealHtml='', nextHtml='';
+  if(ans){
+    opts.forEach((o,i)=>{
+      let cls='opt';
+      if(o===term.m){
+        cls += (ans.skip ? ' miss' : ' ok');   // 选不会=没记住→红色；答对→绿色
+      }
+      else if(i===ans.choice && !ans.correct) cls+=' bad';
+      else cls+=' dim';
+      optHtml += `<button class="${cls}" data-k="${keys[i]}" disabled>${esc(o)}</button>`;
+    });
+    let rt, rcls='';
+    if(ans.correct){ rt='✓ 答对啦，记牢咯'; }
+    else if(ans.skip){ rt='✎ 还没记住，记一下！'; rcls=' bad'; }
+    else { rt='✗ 答错了，看正确答案'; rcls=' bad'; }
+    revealHtml = `<div class="reveal"><div class="rt${rcls}">${rt}</div>
+      <div class="rm">正确答案：<mark>${esc(term.m)}</mark></div>
+      <div class="rn">${esc(term.e)} ${esc(term.p||'')}</div>
+      ${ans.correct && p.wrong ? `<div class="rn" style="color:var(--green-deep)">📕 错词本连对 ${Math.min(p.streak||0,2)}/2</div>` : ''}
+      ${!ans.correct ? `<div class="rn" style="color:var(--bad)">已收入错词本，之后可单独重练</div>` : ''}
+    </div>`;
+  } else {
+    opts.forEach((o,i)=>{
+      optHtml += `<button class="opt" data-act="choose" data-i="${i}" data-k="${keys[i]}" data-m="${esc(o)}">${esc(o)}</button>`;
+    });
+    revealHtml = `<button class="dontknow" data-act="skip">我选不会 · 显示答案</button>`;
+  }
+
+  nextHtml = `
+    <div class="nextrow">
+      <button class="btn sec" data-act="prev" ${sess.pos<=0?'disabled':''}>‹ 上一题</button>
+      ${sess.pos<total-1
+        ? `<button class="btn primary" data-act="next">下一题 ›</button>`
+        : `<button class="btn primary" data-act="finish">完成 ✓</button>`}
+    </div>`;
+
+  const cornerIll = bid==='cell' ? 'chloro' : 'flask';
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
+      <div class="title">${b.title}</div>
+      <div class="meta">${pos}/${total}</div>
+    </div>
+    <div class="progwrap">
+      <div class="prog"><span class="mode">${sess.mode==='review'?'复习模式':sess.mode==='fav'?'收藏夹':sess.mode==='wrong'?'错词重练':'学习'}</span><span>${term._ch}</span></div>
+      <div class="bar"><i style="width:${Math.round(pos/total*100)}%"></i></div>
+    </div>
+    <div class="scroll">
+      <div style="position:relative" class="pad">
+        <div class="paper wordcard">
+          <span class="tape ${bid==='bio'?'o':''}"></span>
+          <button class="star ${isFav?'on':''}" data-act="fav-toggle" title="收藏">${isFav?'★':'☆'}</button>
+          <div class="kicker">English</div>
+          <div class="en ${term.e.length>40?'l':term.e.length>26?'m':''}">${esc(term.e)}</div>
+          ${term.p&&term.p!=='/'?`<div class="ph">${esc(term.p)}</div>`:''}
+          <span class="ill illcorner">${ILL[cornerIll]}</span>
+        </div>
+        ${optHtml}
+        ${revealHtml}
+        ${nextHtml}
+      </div>
+      <div class="spacer" style="height:14px"></div>
+    </div>
+  `;
+}
+
+function renderDone(){
+  const bid=sess.bid; const b=DATA[bid];
+  let correct=0,total=0;
+  sess.queue.forEach(id=>{ const a=sess.answered[id]; if(a){ total++; if(a.correct) correct++; } });
+  const acc = total? Math.round(correct/total*100):0;
+  const m = masteryOf(bid);
+  app.innerHTML = `
+    <div class="scroll"><div class="done">
+      <div class="em">🌿</div>
+      <h2>本轮完成！</h2>
+      <p>${b.title} · ${sess.mode==='review'?'复习':sess.mode==='fav'?'收藏夹':sess.mode==='wrong'?'错词重练':'学习'}模式</p>
+      <p>本次答对 ${correct}/${total}（${acc}%）　·　全书掌握度 ${m}%</p>
+      <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
+        ${wrongStat(bid).n?`<div class="btn primary" style="border-radius:14px 5px 14px 5px/5px 14px 5px 14px;background:var(--orange);box-shadow:0 3px 0 #b8571f" data-act="study-wrong" data-bid="${bid}">📕 再练错词 (${wrongStat(bid).n})</div>`:''}
+        <div class="paper btn sec" style="border-radius:14px" data-act="chapters" data-bid="${bid}">返回目录</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">🏠 首页</div>
+      </div>
+    </div></div>
+  `;
+}
+
+/* 复习为空（没有错词）时的提示页 */
+function renderEmptyReview(bid){
+  setAccent(bid);
+  const b=DATA[bid];
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
+      <div class="title">🔁 ${b.title} · 复习</div>
+      <div class="meta">0</div>
+    </div>
+    <div class="scroll"><div class="done">
+      <div class="em">🌿</div>
+      <h2>没有需要复习的词</h2>
+      <p>答错或点「我选不会」的词会自动收进这里。</p>
+      <p style="font-size:13px">去任意章节学习，遇到不会的词点「我选不会」，<br>它就会出现在复习清单里啦。</p>
+      <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
+        <div class="btn primary" style="border-radius:14px 5px 14px 5px/5px 14px 5px 14px" data-act="chapters" data-bid="${bid}">去学习新词</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">🏠 首页</div>
+      </div>
+    </div></div>
+  `;
+}
+
+function renderFav(bid){
+  setAccent(bid);
+  const b=DATA[bid];
+  const ids=favIds(bid);
+  let list='';
+  if(ids.length===0){
+    list = `<div class="center-note">还没有收藏的单词。<br>在学习时点击右上角 ☆ 即可收藏。</div>`;
+  } else {
+    ids.forEach(id=>{
+      const t=DATA[bid]._terms.find(x=>x._id===id);
+      list += `<div class="paper favitem"><div class="fe"><div class="e">${esc(t.e)}</div><div class="m">${esc(t.m)}</div></div>
+        <button class="x" data-act="fav-remove" data-bid="${bid}" data-id="${id}">✕</button></div>`;
+    });
+  }
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
+      <div class="title">⭐ ${b.title} · 收藏夹</div>
+      <div class="meta">${ids.length}</div>
+    </div>
+    <div class="scroll">
+      ${ids.length?`<div class="pad"><div class="home-actions"><div class="paper ghost" data-act="study-fav" data-bid="${bid}">▶ 开始背诵收藏 (${ids.length})</div></div></div>`:''}
+      ${list}
+      <div class="spacer"></div>
+    </div>
+  `;
+}
+
+function renderWrong(bid){
+  setAccent(bid);
+  const b=DATA[bid];
+  const ids=wrongIds(bid);
+  // 未毕业（streak<1）的排前面，反复错的优先
+  ids.sort((a,c)=>{
+    const pa=getP(bid,a), pc=getP(bid,c);
+    return (pa.streak||0)-(pc.streak||0) || (pa.box-pc.box);
+  });
+  let list='';
+  if(ids.length===0){
+    list = `<div class="center-note">错词本是空的 🎉<br>答错或点「我选不会」的词会自动收进来。</div>`;
+  } else {
+    ids.forEach(id=>{
+      const t=DATA[bid]._terms.find(x=>x._id===id);
+      const p=getP(bid,id);
+      const st=Math.min(p.streak||0,2);
+      list += `<div class="paper favitem">
+        <span class="ill" style="width:28px;height:28px;color:var(--bad);opacity:.75;flex:0 0 auto">${ILL.colony}</span>
+        <div class="fe"><div class="e">${esc(t.e)}</div><div class="m">${esc(t.m)}</div></div>
+        <div class="chip ok" style="flex:0 0 auto">已连对 <b>${st}</b>/2</div>
+      </div>`;
+    });
+  }
+  const stat=wrongStat(bid);
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
+      <div class="title">📕 ${b.title} · 错词本</div>
+      <div class="meta">${ids.length}</div>
+    </div>
+    <div class="scroll">
+      <div style="margin:14px 16px" class="sticky orange">
+        <span class="pin"></span>
+        <span class="pin-t">错词说明</span>
+        只练你答错 / 选不会的词。连续答对 2 次就自动「毕业」移出。
+        当前共 <b>${stat.n}</b> 个，其中 <b>${stat.weak}</b> 个还没答对过。
+      </div>
+      ${ids.length?`<div class="pad"><div class="home-actions"><div class="paper ghost" data-act="study-wrong" data-bid="${bid}" style="border-color:var(--orange);color:var(--orange)">▶ 只练错词 (${ids.length})</div></div></div>`:''}
+      ${list}
+      <div class="spacer"></div>
+    </div>
+  `;
+}
+
+/* ============ 事件 ============ */
+app.addEventListener("click", e=>{
+  const el = e.target.closest("[data-act]");
+  if(!el) return;
+  const act = el.dataset.act;
+  const bid = el.dataset.bid;
+
+  if(act==="open"){ renderChapters(el.dataset.bid); }
+  else if(act==="home"){ renderHome(); }
+  else if(act==="chapters"){ renderChapters(bid); }
+
+  else if(act==="study"){
+    const ci=+el.dataset.ci;
+    const ids=DATA[bid].chapters[ci].terms.map(t=>t._id);
+    startSession(bid,"study",ids);
+  }
+  else if(act==="review"){
+    // 复习 = 只复习答错 / 选不会的词（错词本），不含没学过的新词
+    const ids=wrongIds(bid);
+    if(ids.length===0){
+      sess={bid,mode:"review",queue:[],pos:0,answered:{},note:"没有需要复习的词啦 ✨ 答错或选不会的词会自动收进来。"};
+      // 空队列：直接显示完成页
+      renderEmptyReview(bid);
+      return;
+    }
+    // 还没答对过的（streak=0）排前面，反复错优先
+    ids.sort((a,c)=>{
+      const pa=getP(bid,a), pc=getP(bid,c);
+      return (pa.streak||0)-(pc.streak||0) || (pa.box-pc.box);
+    });
+    startSession(bid,"review",ids);
+  }
+  else if(act==="fav"){ renderFav(bid); }
+  else if(act==="wrong"){ renderWrong(bid); }
+  else if(act==="study-wrong"){
+    const ids=wrongIds(bid);
+    if(ids.length) startSession(bid,"wrong",ids);
+  }
+  else if(act==="study-fav"){
+    const ids=favIds(bid);
+    if(ids.length) startSession(bid,"fav",ids);
+  }
+  else if(act==="fav-remove"){
+    const id=el.dataset.id; const p=getP(bid,id); p.fav=false; state[bid].p[id]=p; saveState();
+    renderFav(bid);
+  }
+
+  else if(act==="choose"){
+    const term=currentTerm(); const id=term._id; const b=sess.bid;
+    if(sess.answered[id]) return;
+    const chosen=el.dataset.m;
+    const correct = (chosen===term.m);
+    sess.answered[id]={choice:+el.dataset.i, correct, skip:false};
+    record(b,id,correct);
+    renderStudy();
+  }
+  else if(act==="skip"){
+    const term=currentTerm(); const id=term._id; const b=sess.bid;
+    if(sess.answered[id]) return;
+    sess.answered[id]={choice:-1, correct:false, skip:true};
+    record(b,id,false);
+    renderStudy();
+  }
+  else if(act==="fav-toggle"){
+    const term=currentTerm(); const id=term._id; const b=sess.bid;
+    const p=getP(b,id); p.fav=!p.fav; state[b].p[id]=p; saveState();
+    renderStudy();
+  }
+  else if(act==="prev"){
+    if(sess.pos>0){ sess.pos--; renderStudy(); }
+  }
+  else if(act==="next"){
+    if(sess.pos<sess.queue.length-1){ sess.pos++; renderStudy(); }
+  }
+  else if(act==="finish"){ renderDone(); }
+
+  else if(act==="reset"){
+    if(confirm("确定清空两本书的全部学习进度（收藏、掌握度、复习计划）吗？此操作不可恢复。")){
+      state={cell:{p:{}},bio:{p:{}}}; saveState(); renderHome();
+    }
+  }
+});
+
+/* 复习模式无到期时注入提示条 */
+const _renderStudy = renderStudy;
+renderStudy = function(){
+  _renderStudy();
+  if(sess && sess.note){
+    const sc=app.querySelector(".scroll");
+    if(sc && !sc.querySelector(".banner")){
+      const b=document.createElement("div");
+      b.className="banner"; b.textContent="💡 "+sess.note;
+      sc.insertBefore(b, sc.firstChild);
+    }
+  }
+};
+
+renderHome();
+</script>
+</body>
+</html>
