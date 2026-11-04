@@ -1047,12 +1047,54 @@ function $(sel){ return document.querySelector(sel); }
 
 /* ============ 当前学习会话 ============ */
 let sess = null;
-function startSession(bid, mode, ids){
+function startSession(bid, mode, ids, meta){
   // opts 缓存每题的 4 个选项：保证答题前/后、切收藏、上一题来回时选项顺序不变
-  sess = { bid, mode, queue: ids, pos: 0, answered:{}, revealed:false, opts:{} };
+  sess = { bid, mode, queue: ids, pos: 0, answered:{}, revealed:false, opts:{}, ci:meta&&meta.ci };
   renderStudy();
 }
 function currentTerm(){ return DATA[sess.bid]._terms.find(t=>t._id===sess.queue[sess.pos]); }
+
+/* ---------- 章节学习进度（断点续背，持久化） ---------- */
+/* rounds[bid+"_"+ci] = { ids:[本轮要背的词id], pos:已答到第几个, done:本轮是否已完成 } */
+function getRound(bid, ci){
+  if(!state[bid].rounds) state[bid].rounds = {};
+  return state[bid].rounds[bid+"_"+ci] || null;
+}
+function setRound(bid, ci, r){
+  if(!state[bid].rounds) state[bid].rounds = {};
+  state[bid].rounds[bid+"_"+ci] = r;
+  saveState();
+}
+/* 某词是否"已掌握"：答对过且不在错词本里 */
+function isMastered(bid, id){
+  const p = getP(bid, id);
+  return (p.c||0) > 0 && !p.wrong;
+}
+/* 决定进入章节时该背哪些词，返回 {ids, pos, label, empty} */
+function planChapter(bid, ci){
+  const terms = DATA[bid].chapters[ci].terms;
+  const allIds = terms.map(t=>t._id);
+  const r = getRound(bid, ci);
+
+  // 1) 有未完成的本轮 → 断点续背（保留原队列与位置，选项顺序也会重新生成，不影响）
+  if(r && !r.done && r.ids && r.ids.length){
+    return { ids: r.ids, pos: r.pos, label:"继续上次" };
+  }
+
+  // 2) 本轮已完成 / 首次进入 → 只背还没掌握的
+  const unmastered = allIds.filter(id=>!isMastered(bid,id));
+  if(unmastered.length===0){
+    return { ids: [], pos:0, label:"已全部掌握", empty:true };
+  }
+  const hasWrong = unmastered.some(id=>getP(bid,id).wrong);
+  return {
+    ids: unmastered,
+    pos: 0,
+    label: hasWrong ? "重练错词" : "从没背过的开始",
+    isNew: true
+  };
+}
+
 
 /* 生成 4 个选项（1 正确 + 3 干扰） */
 function buildOptions(term){
@@ -1067,6 +1109,26 @@ function optionsFor(term){
   if(!sess.opts) sess.opts = {};
   if(!sess.opts[term._id]) sess.opts[term._id] = buildOptions(term);
   return sess.opts[term._id];
+}
+
+/* 保存学习断点（章节学习模式才需要） */
+function savePos(){
+  if(!sess || sess.mode!=="study" || sess.ci==null) return;
+  const r=getRound(sess.bid, sess.ci);
+  setRound(sess.bid, sess.ci, {
+    ids: sess.queue,
+    pos: sess.pos,
+    done: false
+  });
+}
+/* 本轮完成：标记 done，下次进入直接挑没掌握的 */
+function finishRound(){
+  if(!sess || sess.mode!=="study" || sess.ci==null) return;
+  setRound(sess.bid, sess.ci, {
+    ids: sess.queue,
+    pos: sess.queue.length,
+    done: true
+  });
 }
 
 /* ============ 渲染 ============ */
@@ -1136,16 +1198,29 @@ function renderChapters(bid){
   let chs='';
   b.chapters.forEach((ch,ci)=>{
     const total=ch.terms.length;
-    let learned=0; ch.terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0) learned++; });
-    const pct = total? Math.round(learned/total*100):0;
+    let learned=0, masteredN=0;
+    ch.terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0) learned++; if(isMastered(bid,t._id)) masteredN++; });
+    const pct = total? Math.round(masteredN/total*100):0;
     const dot = (ci%3===0)?'leaf':(ci%3===1)?'chloro':'petri';
+    // 断点状态
+    const r=getRound(bid,ci);
+    let badge='';
+    if(masteredN===total && total>0){
+      badge = `<span class="chip ok" style="flex:0 0 auto;border-color:var(--green)">✓ 已掌握</span>`;
+    } else if(r && !r.done && r.ids && r.ids.length && r.pos>0){
+      const doneN=Math.min(r.pos, r.ids.length);
+      badge = `<span class="chip" style="flex:0 0 auto;border-color:var(--orange);color:var(--orange)">继续 ${doneN}/${r.ids.length}</span>`;
+    } else if(masteredN>0){
+      badge = `<span class="chip" style="flex:0 0 auto">${masteredN}/${total} 已掌握</span>`;
+    }
     chs += `
       <div class="paper chap" data-act="study" data-bid="${bid}" data-ci="${ci}">
         <span class="ill dot">${ILL[dot]}</span>
         <div class="cn">
           <div class="t">${ch.name}</div>
-          <div class="s">${learned}/${total} 已学 · 掌握 ${pct}%</div>
+          <div class="s">已掌握 ${masteredN}/${total} · ${pct}%</div>
         </div>
+        ${badge}
         <div class="go">›</div>
       </div>`;
   });
@@ -1328,6 +1403,30 @@ function renderFav(bid){
   `;
 }
 
+/* 章节已全部掌握 */
+function renderChapterDone(bid, ci){
+  setAccent(bid);
+  const b=DATA[bid];
+  const ch=b.chapters[ci];
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
+      <div class="title">${ch.name}</div>
+      <div class="meta">${ch.terms.length}/${ch.terms.length}</div>
+    </div>
+    <div class="scroll"><div class="done">
+      <div class="em">🌱</div>
+      <h2>这一章全部掌握啦</h2>
+      <p>${ch.terms.length} 个词都答对过了，没有需要再背的。</p>
+      <p style="font-size:13px">想再巩固可以随时去错词本，或换到下一章。</p>
+      <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
+        <div class="btn primary" style="border-radius:14px 5px 14px 5px/5px 14px 5px 14px" data-act="chapters" data-bid="${bid}">返回目录 · 换下一章</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">🏠 首页</div>
+      </div>
+    </div></div>
+  `;
+}
+
 function renderWrong(bid){
   setAccent(bid);
   const b=DATA[bid];
@@ -1386,8 +1485,21 @@ app.addEventListener("click", e=>{
 
   else if(act==="study"){
     const ci=+el.dataset.ci;
-    const ids=DATA[bid].chapters[ci].terms.map(t=>t._id);
-    startSession(bid,"study",ids);
+    const plan=planChapter(bid,ci);
+    if(plan.empty){
+      renderChapterDone(bid, ci);
+      return;
+    }
+    const r=getRound(bid,ci);
+    // 断点续背：沿用原队列；新一轮：建立新队列
+    const ids = r && !r.done && r.ids && r.ids.length ? r.ids : plan.ids;
+    const pos = r && !r.done && r.ids && r.ids.length ? r.pos : 0;
+    if(!(r && !r.done && r.ids && r.ids.length)){
+      setRound(bid, ci, {ids:plan.ids, pos:0, done:false});
+    }
+    startSession(bid,"study",ids,{ci});
+    sess.pos = pos;
+    renderStudy();
   }
   else if(act==="review"){
     // 复习 = 只复习答错 / 选不会的词（错词本），不含没学过的新词
@@ -1427,6 +1539,7 @@ app.addEventListener("click", e=>{
     const correct = (chosen===term.m);
     sess.answered[id]={choice:+el.dataset.i, correct, skip:false};
     record(b,id,correct);
+    savePos();
     renderStudy();
   }
   else if(act==="skip"){
@@ -1434,6 +1547,7 @@ app.addEventListener("click", e=>{
     if(sess.answered[id]) return;
     sess.answered[id]={choice:-1, correct:false, skip:true};
     record(b,id,false);
+    savePos();
     renderStudy();
   }
   else if(act==="fav-toggle"){
@@ -1442,16 +1556,19 @@ app.addEventListener("click", e=>{
     renderStudy();
   }
   else if(act==="prev"){
-    if(sess.pos>0){ sess.pos--; renderStudy(); }
+    if(sess.pos>0){ sess.pos--; savePos(); renderStudy(); }
   }
   else if(act==="next"){
-    if(sess.pos<sess.queue.length-1){ sess.pos++; renderStudy(); }
+    if(sess.pos<sess.queue.length-1){ sess.pos++; savePos(); renderStudy(); }
   }
-  else if(act==="finish"){ renderDone(); }
+  else if(act==="finish"){
+    finishRound();
+    renderDone();
+  }
 
   else if(act==="reset"){
     if(confirm("确定清空两本书的全部学习进度（收藏、掌握度、复习计划）吗？此操作不可恢复。")){
-      state={cell:{p:{}},bio:{p:{}}}; saveState(); renderHome();
+      state={cell:{p:{}},bio:{p:{}},cellVer:CELL_LIB_VER}; saveState(); renderHome();
     }
   }
 });
