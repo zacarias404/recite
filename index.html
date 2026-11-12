@@ -1126,6 +1126,25 @@ function saveState(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)
 if(state.curBook!=="cell" && state.curBook!=="bio"){ state.curBook="cell"; saveState(); }
 function curBook(){ return DATA[state.curBook] ? state.curBook : "cell"; }
 
+/* 旧版本把「背新词答错」写成当天到期，会让今天刚学的词当天就进复习。
+   升级时只顺延「今天刚学、却被排在今天或更早」的记录；
+   往日到期该复习的记录原样保留，逾期累加不能丢。 */
+function migrateSameDayDue(){
+  const t = today();
+  let n = 0;
+  for(const bid of ["cell","bio"]){
+    if(!state[bid] || !state[bid].p) continue;
+    for(const id in state[bid].p){
+      const p = state[bid].p[id];
+      if(!p || p.ddue==null || p.ddue>t) continue;
+      if(!p.last || dayOf(p.last)!==t) continue;
+      p.ddue = t+1; n++;
+    }
+  }
+  if(n) saveState();
+}
+migrateSameDayDue();
+
 /* 为每个 term 生成稳定 id */
 function buildIndex(){
   for(const bid in DATA){
@@ -1142,28 +1161,32 @@ function buildIndex(){
 buildIndex();
 
 /* ---------- 按天调度（艾宾浩斯） ---------- */
-function today(){ const d=new Date(); return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000); }
+function dayOf(ms){ if(!ms) return -1; const d=new Date(ms); return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000); }
+function today(){ return dayOf(Date.now()); }
 function INTERVAL(box){ const t=[1,2,4,7,15,30]; return (box>=0&&box<t.length)? t[box] : 30; } // 天
 function getP(bid,id){
   return state[bid].p[id] || {c:0,w:0,box:0,due:0,fav:false,last:0,streak:0,wrong:false,lastWrong:0};
 }
 function saveP(bid,id,p){ state[bid].p[id]=p; saveState(); }
 
-/* 背新词作答：答对按等级拉长间隔，答错当天就到期（可立刻进复习） */
+/* 作答记录：当天学 / 复习过的词最早明天才回来，绝不在同一天重复安排复习。
+   答对按艾宾浩斯 1/2/4/7/15/30 天逐级拉长（先按当前等级定下次日期，再升级）；
+   答错等级归零，明天重来。复习里「记错了」的循环由会话队列负责，不靠 ddue。 */
 function record(bid,id,correct){
   const p = getP(bid,id);
   p.seen = true; p.last = Date.now();
   if(correct){
-    p.c++; p.box = Math.min(p.box+1,5); p.streak = (p.streak||0)+1;
+    p.c++; p.streak = (p.streak||0)+1;
     if(p.wrong && p.streak>=2) p.wrong = false;      // 连对 2 次毕业
-    p.ddue = today() + INTERVAL(p.box);
+    p.ddue = today() + INTERVAL(p.box);              // 首次答对 = 明天（第 1 天）
+    p.box = Math.min(p.box+1,5);
   } else {
     p.w++; p.box = 0; p.streak = 0; p.wrong = true; p.lastWrong = Date.now();
-    p.ddue = today();
+    p.ddue = today()+1;                              // 答错也次日再来，不当天
   }
   saveP(bid,id,p);
 }
-/* 复习通过：会 → 交给遗忘曲线拉长间隔；不会 → 明天再来 */
+/* 复习通过：会 → 交给遗忘曲线拉长间隔；不会 → 明天再来（都不当天重复） */
 function reviewPass(bid,id,know){
   if(know){ record(bid,id,true); return; }
   const p=getP(bid,id);
@@ -1176,13 +1199,15 @@ function reviewMissReset(bid,id){
   const p=getP(bid,id); p.box=0; p.streak=0; p.wrong=true; saveP(bid,id,p);
 }
 /* 今日该复习的词：学过的 + 已到期（ddue<=今天）。
-   没复习的词 ddue 不会自动推进，所以昨天的会原样累加进来，不丢失、不重置。 */
+   到期日不自动推进，所以昨天没复习的原样累加进来，不丢失、不重置。
+   今天刚学 / 刚复习的词 ddue 至少是明天，因此不会出现在当天队列里。 */
 function dueIds(bid){
   const t=today();
   const arr=DATA[bid]._terms.filter(x=>{
     const p=getP(bid,x._id);
     if((p.c+p.w)<=0) return false;                 // 没学过的新词绝不进复习
-    return p.ddue==null || p.ddue<=t;              // 旧进度无 ddue → 视为到期
+    if(p.ddue==null) return dayOf(p.last) < t;     // 旧格式进度：只有往日学的才算到期
+    return p.ddue<=t;
   });
   arr.sort((a,b)=>{
     const pa=getP(bid,a._id), pb=getP(bid,b._id);
@@ -1535,7 +1560,7 @@ function renderHome(){
         </button>
         <button class="bigbtn" data-act="review" data-bid="${bid}">
           <span class="ic"><span class="ill" style="width:26px;height:26px">${ILL.arrow}</span></span>
-          <span class="tx"><span class="t1">复习</span><span class="t2">今日 ${due} 词到期 · 未复习自动顺延</span></span>
+          <span class="tx"><span class="t1">复习</span><span class="t2">今日 ${due} 词到期 · 新词明天起复习</span></span>
           <span class="ar">›</span>
         </button>
       </div>
@@ -1800,7 +1825,7 @@ function renderEmptyReview(bid){
       <div class="em"><span class="ill" style="width:62px;height:62px;color:var(--green);margin:0 auto">${ILL.leaf}</span></div>
       <h2>今天没有到期的词</h2>
       <p>按遗忘曲线，学过的词会在第 1、2、4、7、15、30 天回来找你。</p>
-      <p style="font-size:13px">先去背点新词吧；昨天没复习完的会自动累加到今天。</p>
+      <p style="font-size:13px">今天刚背 / 刚复习的词从明天才进入复习计划，不会当天重复；昨天没复习完的会自动累加到今天。</p>
       <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
         <div class="btn primary" data-act="new" data-bid="${bid}">去背新词 ›</div>
         <div class="paper btn sec" style="border-radius:14px" data-act="home">首页</div>
