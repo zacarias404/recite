@@ -271,6 +271,149 @@
   .reset:active{color:var(--bad);}
 
   .spacer{height:22px;}
+
+  /* ================= v2：布局稳定 / 首页 / 复习 ================= */
+  /* 学习&复习页：视口固定高度，滚动只发生在 .scroll 内，底栏永远不动 */
+  #app.sess{height:100vh;height:100dvh;min-height:0;overflow:hidden;}
+  #app.sess .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .footbar{flex:0 0 auto;display:flex;align-items:center;gap:10px;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    background:var(--paper);border-top:1.5px dashed var(--line);}
+  .footbar .btn{margin:0;height:54px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
+  .footbar .btn.rv-wrong{border-color:#e2a79c;color:var(--bad);}
+  /* 背新词：「我选不会」移进底栏，与下一题/完成同一行 */
+  .footbar .btn.miss{flex:0 0 42%;background:#fffaf0;border:2px dashed var(--orange);
+    color:var(--orange);font-size:14px;font-weight:800;}
+  .footbar .btn.miss:active{background:#fff3e2;}
+  .footbar .btn.miss:disabled{opacity:.42;cursor:default;background:#fffaf0;}
+  /* 「上一页」改判态：保持原判 / 改成记错了 */
+  .footbar .btn.keep{flex:1;}
+  .footbar .btn.danger{flex:1;border-color:#e2a79c;background:#fdf1ee;color:var(--bad);font-weight:800;}
+  .footbar .btn.danger:active{background:#fbe4df;}
+  /* topbar 右上角「撤回」 */
+  .topbar .undo{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--green-deep);
+    font-size:12.5px;font-weight:800;padding:6px 10px;border-radius:18px;cursor:pointer;white-space:nowrap;}
+  .topbar .undo:active{background:#42995810;}
+  .topbar .undo:disabled{opacity:.35;cursor:default;}
+  /* 提示态与按钮态占用同一高度，底栏位置恒定 */
+  .footnote{flex:1;height:54px;display:flex;align-items:center;justify-content:center;text-align:center;
+    font-size:12px;color:var(--ink-soft);font-family:var(--hand-en);letter-spacing:.4px;}
+
+  /* 固定槽位：选项 / 判断 / 释义都在同一区域内就地替换，不新增占位行 */
+  .slot{margin:11px 16px 0;min-height:320px;display:flex;flex-direction:column;justify-content:center;}
+  .slot > .opt{margin:0 0 9px;}
+  .slot > .answerbar,.slot > .defbox,.slot > .judgerow{margin:3px 0 0;}
+  /* 揭晓答案后释义框上移，紧跟单词卡，别沉在页面中下部（纯视觉位移，不改文档流） */
+  .slot > .defbox{transform:translateY(-44px);}
+  /* 选完后只剩一个展示框，高度固定，避免撑开页面 */
+  .defbox.study-def{min-height:176px;display:flex;flex-direction:column;justify-content:center;}
+  .defbox .extra{font-size:12px;color:var(--ink-soft);margin-top:10px;line-height:1.6;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;}
+  .defbox .extra b{color:var(--green-deep);font-weight:800;}
+  .answerbar{height:48px;min-height:0;overflow:hidden;display:flex;align-items:center;gap:9px;
+    background:#f2f7ee;border:2px solid var(--line);border-radius:13px;padding:0 13px;font-size:13.5px;line-height:1.45;}
+  .answerbar.bad{background:#fdf1ee;border-color:#e8bcb3;}
+  .answerbar .lbl{font-size:11.5px;color:var(--ink-soft);flex:0 0 auto;font-family:var(--hand-en);letter-spacing:1px;}
+  .answerbar .val{font-weight:800;font-size:15.5px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .answerbar .st{margin-left:auto;font-size:12.5px;font-weight:800;flex:0 0 auto;}
+  .answerbar .st.ok{color:var(--green-deep);}
+  .answerbar .st.bad{color:var(--bad);}
+  .wordcard{min-height:168px;}
+
+  /* 复习：纯判断按钮 */
+  .judgerow{display:flex;gap:12px;}
+  .judge{flex:1;padding:22px 8px;border:2px solid var(--line);border-radius:16px 6px 16px 6px/6px 16px 6px 16px;
+    background:var(--card);font-size:19px;font-weight:800;cursor:pointer;color:var(--ink);line-height:1.3;}
+  .judge:active{transform:translateY(1px);}
+  .judge.yes{border-color:var(--green);color:var(--green-deep);background:#f0f8f1;}
+  .judge.no{border-color:#e2a79c;color:var(--bad);background:#fdf4f1;}
+  .judge:disabled{opacity:.42;cursor:default;transform:none;}
+  .judge small{display:block;font-size:11px;font-weight:600;color:var(--ink-soft);margin-top:6px;}
+  .defbox{background:var(--card);border:2px solid var(--line);border-radius:14px 6px 14px 6px/6px 14px 6px 14px;
+    padding:20px 18px;text-align:center;}
+  .defbox .dk{font-family:var(--hand-en);font-size:12px;letter-spacing:2px;color:var(--orange);}
+  .defbox .zh{font-size:24px;font-weight:800;line-height:1.4;margin:6px 0 4px;}
+  .defbox .tip{font-size:12.5px;color:var(--ink-soft);font-family:var(--hand-en);}
+  .defbox .rst{display:inline-block;margin-top:12px;font-size:12.5px;font-weight:800;padding:5px 12px;border-radius:20px;
+    background:#ecf6ee;color:var(--green-deep);}
+  .defbox .rst.bad{background:#fbecea;color:var(--bad);}
+  .rvstat{margin:8px 16px 0;font-size:12px;color:var(--ink-soft);font-family:var(--hand-en);letter-spacing:.5px;}
+  .rvstat b{color:var(--orange);}
+
+  /* —— 首页：简洁留白 —— */
+  #app.home{background-color:#F9FBF6;}
+  .homebg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+  .homebg .wash{position:absolute;right:-120px;top:-110px;width:340px;height:340px;border-radius:50%;background:#e8f2e6;opacity:.55;}
+  .homebg .wash2{position:absolute;left:-90px;bottom:-70px;width:260px;height:260px;border-radius:50%;background:#fbeedd;opacity:.4;}
+  .homebg .bgill{position:absolute;color:var(--green);opacity:.13;}
+  .homebg .bgill.a{width:110px;height:170px;left:-24px;top:120px;transform:rotate(-12deg);}
+  .homebg .bgill.b{width:120px;height:120px;right:-18px;bottom:110px;transform:rotate(14deg);color:var(--orange);opacity:.12;}
+  .homebg .bgill.c{width:96px;height:96px;right:26px;top:210px;opacity:.1;}
+  .homebg .bggrid{position:absolute;inset:0;background-image:radial-gradient(#7a9a7a22 1px,transparent 1px);
+    background-size:22px 22px;opacity:.5;}
+  .homewrap{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;padding:18px 22px 22px;}
+  .hometop{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .htag{font-family:var(--hand-en);font-size:13px;letter-spacing:2.5px;color:var(--green-deep);font-weight:700;}
+  .pickbtn{border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:12.5px;font-weight:700;
+    padding:8px 13px;border-radius:20px;cursor:pointer;box-shadow:0 2px 0 #00000008;}
+  .pickbtn:active{background:#42995810;}
+  .hhero{margin-top:54px;}
+  .hkick{font-family:var(--hand-en);font-size:15px;letter-spacing:4px;color:var(--orange);font-weight:700;}
+  .hhero h1{font-size:37px;line-height:1.24;margin:10px 0 10px;font-weight:900;letter-spacing:1px;}
+  .hhero h1 em{font-style:normal;color:var(--green);background:linear-gradient(transparent 62%,var(--hl) 62%);}
+  .hhero .cur{font-size:12.5px;color:var(--ink-soft);display:flex;align-items:center;gap:7px;}
+  .hhero .cur i{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;}
+  .quotecard{margin:26px 0 0;padding:22px 20px 18px;min-height:132px;display:flex;flex-direction:column;justify-content:center;}
+  .quotecard .qmark{font-family:var(--hand-en);font-size:40px;line-height:.6;color:var(--orange);opacity:.7;}
+  .quotecard .q{font-family:var(--hand-en);font-size:19px;line-height:1.45;font-weight:700;margin-top:6px;}
+  .quotecard .sub{font-size:13px;color:var(--ink-soft);margin-top:6px;}
+  .quotecard .by{font-family:var(--hand-en);font-size:12.5px;color:var(--green-deep);margin-top:8px;text-align:right;}
+  .bigbtns{display:flex;flex-direction:column;gap:12px;margin-top:22px;}
+  .bigbtn{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    border:2px solid var(--line);border-radius:16px 6px 16px 6px/6px 16px 6px 16px;padding:16px 18px;background:var(--card);}
+  .bigbtn:active{transform:translateY(1px);}
+  .bigbtn .ic{width:44px;height:44px;flex:0 0 auto;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    font-size:22px;background:#eaf4ea;color:var(--green-deep);}
+  .bigbtn .tx{flex:1;min-width:0;}
+  .bigbtn .t1{display:block;font-size:17px;font-weight:800;}
+  .bigbtn .t2{display:block;font-size:11.5px;color:var(--ink-soft);margin-top:3px;font-family:var(--hand-en);letter-spacing:.3px;}
+  .bigbtn .ar{font-size:22px;color:var(--green-deep);font-weight:700;}
+  .bigbtn.primary{background:var(--green);border-color:var(--green);box-shadow:0 3px 0 #2f7d4f;}
+  .bigbtn.primary .ic{background:#ffffff2e;color:#fff;}
+  .bigbtn.primary .t1,.bigbtn.primary .ar{color:#fff;}
+  .bigbtn.primary .t2{color:#e6f3e9;}
+  .hfoot{margin-top:auto;padding-top:20px;text-align:center;font-size:11px;color:#b3bca9;
+    font-family:var(--hand-en);letter-spacing:1px;cursor:pointer;}
+
+  /* —— 词书选择页 —— */
+  .pickerhead{display:flex;align-items:center;gap:10px;padding:16px 18px 4px;}
+  .pickerlist{padding:8px 18px;}
+  .bookopt{margin:12px 0;padding:18px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:.12s;}
+  .bookopt.sel{border-color:var(--green);box-shadow:0 0 0 3px #4299581a,0 7px 20px #3c5a3c0d;}
+  .bookopt:active{transform:scale(.99);}
+  .bookopt .bn2{font-size:17px;font-weight:800;}
+  .bookopt .ba2{font-size:11.5px;color:var(--ink-soft);margin-top:4px;}
+  .bookopt .ck{margin-left:auto;font-size:19px;color:var(--green);font-weight:800;}
+  .pickernote{margin:8px 18px;font-size:12.5px;color:var(--ink-soft);line-height:1.75;}
+  .minorlinks{display:flex;gap:18px;justify-content:center;margin:22px 18px;font-size:12.5px;color:var(--ink-soft);}
+  .minorlinks span{cursor:pointer;text-decoration:underline;text-underline-offset:3px;}
+
+  @media (min-width:760px){
+    #app.home .homewrap{padding:26px 40px 34px;}
+    .hhero{margin-top:72px;}
+    .hhero h1{font-size:46px;}
+    .quotecard{max-width:560px;padding:26px 28px;}
+    .bigbtns{flex-direction:row;gap:16px;max-width:640px;}
+    .bigbtn{padding:20px 22px;}
+    .slot{margin:13px 30px 0;min-height:360px;}
+    .footbar{padding:12px 30px calc(12px + env(safe-area-inset-bottom));}
+    .footbar .btn.miss{flex:0 0 38%;font-size:15px;}
+    .topbar .undo{font-size:13.5px;padding:7px 13px;}
+    .defbox.study-def{min-height:196px;}
+    .slot > .defbox{transform:translateY(-52px);}
+    .rvstat{margin:12px 30px 0;}
+    .pickerhead,.pickerlist,.pickernote{padding-left:40px;padding-right:40px;}
+  }
 </style>
 </head>
 <body>
@@ -961,14 +1104,13 @@ const DATA = {
 
 /* ============ 状态（localStorage 持久化，两本书独立） ============ */
 const STORE_KEY = "bioFlashcardsState_v1";
-const CELL_LIB_VER = 2;   // 细胞生物学词库版本（换成求臻词表后 +1）
+const CELL_LIB_VER = 2;   // 细胞生物学词库版本
 let state = loadState();
 function loadState(){
   try{
     const s = JSON.parse(localStorage.getItem(STORE_KEY));
     if(s && s.cell && s.bio){
-      // 词库整体替换后，旧 cell 的词条 id 会错位映射到新词上：
-      // 只清空细胞生物学的旧进度，生物化学进度原样保留。
+      // 词库整体替换后，旧 cell 词条 id 会错位：只清空细胞进度，生化原样保留
       if(s.cellVer !== CELL_LIB_VER){
         s.cell = {p:{}};
         s.cellVer = CELL_LIB_VER;
@@ -980,6 +1122,9 @@ function loadState(){
   return { cell:{p:{}}, bio:{p:{}}, cellVer:CELL_LIB_VER };
 }
 function saveState(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+/* 当前词书：记住上次选择，不主动重选就一直沿用 */
+if(state.curBook!=="cell" && state.curBook!=="bio"){ state.curBook="cell"; saveState(); }
+function curBook(){ return DATA[state.curBook] ? state.curBook : "cell"; }
 
 /* 为每个 term 生成稳定 id */
 function buildIndex(){
@@ -996,306 +1141,594 @@ function buildIndex(){
 }
 buildIndex();
 
+/* ---------- 按天调度（艾宾浩斯） ---------- */
+function today(){ const d=new Date(); return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000); }
+function INTERVAL(box){ const t=[1,2,4,7,15,30]; return (box>=0&&box<t.length)? t[box] : 30; } // 天
 function getP(bid,id){
   return state[bid].p[id] || {c:0,w:0,box:0,due:0,fav:false,last:0,streak:0,wrong:false,lastWrong:0};
 }
-function INTERVAL(box){ const t=[0,1,2,4,7,15]; return (box>=0&&box<t.length)? t[box] : 15; } // 天
+function saveP(bid,id,p){ state[bid].p[id]=p; saveState(); }
+
+/* 背新词作答：答对按等级拉长间隔，答错当天就到期（可立刻进复习） */
 function record(bid,id,correct){
   const p = getP(bid,id);
+  p.seen = true; p.last = Date.now();
   if(correct){
-    p.c++; p.box = Math.min(p.box+1,5);
-    p.streak = (p.streak||0)+1;
-    // 连续答对 2 次 → 移出错词本
-    if(p.wrong && p.streak>=2) p.wrong = false;
+    p.c++; p.box = Math.min(p.box+1,5); p.streak = (p.streak||0)+1;
+    if(p.wrong && p.streak>=2) p.wrong = false;      // 连对 2 次毕业
+    p.ddue = today() + INTERVAL(p.box);
   } else {
-    p.w++; p.box = Math.max(p.box-2,0);
-    p.streak = 0;
-    p.wrong = true;            // 答错 / 选不会 → 进入错词本
-    p.lastWrong = Date.now();
+    p.w++; p.box = 0; p.streak = 0; p.wrong = true; p.lastWrong = Date.now();
+    p.ddue = today();
   }
-  p.due = Date.now() + INTERVAL(p.box)*86400000;
-  p.last = Date.now();
-  state[bid].p[id] = p;
-  saveState();
+  saveP(bid,id,p);
 }
-function wrongIds(bid){
-  return DATA[bid]._terms.filter(t=>getP(bid,t._id).wrong).map(t=>t._id);
+/* 复习通过：会 → 交给遗忘曲线拉长间隔；不会 → 明天再来 */
+function reviewPass(bid,id,know){
+  if(know){ record(bid,id,true); return; }
+  const p=getP(bid,id);
+  p.seen=true; p.w++; p.box=0; p.streak=0; p.wrong=true; p.last=Date.now();
+  p.ddue = today()+1;
+  saveP(bid,id,p);
 }
-/* 某本书的错词统计 */
+/* 记错了：等级清零，本轮不安排到期，等循环巩固后再交给遗忘曲线 */
+function reviewMissReset(bid,id){
+  const p=getP(bid,id); p.box=0; p.streak=0; p.wrong=true; saveP(bid,id,p);
+}
+/* 今日该复习的词：学过的 + 已到期（ddue<=今天）。
+   没复习的词 ddue 不会自动推进，所以昨天的会原样累加进来，不丢失、不重置。 */
+function dueIds(bid){
+  const t=today();
+  const arr=DATA[bid]._terms.filter(x=>{
+    const p=getP(bid,x._id);
+    if((p.c+p.w)<=0) return false;                 // 没学过的新词绝不进复习
+    return p.ddue==null || p.ddue<=t;              // 旧进度无 ddue → 视为到期
+  });
+  arr.sort((a,b)=>{
+    const pa=getP(bid,a._id), pb=getP(bid,b._id);
+    return (pa.ddue==null?t:pa.ddue)-(pb.ddue==null?t:pb.ddue);
+  });
+  return arr.map(x=>x._id);
+}
+function overdueCount(bid){
+  const t=today();
+  return dueIds(bid).filter(id=>{ const p=getP(bid,id); return p.ddue!=null && p.ddue<t; }).length;
+}
+function isMastered(bid,id){ const p=getP(bid,id); return (p.c||0)>0 && !p.wrong; }
+function pendingIds(bid){ return DATA[bid]._terms.filter(t=>!isMastered(bid,t._id)).map(t=>t._id); }
+function wrongIds(bid){ return DATA[bid]._terms.filter(t=>getP(bid,t._id).wrong).map(t=>t._id); }
 function wrongStat(bid){
   let n=0, weak=0;
-  DATA[bid]._terms.forEach(t=>{
-    const p=getP(bid,t._id);
-    if(p.wrong){ n++; if((p.streak||0)===0) weak++; }
-  });
+  DATA[bid]._terms.forEach(t=>{ const p=getP(bid,t._id); if(p.wrong){ n++; if((p.streak||0)===0) weak++; } });
   return {n, weak};
 }
 function masteryOf(bid){
-  const terms = DATA[bid]._terms;
   let ans=0, tot=0;
-  terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0){ ans += p.c/(p.c+p.w); tot++; } });
+  DATA[bid]._terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0){ ans += p.c/(p.c+p.w); tot++; } });
   return tot? Math.round(ans/tot*100) : 0;
 }
-function favIds(bid){
-  return DATA[bid]._terms.filter(t=>getP(bid,t._id).fav).map(t=>t._id);
-}
+function favIds(bid){ return DATA[bid]._terms.filter(t=>getP(bid,t._id).fav).map(t=>t._id); }
 
 /* ============ 工具 ============ */
 function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function $(sel){ return document.querySelector(sel); }
 
-/* ============ 当前学习会话 ============ */
+/* ---------- 小注：一句真正讲词义 / 构词的内容，不写流程状态 ---------- */
+const NOTES = [
+  ["细胞外基质","由细胞分泌的蛋白与多糖织成的网架，撑住组织、传递信号，不只是填充物。"],
+  ["紧密连接","相邻质膜几乎无缝贴合，封住细胞间隙，防止物质从细胞之间漏过。"],
+  ["间隙连接","连接子拼成的小通道，让离子和小分子直接在相邻细胞间通过。"],
+  ["胞间连丝","穿过植物细胞壁的细胞质通道，把相邻细胞连成一个共质体。"],
+  ["桥粒","像铆钉把相邻细胞铆在一起，胞内连着中间纤维，特别抗拉扯。"],
+  ["半桥粒","把细胞的「半边」铆到基底膜上，胞内同样连中间纤维。"],
+  ["黏着带","位于紧密连接下方，钙黏蛋白连成环带，胞内接着微丝。"],
+  ["黏着斑","整联蛋白把胞外基质与胞内微丝接起来的点状黏附结构。"],
+  ["钙黏蛋白","依赖 Ca²⁺ 才有黏附力，去钙就散，让同类细胞互相认亲。"],
+  ["整联蛋白","跨膜「双手」受体：外抓细胞外基质、内连骨架，双向传信号。"],
+  ["选择素","识别糖链、让白细胞在血管壁上先滚动再停下的黏附分子。"],
+  ["流动镶嵌","膜是流动的脂双层，蛋白像冰山一样镶在其中并可侧向移动。"],
+  ["脂筏","富含胆固醇与鞘脂的微区，像筏子一样聚集信号分子。"],
+  ["磷脂","一头亲水、两条疏水尾，进水里自发排成双分子层。"],
+  ["胆固醇","插在脂双层里调流动性：高温稳住、低温防僵。"],
+  ["主动运输","逆浓度梯度搬运，要耗 ATP 或离子梯度，靠泵或载体完成。"],
+  ["协助扩散","顺梯度、不耗能，但必须借通道或载体蛋白才能过膜。"],
+  ["简单扩散","小分子顺浓度梯度直接穿过脂双层，不需蛋白也不耗能。"],
+  ["钠钾泵","每耗 1 个 ATP 泵出 3 Na⁺、泵入 2 K⁺，维持膜两侧离子差。"],
+  ["胞吞","质膜内陷把外来物包成囊泡带进细胞，分吞噬、胞饮、受体介导三类。"],
+  ["胞饮","细胞「喝」进胞外液及其中溶质，形成小囊泡，选择性低。"],
+  ["吞噬","细胞「吃」进大颗粒或细菌，形成吞噬体再送溶酶体消化。"],
+  ["胞吐","囊泡与质膜融合把内容物排到胞外，顺便补上膜面积。"],
+  ["受体介导","配体先结合膜上受体，聚到有被小窝再内吞，高效又专一。"],
+  ["线粒体","双层膜的动力工厂，内膜折成嵴，在这里做氧化磷酸化产 ATP。"],
+  ["叶绿体","双层膜加类囊体：光反应在类囊体膜，暗反应在基质里固碳。"],
+  ["类囊体","扁平膜囊堆叠成基粒，膜上摆着光系统与 ATP 合酶。"],
+  ["氧化磷酸化","电子经呼吸链传给氧，泵出的质子回流驱动 ATP 合酶产 ATP。"],
+  ["呼吸链","嵌在线粒体内膜上的电子传递体，一路把电子交给氧并泵质子。"],
+  ["核糖体","rRNA 加蛋白组成的颗粒，按 mRNA 密码子把氨基酸接成肽链。"],
+  ["内质网","粗面带核糖体管蛋白合成，光面管脂质合成与解毒，两者腔相通。"],
+  ["高尔基体","扁平囊堆叠的分拣站，给蛋白加糖、打包、贴标签再发运。"],
+  ["溶酶体","pH≈5 的水解酶仓库，消化旧细胞器和吞进来的东西。"],
+  ["过氧化物酶体","含氧化酶与过氧化氢酶，分解脂肪酸并就地清掉 H₂O₂。"],
+  ["信号肽","新生肽链 N 端的一段疏水序列，像地址标签把蛋白引向内质网。"],
+  ["核定位信号","带正电的短肽标签，让蛋白被核孔复合体认出并运进核。"],
+  ["囊泡","膜包着的小泡，负责在细胞器之间运输货物，靠包被与 SNARE 认路。"],
+  ["细胞骨架","微管、微丝、中间纤维三套纤维：撑形状、当轨道、管分裂。"],
+  ["微管","α/β 微管蛋白拼成的中空管，有极性，是驱动蛋白与动力蛋白的轨道。"],
+  ["微丝","肌动蛋白双螺旋细丝，管收缩、伪足和胞质分裂环。"],
+  ["中间纤维","最耐拉、无极性，像绳索给细胞提供机械强度。"],
+  ["中心体","一对中心粒加周围物质，是动物细胞主要的微管组织中心。"],
+  ["纺锤体","分裂期由微管搭成的装置，把复制好的染色体均分给两极。"],
+  ["核孔","核膜上的选择性闸门：小分子自由过，大分子要带核定位信号。"],
+  ["核仁","rRNA 转录与核糖体亚基装配的场所，没有膜包着。"],
+  ["染色质","DNA 缠绕组蛋白成核小体再逐级折叠；松散的常染色质才活跃转录。"],
+  ["核小体","约 147 bp DNA 绕在组蛋白八聚体上，是染色质的基本重复单位。"],
+  ["染色体","分裂期染色质高度螺旋化的紧凑形态，便于均等分配。"],
+  ["着丝粒","染色体上连接动粒、牵引姐妹染色单体分开的狭窄区域。"],
+  ["端粒","染色体末端的重复序列，像鞋带帽保护末端，随分裂逐次缩短。"],
+  ["细胞周期","G1→S→G2→M 依次推进，检查点会卡住不合格的细胞。"],
+  ["周期蛋白","浓度随周期涨落的调控亚基，结合并激活 CDK 推动时相转换。"],
+  ["细胞凋亡","基因控制的程序性自杀，膜保持完整、不发炎，和坏死不同。"],
+  ["自噬","把受损细胞器包进自噬体送溶酶体降解，饥饿时回收原料。"],
+  ["干细胞","能自我更新又能分化，按潜能分全能、多能、单能。"],
+  ["细胞分化","同一套基因组选择性表达不同基因，长出不同形态与功能。"],
+  ["接触抑制","正常细胞贴满一层就停分裂，癌细胞常丢掉这个刹车。"],
+  ["信号转导","胞外信号经受体→级联放大→效应，多靠磷酸化当开关。"],
+  ["第二信使","cAMP、Ca²⁺、IP₃ 这类胞内小分子，把信号放大并扩散开。"],
+  ["蛋白偶联受体","七次跨膜，配体一来就换上 GTP 激活下游，是最大的受体家族。"],
+  ["酪氨酸激酶受体","配体使受体二聚并互相磷酸化，招来下游信号蛋白。"],
+  ["单克隆抗体","由单一 B 细胞克隆产生，只认一个抗原表位，特异性极高。"],
+  ["分辨率","能分辨两点的最小距离，受波长与数值孔径限制。"],
+  ["免疫荧光","用带荧光素的抗体定位蛋白，在显微镜下直接看它在哪儿。"],
+  ["流式细胞术","让细胞单个穿过激光，按散射光与荧光快速分选计数。"],
+  ["肽键","一个氨基酸的羧基与另一个的氨基脱水缩成 –CO–NH–，有部分双键性。"],
+  ["氨基酸","带 α-氨基、α-羧基和侧链 R 基；R 基决定极性与电荷。"],
+  ["等电点","净电荷为零时的 pH，此时蛋白溶解度最低、电泳不迁移。"],
+  ["α-螺旋","每圈 3.6 个残基，靠链内 i→i+4 氢键撑起的右手螺旋。"],
+  ["β-折叠","相邻肽段间氢键连成的片层，可平行也可反平行排列。"],
+  ["结构域","能独立折叠、常对应独立功能的一段序列，是蛋白的模块化零件。"],
+  ["变性","空间构象被破坏但一级结构不变，通常活性丧失；有的可复性。"],
+  ["二硫键","两个半胱氨酸氧化成 –S–S–，把肽链或亚基横向锁牢。"],
+  ["血红蛋白","四亚基的运氧蛋白，结合氧有正协同效应，呈别构行为。"],
+  ["活性中心","酶上直接结合底物并催化的小口袋，决定专一性。"],
+  ["米氏常数","速度到一半 Vmax 时的底物浓度，越小说明酶与底物越亲和。"],
+  ["竞争性抑制","抑制剂挤占活性中心，可被高浓度底物冲掉：Vmax 不变、Km 变大。"],
+  ["别构调节","调节物结合活性中心以外的部位，改变构象来开关酶活性。"],
+  ["同工酶","催化同一反应但结构不同的一组酶，常用于组织特异诊断。"],
+  ["辅酶","与酶松散结合的小分子有机物，负责搬运电子或基团。"],
+  ["三羧酸循环","基质里乙酰 CoA 被彻底氧化，一轮出 3 NADH、1 FADH₂、1 GTP。"],
+  ["糖酵解","胞质里葡萄糖拆成 2 丙酮酸，净得 2 ATP 与 2 NADH，不耗氧。"],
+  ["糖异生","由丙酮酸等小分子逆着糖酵解合成葡萄糖，需绕开三个不可逆步。"],
+  ["糖原","葡萄糖以 α-1,4 为主链、α-1,6 分支的高度支化储能多糖。"],
+  ["磷酸戊糖","产生 NADPH 与 5-磷酸核糖，供还原合成与核苷酸合成使用。"],
+  ["β-氧化","从羧基端每次切下二碳乙酰 CoA，同时生成 NADH 和 FADH₂。"],
+  ["酮体","肝中乙酰 CoA 生成的乙酰乙酸等，可在饥饿时供脑与肌肉用。"],
+  ["半保留复制","每条旧链各作模板配一条新链，子代 DNA 都是一旧一新。"],
+  ["冈崎片段","滞后链上不连续合成的一小段 DNA，最后由连接酶接起来。"],
+  ["逆转录","以 RNA 为模板合成 DNA，由逆转录酶完成，见于逆转录病毒。"],
+  ["启动子","RNA 聚合酶识别并结合的 DNA 序列，决定转录从哪儿起始。"],
+  ["内含子","转录后被剪掉的非编码片段；留下的外显子才拼成成熟 mRNA。"],
+  ["密码子","mRNA 上 3 个核苷酸决定 1 个氨基酸，共 64 个含 3 个终止。"],
+  ["反密码子","tRNA 上与密码子互补的三联体，保证把对的氨基酸搬过来。"],
+  ["增色效应","DNA 变性后 260 nm 吸光值升高，可用来测熔解温度 Tm。"],
+  ["光反应","类囊体膜上把光能转成 ATP 与 NADPH，并裂解水放出氧。"],
+  ["卡尔文循环","用 ATP 与 NADPH 把 CO₂ 固定成糖，关键酶是 Rubisco。"],
+  ["反馈抑制","终产物反过来抑制通路开头的限速酶，避免过量合成。"],
+  ["变构酶","活性受效应物结合别构部位调节，动力学常不服从米氏方程。"],
+  ["尿素循环","肝中把有毒的氨转成尿素排出，耗 ATP，连接氨基酸代谢。"],
+  ["转氨作用","把氨基从氨基酸转给 α-酮酸，生成新的氨基酸与酮酸。"],
+];
+const ROOTS = [
+  [/^extra|^exo/i,"extra-/exo- 表「外」"], [/^endo|^intra/i,"endo-/intra- 表「内」"],
+  [/^inter/i,"inter- 表「之间」"], [/^trans/i,"trans- 表「跨／转移」"],
+  [/^anti/i,"anti- 表「抗」"], [/^auto/i,"auto- 表「自」"],
+  [/^hetero/i,"hetero- 表「异」"], [/^homo|^homeo/i,"homo-/homeo- 表「同」"],
+  [/^iso/i,"iso- 表「等／同」"], [/^micro/i,"micro- 表「微」"],
+  [/^macro/i,"macro- 表「巨」"], [/^poly/i,"poly- 表「多」"],
+  [/^mono|^uni/i,"mono-/uni- 表「单」"], [/^bi\b|^di\b/i,"bi-/di- 表「双／二」"],
+  [/^tri/i,"tri- 表「三」"], [/^semi|^hemi/i,"semi-/hemi- 表「半」"],
+  [/^pro|^pre/i,"pro-/pre- 表「前」"], [/^post/i,"post- 表「后」"],
+  [/^co\b|^sym|^syn/i,"co-/sym-/syn- 表「共／同」"], [/^de/i,"de- 表「脱／去」"],
+  [/^re/i,"re- 表「再／回」"], [/^sub/i,"sub- 表「亚／下」"],
+  [/^peri/i,"peri- 表「周」"], [/^proto/i,"proto- 表「原／初」"],
+  [/^cyto/i,"cyto- 表「细胞」"], [/^nucle|^karyo/i,"nucleo-/karyo- 表「核」"],
+  [/^mito/i,"mito- 表「线粒体」"], [/^chloro/i,"chloro- 表「绿」"],
+  [/^phospho/i,"phospho- 表「磷」"], [/^glyco|^gluco/i,"glyco-/gluco- 表「糖」"],
+  [/^lipo|^lipid/i,"lipo- 表「脂」"], [/^chrom/i,"chrom- 表「色」"],
+  [/^soma|^som\b/i,"soma- 表「体」"], [/^photo/i,"photo- 表「光」"],
+  [/^thermo/i,"thermo- 表「热」"], [/^hydro/i,"hydro- 表「水／氢」"],
+  [/ase\b/i,"-ase 表「酶」"], [/osis\b/i,"-osis 表「过程／病变」"],
+  [/genesis\b/i,"-genesis 表「生成」"], [/lysis\b/i,"-lysis 表「裂解」"],
+  [/some\b/i,"-some 表「小体」"], [/plast\b/i,"-plast 表「体／质体」"],
+  [/cyte\b/i,"-cyte 表「细胞」"], [/blast\b/i,"-blast 表「成…细胞」"],
+  [/philic\b/i,"-philic 表「亲」"], [/phobic\b/i,"-phobic 表「疏」"],
+  [/^oligo/i,"oligo- 表「寡／少」"], [/^multi/i,"multi- 表「多」"],
+];
+function briefNote(t){
+  const m=String(t.m||""), e=String(t.e||"");
+  for(const pair of NOTES) if(m.indexOf(pair[0])>=0) return esc(pair[1]);
+  const hits=[];
+  for(const pair of ROOTS) if(pair[0].test(e) && hits.length<2 && hits.indexOf(pair[1])<0) hits.push(pair[1]);
+  const main=m.split(/[；;，,、（(\/]/)[0].trim() || m;
+  const al=m.match(/[（(]([^）)]+)[）)]/);
+  const slash=m.indexOf("/")>=0 ? m.split("/").slice(1).join("/").replace(/[（(].*?[）)]/g,"").trim() : "";
+  const alias=al ? al[1] : slash;
+  const core="「"+main+"」"+(alias && alias!==main ? "（又称"+alias+"）" : "");
+  if(hits.length) return esc("拆词："+hits.join("、")+"。中文对应"+core+"，别和形近术语弄混。");
+  return esc("重点记"+core+"这一中英对应；考试常给英文让你选释义，留意同章近义词。");
+}
+function $(sel){ return document.querySelector(sel); }
+const app = document.getElementById("app");
+function setView(cls){ app.className = cls || ""; }
+function setAccent(bid){ document.documentElement.style.setProperty('--accent', DATA[bid].accent); }
+
+/* ============ 会话 ============ */
 let sess = null;
-function startSession(bid, mode, ids, meta){
-  // opts 缓存每题的 4 个选项：保证答题前/后、切收藏、上一题来回时选项顺序不变
-  sess = { bid, mode, queue: ids, pos: 0, answered:{}, revealed:false, opts:{}, ci:meta&&meta.ci };
+function startSession(bid, mode, ids, pos){
+  sess = { bid, mode, queue: ids, pos: pos||0, answered:{}, opts:{},
+           cards:{}, cardsOrder:[], recheck:null };
   renderStudy();
 }
 function currentTerm(){ return DATA[sess.bid]._terms.find(t=>t._id===sess.queue[sess.pos]); }
 
-/* ---------- 章节学习进度（断点续背，持久化） ---------- */
-/* rounds[bid+"_"+ci] = { ids:[本轮要背的词id], pos:已答到第几个, done:本轮是否已完成 } */
-function getRound(bid, ci){
-  if(!state[bid].rounds) state[bid].rounds = {};
-  return state[bid].rounds[bid+"_"+ci] || null;
+/* ---------- 背新词：按单元顺序的连续队列 + 断点续背 ---------- */
+/* state[bid].newRound = { ids:[本轮全部词], pos:已背到第几个, done:本轮是否完成 } */
+function planNew(bid){
+  const r = state[bid].newRound;
+  if(r && !r.done && r.ids && r.ids.length && r.pos < r.ids.length){
+    return { ids:r.ids, pos:r.pos, label:"继续上次" };
+  }
+  const ids = pendingIds(bid);          // 按章节顺序，只挑还没掌握的
+  if(!ids.length) return { empty:true };
+  state[bid].newRound = { ids, pos:0, done:false }; saveState();
+  return { ids, pos:0, label:"新的一轮" };
 }
-function setRound(bid, ci, r){
-  if(!state[bid].rounds) state[bid].rounds = {};
-  state[bid].rounds[bid+"_"+ci] = r;
+function startNew(bid){
+  const plan = planNew(bid);
+  if(plan.empty){ return renderAllDone(bid); }
+  startSession(bid,"study",plan.ids,plan.pos);
+}
+function savePos(){
+  if(!sess || sess.mode!=="study") return;
+  state[sess.bid].newRound = { ids:sess.queue, pos:sess.pos, done:false };
   saveState();
 }
-/* 某词是否"已掌握"：答对过且不在错词本里 */
-function isMastered(bid, id){
-  const p = getP(bid, id);
-  return (p.c||0) > 0 && !p.wrong;
+function finishRound(){
+  if(!sess || sess.mode!=="study") return;
+  state[sess.bid].newRound = { ids:sess.queue, pos:sess.queue.length, done:true };
+  saveState();
 }
-/* 决定进入章节时该背哪些词，返回 {ids, pos, label, empty} */
-function planChapter(bid, ci){
-  const terms = DATA[bid].chapters[ci].terms;
-  const allIds = terms.map(t=>t._id);
-  const r = getRound(bid, ci);
 
-  // 1) 有未完成的本轮 → 断点续背（保留原队列与位置，选项顺序也会重新生成，不影响）
-  if(r && !r.done && r.ids && r.ids.length){
-    return { ids: r.ids, pos: r.pos, label:"继续上次" };
-  }
+/* ---------- 复习会话：循环队列 ---------- */
+/* queue = [{id, ph}]，ph: judge(只给单词+会/不会) | quiz(记错词强化选择题) */
+function startReview(bid){
+  const ids = dueIds(bid);
+  if(!ids.length){ return renderEmptyReview(bid); }
+  sess = {
+    bid, mode:"review",
+    queue: ids.map(id=>({id, ph:"judge"})),
+    ans:null, opts:{}, cards:{}, cardsOrder:[], recheck:null,
+    total:ids.length, passed:0, loops:0, overdue:overdueCount(bid)
+  };
+  renderReview();
+}
+function reviewTerm(){ return DATA[sess.bid]._terms.find(t=>t._id===sess.queue[0].id); }
 
-  // 2) 本轮已完成 / 首次进入 → 只背还没掌握的
-  const unmastered = allIds.filter(id=>!isMastered(bid,id));
-  if(unmastered.length===0){
-    return { ids: [], pos:0, label:"已全部掌握", empty:true };
-  }
-  const hasWrong = unmastered.some(id=>getP(bid,id).wrong);
+/* ---------- 「撤回」= 返回上一页改判 ----------
+   不是撤销某次点击，而是回到最近一张已完成的卡片，
+   让你把「蒙对 / 点了会」改判成「记错了」。
+   每题完成时记下作答前的进度；进入改判态即回滚该题已写入的
+   localStorage 记录，最后由「保持原判 / 改成记错了」决定写回什么。 */
+function cp(o){ return o==null ? o : JSON.parse(JSON.stringify(o)); }
+function snapSess(){
   return {
-    ids: unmastered,
-    pos: 0,
-    label: hasWrong ? "重练错词" : "从没背过的开始",
-    isNew: true
+    queue:cp(sess.queue), pos:sess.pos, answered:cp(sess.answered), ans:cp(sess.ans), opts:cp(sess.opts),
+    passed:sess.passed, loops:sess.loops, total:sess.total, overdue:sess.overdue,
+    newRound:cp(state[sess.bid].newRound)
   };
 }
+function recordCard(id, c){
+  if(!sess.cards) sess.cards={};
+  if(!sess.cardsOrder) sess.cardsOrder=[];
+  sess.cards[id]=c;
+  sess.cardsOrder.push(id);            // 末项 = 最近完成的一题
+  if(sess.cardsOrder.length>300) sess.cardsOrder.shift();
+}
+function canUndo(){
+  if(!sess || sess.recheck) return false;
+  if(sess.mode==="review") return !!(sess.cardsOrder && sess.cardsOrder.length);
+  const cur=sess.queue[sess.pos];
+  const idx=sess.answered[cur] ? sess.pos : sess.pos-1;
+  return idx>=0 && !!sess.cards[sess.queue[idx]];
+}
+function openRecheck(){
+  if(!sess || sess.recheck) return false;
+  let id=null;
+  if(sess.mode==="review"){
+    if(!sess.cardsOrder || !sess.cardsOrder.length) return false;
+    id=sess.cardsOrder[sess.cardsOrder.length-1];
+  } else {
+    const cur=sess.queue[sess.pos];
+    const idx=sess.answered[cur] ? sess.pos : sess.pos-1;
+    if(idx<0 || idx>=sess.queue.length) return false;
+    id=sess.queue[idx];
+  }
+  const card=sess.cards[id];
+  if(!card) return false;
+  sess.recheck={ id, restore:snapSess() };
+  if(card.beforeP===undefined) delete state[sess.bid].p[id];
+  else state[sess.bid].p[id]=cp(card.beforeP);     // 撤销该题写入的学习记录
+  if(sess.mode!=="review" && card.beforeNR!==undefined) state[sess.bid].newRound=cp(card.beforeNR);
+  saveState();
+  renderRecheck();
+  return true;
+}
+function replayCard(bid,id,card){
+  const r=(card&&card.result)||{};
+  if(card.ph==="study"){ record(bid,id,!!r.correct); return; }
+  if(r.kind==="pass"){ reviewPass(bid,id,r.know!==false); return; }
+  reviewMissReset(bid,id);
+}
+function doRecheck(miss){
+  if(!sess || !sess.recheck) return;
+  const {id,restore}=sess.recheck, bid=sess.bid;
+  const card=sess.cards[id]||{};
+  sess.queue=restore.queue; sess.pos=restore.pos; sess.answered=restore.answered;
+  sess.ans=restore.ans; sess.opts=restore.opts||{};
+  if(restore.passed!==undefined) sess.passed=restore.passed;
+  if(restore.loops!==undefined) sess.loops=restore.loops;
+  if(restore.total!==undefined) sess.total=restore.total;
+  if(restore.overdue!==undefined) sess.overdue=restore.overdue;
+  state[bid].newRound=restore.newRound;
+  if(miss){
+    if(sess.mode==="review"){
+      reviewMissReset(bid,id);
+      if(!sess.queue.some(q=>q.id===id)) sess.queue.push({id, ph:"quiz", miss:true, quizDone:false});
+      sess.cards[id]={ph:card.ph, result:{know:false, correct:false, kind:"wrong"},
+        beforeP:cp(card.beforeP), afterP:cp(state[bid].p[id])};
+    } else {
+      record(bid,id,false);
+      sess.answered[id]={choice:-1, correct:false, skip:true};
+      sess.cards[id]={ph:"study", result:{correct:false, skip:true},
+        beforeP:cp(card.beforeP), beforeNR:cp(card.beforeNR), afterP:cp(state[bid].p[id])};
+    }
+  } else {
+    if(card.afterP!==undefined) state[bid].p[id]=cp(card.afterP);  // 逐字段还原撤回前
+    else replayCard(bid,id,card);
+  }
+  sess.recheck=null;
+  saveState(); savePos();
+  (sess.mode==="review" ? renderReview() : renderStudy());
+}
 
+/* ============ 「上一页」改判卡片：显示词义 + 保持/改判两个按钮 ============ */
+function renderRecheck(){
+  const bid=sess.bid, id=sess.recheck.id;
+  const term=DATA[bid]._terms.find(t=>t._id===id);
+  if(!term){ doRecheck(false); return; }
+  const card=sess.cards[id]||{}, r=card.result||{};
+  const orig = sess.mode==="review"
+    ? (r.kind==="wrong" ? '↻ 当时标了「记错了」' : r.know===false ? '✗ 当时点了「不会」' : '✓ 当时点了「会」')
+    : (r.correct ? '✓ 当时答对了' : r.skip ? '✎ 当时选了「不会」' : '✗ 当时答错了');
+  setAccent(bid); setView("sess");
+  // 复习页原有统计条保留占位，进入/退出改判态不发生上下位移
+  const stat = sess.mode==="review" ? `<div class="rvstat">返回上一页改判 · 确认后回到复习</div>` : ``;
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="home">‹</button>
+      <div class="title">↶ 上一页 · 再确认</div>
+      <div class="meta">${DATA[bid].title}</div>
+      <button class="undo" data-act="undo" disabled>↶ 撤回</button>
+    </div>
+    <div class="progwrap">
+      <div class="prog"><span class="mode">返回上一页 · 可改判</span><span>蒙对的？改成记错了</span></div>
+      <div class="bar"><i style="width:100%"></i></div>
+    </div>
+    ${stat}
+    <div class="scroll">
+      <div class="paper wordcard">
+        <span class="tape ${bid==='bio'?'o':''}"></span>
+        <div class="kicker">Recheck · 再看一眼</div>
+        <div class="en ${term.e.length>40?'l':term.e.length>26?'m':''}">${esc(term.e)}</div>
+        ${term.p&&term.p!=='/'?`<div class="ph">${esc(term.p)}</div>`:''}
+        <span class="ill illcorner">${ILL[bid==='cell'?'chloro':'flask']}</span>
+      </div>
+      <div class="slot">
+        <div class="defbox study-def">
+          <div class="dk">ANSWER · 正确释义</div>
+          <div class="zh"><mark>${esc(term.m)}</mark></div>
+          <div class="tip">${esc(term.e)} ${esc(term.p&&term.p!=='/'?term.p:'')}</div>
+          <div class="rst ${r.correct||r.know?'':'bad'}">${orig}</div>
+          <div class="extra"><b>✎ 小注</b> ${briefNote(term)}</div>
+        </div>
+      </div>
+      <div class="spacer" style="height:12px"></div>
+    </div>
+    <div class="footbar">
+      <button class="btn sec keep" data-act="recheck-keep">✓ 保持原判</button>
+      <button class="btn danger" data-act="recheck-miss">✗ 改成记错了</button>
+    </div>`;
+}
 
-/* 生成 4 个选项（1 正确 + 3 干扰） */
+/* kind: "pass"(下一张) | "wrong"(记错了) */
+function reviewAdvance(kind){
+  if(!sess || sess.mode!=="review" || !sess.queue.length || !sess.ans) return;
+  const bid = sess.bid;
+  const item = sess.queue.shift();
+  const a = sess.ans;
+  recordCard(item.id, { ph:item.ph,
+    result:{ know:a.know, correct:a.correct, kind:kind },
+    beforeP:cp(state[bid].p[item.id]) });
+  if(item.ph==="judge"){
+    if(kind==="pass"){
+      reviewPass(bid, item.id, a.know);
+      sess.passed++;
+    } else {
+      reviewMissReset(bid, item.id);
+      sess.queue.push({ id:item.id, ph:"quiz", miss:true, quizDone:false }); // 记错词必须先考选择题
+      sess.loops++;
+    }
+  } else { // quiz：只有「选对 + 下一张」才放行到 judge；选错 / 记错一律继续 quiz
+    if(kind==="pass" && a.correct) sess.queue.push({ id:item.id, ph:"judge", miss:true, quizDone:true });
+    else sess.queue.push({ id:item.id, ph:"quiz", miss:true, quizDone:false });
+    sess.loops++;
+  }
+  if(sess.cards[item.id]) sess.cards[item.id].afterP = cp(state[bid].p[item.id]);
+  sess.ans = null;
+  renderReview();
+}
+
+/* 生成 4 个选项（1 正确 + 3 干扰）；同一会话内缓存，顺序恒定 */
 function buildOptions(term){
-  const bid = term._bid;
-  const pool = DATA[bid]._terms.filter(t=>t._id!==term._id && t.m!==term.m).map(t=>t.m);
+  const pool = DATA[term._bid]._terms.filter(t=>t._id!==term._id && t.m!==term.m).map(t=>t.m);
   const wrongs = shuffle(pool).slice(0,3);
-  while(wrongs.length<3){ wrongs.push("（暂无更多干扰项）"); }
+  while(wrongs.length<3) wrongs.push("（暂无更多干扰项）");
   return shuffle([term.m, ...wrongs]);
 }
-/* 取某题选项：同一会话内只生成一次并缓存，顺序恒定 */
 function optionsFor(term){
   if(!sess.opts) sess.opts = {};
   if(!sess.opts[term._id]) sess.opts[term._id] = buildOptions(term);
   return sess.opts[term._id];
 }
 
-/* 保存学习断点（章节学习模式才需要） */
-function savePos(){
-  if(!sess || sess.mode!=="study" || sess.ci==null) return;
-  const r=getRound(sess.bid, sess.ci);
-  setRound(sess.bid, sess.ci, {
-    ids: sess.queue,
-    pos: sess.pos,
-    done: false
-  });
-}
-/* 本轮完成：标记 done，下次进入直接挑没掌握的 */
-function finishRound(){
-  if(!sess || sess.mode!=="study" || sess.ci==null) return;
-  setRound(sess.bid, sess.ci, {
-    ids: sess.queue,
-    pos: sess.queue.length,
-    done: true
-  });
+/* 励志短句：每次进首页随机换一条，且不与上一条重复 */
+const QUOTES = [
+  {q:"Fall seven times, stand up eight.", sub:"七次跌倒，第八次站起来。", by:"日本谚语"},
+  {q:"Energy and persistence conquer all things.", sub:"能量与坚持，可以征服一切。", by:"Benjamin Franklin"},
+  {q:"It always seems impossible until it's done.", sub:"在完成之前，一切看起来都不可能。", by:"Nelson Mandela"},
+  {q:"Success is the sum of small efforts, repeated day in and day out.", sub:"成功，是日复一日微小努力的累加。", by:"Robert Collier"},
+  {q:"不积跬步，无以至千里。", sub:"A journey of a thousand miles begins with a single step.", by:"荀子《劝学》"},
+  {q:"The secret of getting ahead is getting started.", sub:"前进的秘诀，就是先开始。", by:"Mark Twain"},
+  {q:"行百里者半九十。", sub:"越接近终点，越要坚持住。", by:"《战国策》"}
+];
+function pickQuote(){
+  const pool=[];
+  for(let i=0;i<QUOTES.length;i++) if(i!==state.lastQuote) pool.push(i);
+  const i = pool.length ? pool[Math.floor(Math.random()*pool.length)] : 0;
+  state.lastQuote=i; saveState();
+  return QUOTES[i];
 }
 
-/* ============ 渲染 ============ */
-const app = document.getElementById("app");
-function setAccent(bid){
-  const a = DATA[bid].accent;
-  document.documentElement.style.setProperty('--accent', a);
-}
-
-/* 艾宾浩斯遗忘曲线（SVG）：理论保持率 R = e^(-t/S)，S 随复习次数增大 */
+/* ============ 首页 ============ */
 function renderHome(){
-  sess=null;
-  let books='';
+  sess = null;
+  setView("home");
+  const bid = curBook(), b = DATA[bid];
+  const pending = pendingIds(bid).length;
+  const due = dueIds(bid).length;
+  const q = pickQuote();
+  app.innerHTML = `
+    <div class="homebg">
+      <span class="wash"></span><span class="wash2"></span><span class="bggrid"></span>
+      <span class="bgill a">${ILL.dna}</span>
+      <span class="bgill b">${ILL.chloro}</span>
+      <span class="bgill c">${ILL.microscope}</span>
+    </div>
+    <div class="homewrap">
+      <div class="hometop">
+        <span class="htag">DAILY · 每日一词</span>
+        <button class="pickbtn" data-act="pick-book">选词书</button>
+      </div>
+
+      <div class="hhero">
+        <div class="hkick">BIOLOGY WORDS</div>
+        <h1>今天也要<br><em>记住一点点</em></h1>
+        <div class="cur"><i style="background:${b.accent}"></i> 当前词书 · ${b.title}　·　${b._terms.length} 词</div>
+      </div>
+
+      <div class="paper quotecard">
+        <span class="tape"></span>
+        <div class="qmark">“</div>
+        <div class="q">${esc(q.q)}</div>
+        <div class="sub">${esc(q.sub)}</div>
+        <div class="by">— ${esc(q.by)}</div>
+      </div>
+
+      <div class="bigbtns">
+        <button class="bigbtn primary" data-act="new" data-bid="${bid}">
+          <span class="ic"><span class="ill" style="width:26px;height:26px">${ILL.leaf}</span></span>
+          <span class="tx"><span class="t1">背新词</span><span class="t2">按单元顺序 · 还有 ${pending} 词待背</span></span>
+          <span class="ar">›</span>
+        </button>
+        <button class="bigbtn" data-act="review" data-bid="${bid}">
+          <span class="ic"><span class="ill" style="width:26px;height:26px">${ILL.arrow}</span></span>
+          <span class="tx"><span class="t1">复习</span><span class="t2">今日 ${due} 词到期 · 未复习自动顺延</span></span>
+          <span class="ar">›</span>
+        </button>
+      </div>
+
+      <div class="hfoot" data-act="reset">— 清空全部学习进度 —</div>
+    </div>`;
+}
+
+/* ============ 词书选择页 ============ */
+function renderBookPicker(){
+  sess = null;
+  setView("");
+  let list='';
   for(const bid in DATA){
-    const b=DATA[bid];
-    const total=b._terms.length;
-    const m=masteryOf(bid);
-    const ws=wrongStat(bid);
-    const illName = bid==='cell' ? 'microscope' : 'dna';
-    books += `
-      <div class="paper bookcard" data-act="open" data-bid="${bid}">
-        <span class="tape ${bid==='bio'?'o':''}"></span>
-        <span class="ill illbox">${ILL[illName]}</span>
-        <div class="row1">
-          <div class="badge" style="background:${b.accent}">${b.emoji}</div>
-          <div class="bt">
-            <div class="tagline">
-              <span class="tag ${bid==='bio'?'o':''}">${b.tag}</span>
-              <span class="bn">${b.title}</span>
-            </div>
-            <div class="ba">${b.author}</div>
-          </div>
+    const b=DATA[bid], sel = bid===curBook();
+    list += `
+      <div class="paper bookopt ${sel?'sel':''}" data-act="set-book" data-book="${bid}">
+        <div class="badge" style="background:${b.accent}"><span class="ill" style="width:28px;height:28px;color:#fff">${bid==='cell'?ILL.microscope:ILL.flask}</span></div>
+        <div style="flex:1;min-width:0">
+          <div class="bn2">${b.title}</div>
+          <div class="ba2">${b.author} · ${b._terms.length} 词</div>
         </div>
-        <div class="bar"><i style="width:${m}%"></i></div>
-        <div class="stat">
-          <span>掌握 <b>${m}%</b></span>
-          <span>词条 <b>${total}</b></span>
-          <span>错词 <b>${ws.n}</b></span>
-        </div>
-        <div class="scribble">${bid==='cell'?'细胞 · 微观世界的小宇宙':'生化 · 生命的分子语言'}</div>
-        ${ws.n?`<div class="wrongrow">
-          <span class="chip" style="border-color:#d9594c;color:#d9594c">📕 ${ws.n} 个词待巩固</span>
-          <span class="chip" data-act="wrong" data-bid="${bid}" style="cursor:pointer;border-color:#d9594c;color:#d9594c;font-weight:700">去复习 ›</span>
-        </div>`:''}
+        <span class="ck">${sel?'✓ 当前':''}</span>
       </div>`;
   }
-
+  const bid=curBook();
   app.innerHTML = `
-    <div class="hero">
-      <span class="deco">${ILL.leaf}</span>
-      <span class="stamp">${ILL.circle}</span>
-      <h1>生物专业英语卡片</h1>
-      <p class="sub">两本辞书分开背：细胞生物学 &amp; 生物化学。<br>选择题模式——先看英文，想中文，再选；选对选错都给答案。</p>
-      <div class="scribble o" style="margin-top:8px">✎ 随身记 · 随手背 ~</div>
-    </div>
-
-    ${books}
-
-    <div class="reset" data-act="reset">— 清空全部学习进度 —</div>
-    <div class="spacer"></div>
-  `;
-}
-
-function renderChapters(bid){
-  setAccent(bid);
-  const b=DATA[bid];
-  let chs='';
-  b.chapters.forEach((ch,ci)=>{
-    const total=ch.terms.length;
-    let learned=0, masteredN=0;
-    ch.terms.forEach(t=>{ const p=getP(bid,t._id); if(p.c+p.w>0) learned++; if(isMastered(bid,t._id)) masteredN++; });
-    const pct = total? Math.round(masteredN/total*100):0;
-    const dot = (ci%3===0)?'leaf':(ci%3===1)?'chloro':'petri';
-    // 断点状态
-    const r=getRound(bid,ci);
-    let badge='';
-    if(masteredN===total && total>0){
-      badge = `<span class="chip ok" style="flex:0 0 auto;border-color:var(--green)">✓ 已掌握</span>`;
-    } else if(r && !r.done && r.ids && r.ids.length && r.pos>0){
-      const doneN=Math.min(r.pos, r.ids.length);
-      badge = `<span class="chip" style="flex:0 0 auto;border-color:var(--orange);color:var(--orange)">继续 ${doneN}/${r.ids.length}</span>`;
-    } else if(masteredN>0){
-      badge = `<span class="chip" style="flex:0 0 auto">${masteredN}/${total} 已掌握</span>`;
-    }
-    chs += `
-      <div class="paper chap" data-act="study" data-bid="${bid}" data-ci="${ci}">
-        <span class="ill dot">${ILL[dot]}</span>
-        <div class="cn">
-          <div class="t">${ch.name}</div>
-          <div class="s">已掌握 ${masteredN}/${total} · ${pct}%</div>
-        </div>
-        ${badge}
-        <div class="go">›</div>
-      </div>`;
-  });
-  app.innerHTML = `
-    <div class="topbar">
+    <div class="pickerhead">
       <button class="back" data-act="home">‹</button>
-      <div class="title">${b.emoji} ${b.title}</div>
-      <div class="meta">${b._terms.length} 词</div>
+      <div class="title" style="font-size:18px;font-weight:800">选择词书</div>
     </div>
-    <div class="chaphead">
-      <span class="tag ${bid==='bio'?'o':''}">${b.tag}</span>
-      <span class="scribble">${bid==='cell'?'一章一章，慢慢啃':'从分子读懂生命'}</span>
+    <div class="pickerlist">${list}</div>
+    <div class="pickernote">
+      ✎ 一次只背一本。选好后系统会记住，下次打开自动沿用这本书，不会重复让你选。<br>
+      两本书的进度、错词和复习计划各自独立，互不影响。
     </div>
-    <div class="scroll">
-      <div class="pad" style="padding-top:4px">
-        <div class="home-actions">
-          <div class="paper ghost" data-act="review" data-bid="${bid}">🔁 按掌握度复习</div>
-          <div class="paper ghost" data-act="wrong" data-bid="${bid}">📕 错词本 (${wrongStat(bid).n})</div>
-          <div class="paper ghost" data-act="fav" data-bid="${bid}">⭐ 收藏夹 (${favIds(bid).length})</div>
-        </div>
-      </div>
-      ${chs}
-      <div class="spacer"></div>
+    <div class="minorlinks">
+      <span data-act="fav" data-bid="${bid}">收藏夹</span>
+      <span data-act="wrong" data-bid="${bid}">错词本</span>
     </div>
-  `;
+    <div class="spacer"></div>`;
 }
 
+/* ============ 背新词页（选项区就地展开 + 底栏固定） ============ */
 function renderStudy(){
+  if(sess.recheck) return renderRecheck();
   const bid=sess.bid;
-  setAccent(bid);
+  setAccent(bid); setView("sess");
   const b=DATA[bid];
   const term=currentTerm();
   if(!term){ return renderDone(); }
-  const id=term._id;
-  const p=getP(bid,id);
-  const total=sess.queue.length;
-  const pos=sess.pos+1;
-  const isFav=p.fav;
-
-  const ans = sess.answered[id];
-  const opts = optionsFor(term);
-  const correctIdx = opts.indexOf(term.m);
+  const id=term._id, p=getP(bid,id);
+  const total=sess.queue.length, pos=sess.pos+1;
+  const ans=sess.answered[id];
+  const opts=optionsFor(term);
   const keys=['A','B','C','D'];
 
-  let optHtml='', revealHtml='', nextHtml='';
+  let slot='';
   if(ans){
-    opts.forEach((o,i)=>{
-      let cls='opt';
-      if(o===term.m){
-        cls += (ans.skip ? ' miss' : ' ok');   // 选不会=没记住→红色；答对→绿色
-      }
-      else if(i===ans.choice && !ans.correct) cls+=' bad';
-      else cls+=' dim';
-      optHtml += `<button class="${cls}" data-k="${keys[i]}" disabled>${esc(o)}</button>`;
-    });
-    let rt, rcls='';
-    if(ans.correct){ rt='✓ 答对啦，记牢咯'; }
-    else if(ans.skip){ rt='✎ 还没记住，记一下！'; rcls=' bad'; }
-    else { rt='✗ 答错了，看正确答案'; rcls=' bad'; }
-    revealHtml = `<div class="reveal"><div class="rt${rcls}">${rt}</div>
-      <div class="rm">正确答案：<mark>${esc(term.m)}</mark></div>
-      <div class="rn">${esc(term.e)} ${esc(term.p||'')}</div>
-      ${ans.correct && p.wrong ? `<div class="rn" style="color:var(--green-deep)">📕 错词本连对 ${Math.min(p.streak||0,2)}/2</div>` : ''}
-      ${!ans.correct ? `<div class="rn" style="color:var(--bad)">已收入错词本，之后可单独重练</div>` : ''}
+    // 选完后 A/B/C/D 全部移除，槽位里只保留一个释义展示框
+    const st = ans.correct ? '✓ 答对了' : ans.skip ? '✎ 还没记住，记一下' : '✗ 答错了，看正确答案';
+    slot = `<div class="defbox study-def">
+      <div class="dk">ANSWER · 正确释义</div>
+      <div class="zh"><mark>${esc(term.m)}</mark></div>
+      <div class="tip">${esc(term.e)} ${esc(term.p&&term.p!=='/'?term.p:'')}</div>
+      <div class="rst ${ans.correct?'':'bad'}">${st}</div>
+      <div class="extra"><b>✎ 小注</b> ${briefNote(term)}</div>
     </div>`;
   } else {
     opts.forEach((o,i)=>{
-      optHtml += `<button class="opt" data-act="choose" data-i="${i}" data-k="${keys[i]}" data-m="${esc(o)}">${esc(o)}</button>`;
+      slot += `<button class="opt" data-act="choose" data-i="${i}" data-k="${keys[i]}" data-m="${esc(o)}">${esc(o)}</button>`;
     });
-    revealHtml = `<button class="dontknow" data-act="skip">我选不会 · 显示答案</button>`;
   }
 
-  nextHtml = `
-    <div class="nextrow">
-      <button class="btn sec" data-act="prev" ${sess.pos<=0?'disabled':''}>‹ 上一题</button>
+  const foot = `
+    <div class="footbar">
+      <button class="btn miss" data-act="skip" ${ans?'disabled':''}>${ans?'已看答案':'我选不会'}</button>
       ${sess.pos<total-1
         ? `<button class="btn primary" data-act="next">下一题 ›</button>`
         : `<button class="btn primary" data-act="finish">完成 ✓</button>`}
@@ -1304,172 +1737,245 @@ function renderStudy(){
   const cornerIll = bid==='cell' ? 'chloro' : 'flask';
   app.innerHTML = `
     <div class="topbar">
-      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
+      <button class="back" data-act="home">‹</button>
       <div class="title">${b.title}</div>
       <div class="meta">${pos}/${total}</div>
+      <button class="undo" data-act="undo" title="返回上一页，可把蒙对的改成记错了" ${canUndo()?'':'disabled'}>↶ 撤回</button>
     </div>
     <div class="progwrap">
-      <div class="prog"><span class="mode">${sess.mode==='review'?'复习模式':sess.mode==='fav'?'收藏夹':sess.mode==='wrong'?'错词重练':'学习'}</span><span>${term._ch}</span></div>
+      <div class="prog"><span class="mode">${sess.mode==='review'?'复习':sess.mode==='fav'?'收藏夹':sess.mode==='wrong'?'错词重练':'背新词'}</span><span>${term._ch}</span></div>
       <div class="bar"><i style="width:${Math.round(pos/total*100)}%"></i></div>
     </div>
     <div class="scroll">
-      <div style="position:relative" class="pad">
-        <div class="paper wordcard">
-          <span class="tape ${bid==='bio'?'o':''}"></span>
-          <button class="star ${isFav?'on':''}" data-act="fav-toggle" title="收藏">${isFav?'★':'☆'}</button>
-          <div class="kicker">English</div>
-          <div class="en ${term.e.length>40?'l':term.e.length>26?'m':''}">${esc(term.e)}</div>
-          ${term.p&&term.p!=='/'?`<div class="ph">${esc(term.p)}</div>`:''}
-          <span class="ill illcorner">${ILL[cornerIll]}</span>
-        </div>
-        ${optHtml}
-        ${revealHtml}
-        ${nextHtml}
+      <div class="paper wordcard">
+        <span class="tape ${bid==='bio'?'o':''}"></span>
+        <button class="star ${p.fav?'on':''}" data-act="fav-toggle" title="收藏">${p.fav?'★':'☆'}</button>
+        <div class="kicker">English</div>
+        <div class="en ${term.e.length>40?'l':term.e.length>26?'m':''}">${esc(term.e)}</div>
+        ${term.p&&term.p!=='/'?`<div class="ph">${esc(term.p)}</div>`:''}
+        <span class="ill illcorner">${ILL[cornerIll]}</span>
       </div>
-      <div class="spacer" style="height:14px"></div>
+      <div class="slot">${slot}</div>
+      <div class="spacer" style="height:12px"></div>
     </div>
-  `;
+    ${foot}`;
 }
 
+/* ============ 复习页 ============ */
+function renderReview(){
+  if(sess.recheck) return renderRecheck();
+  const bid=sess.bid;
+  setAccent(bid); setView("sess");
+  if(!sess.queue.length){ return renderReviewDone(); }
+  const item=sess.queue[0];
+  // 硬保护：记错词没通过选择题之前，绝不渲染成纯判断模式
+  if(item.miss && !item.quizDone) item.ph="quiz";
+  const term=DATA[bid]._terms.find(t=>t._id===item.id);
+  if(!term){ sess.queue.shift(); return renderReview(); }
+  const p=getP(bid,item.id);
+  const ans=sess.ans;
+  const keys=['A','B','C','D'];
+  let slot='', foot='', modeLabel='';
+
+  if(item.ph==="judge"){
+    modeLabel = "纯判断 · 只想单词";
+    if(!ans){
+      slot = `<div class="judgerow">
+        <button class="judge yes" data-act="judge" data-v="1">✓ 会<small>记得这个意思</small></button>
+        <button class="judge no" data-act="judge" data-v="0">✗ 不会<small>想不起来了</small></button>
+      </div>`;
+      foot = `<div class="footbar"><div class="footnote">先自己想，再对答案 · 不显示释义与选项</div></div>`;
+    } else {
+      // 释义就地展开在原判断按钮的位置
+      slot = `<div class="defbox">
+        <div class="dk">DEFINITION · 释义</div>
+        <div class="zh"><mark>${esc(term.m)}</mark></div>
+        <div class="tip">${esc(term.e)} ${esc(term.p&&term.p!=='/'?term.p:'')}</div>
+        <div class="rst ${ans.know?'':'bad'}">${ans.know?'✓ 记得没错，继续保持':'✗ 记错了，等会儿再考你一次'}</div>
+        <div class="extra"><b>✎ 小注</b> ${briefNote(term)}</div>
+      </div>`;
+      foot = `<div class="footbar">
+        <button class="btn sec rv-wrong" data-act="rv-wrong">↻ 记错了</button>
+        <button class="btn primary" data-act="rv-next">下一张 ›</button>
+      </div>`;
+    }
+  } else {
+    modeLabel = "记错强化 · 选出释义";
+    const opts=optionsFor(term);
+    if(!ans){
+      opts.forEach((o,i)=>{
+        slot += `<button class="opt" data-act="quiz-choose" data-i="${i}" data-k="${keys[i]}" data-m="${esc(o)}">${esc(o)}</button>`;
+      });
+      foot = `<div class="footbar"><div class="footnote">🔁 刚才记错了 · 从 4 个释义里挑出正确的</div></div>`;
+    } else {
+      opts.forEach((o,i)=>{
+        let cls='opt';
+        if(o===term.m) cls += (ans.correct?' ok':' miss');
+        else if(i===ans.choice && !ans.correct) cls+=' bad';
+        else cls+=' dim';
+        slot += `<button class="${cls}" data-k="${keys[i]}" disabled>${esc(o)}</button>`;
+      });
+      slot += `<div class="answerbar ${ans.correct?'':'bad'}">
+        <span class="lbl">释义</span><span class="val"><mark>${esc(term.m)}</mark></span>
+        <span class="st ${ans.correct?'ok':'bad'}">${ans.correct?'✓ 选对了，再默想一次':'✗ 再看一眼，待会儿重考'}</span></div>`;
+      foot = `<div class="footbar">
+        <button class="btn sec rv-wrong" data-act="rv-wrong">↻ 记错了</button>
+        <button class="btn primary" data-act="rv-next">${ans.correct?'进入回忆 ›':'再练一次 ›'}</button>
+      </div>`;
+    }
+  }
+
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" data-act="home">‹</button>
+      <div class="title">复习 · ${DATA[bid].title}</div>
+      <div class="meta">剩余 ${sess.queue.length}</div>
+      <button class="undo" data-act="undo" title="返回上一页，可把蒙对的改成记错了" ${canUndo()?'':'disabled'}>↶ 撤回</button>
+    </div>
+    <div class="progwrap">
+      <div class="prog"><span class="mode">${modeLabel}</span><span>已完成 ${sess.passed}/${sess.total}</span></div>
+      <div class="bar"><i style="width:${Math.round(sess.passed/Math.max(sess.total,1)*100)}%"></i></div>
+    </div>
+    <div class="rvstat">按遗忘曲线按天安排${sess.overdue?` · 含往日顺延 <b>${sess.overdue}</b> 词`:''}${sess.loops?` · 循环巩固 ${sess.loops} 次`:''}</div>
+    <div class="scroll">
+      <div class="paper wordcard">
+        <span class="tape o"></span>
+        <button class="star ${p.fav?'on':''}" data-act="fav-toggle" title="收藏">${p.fav?'★':'☆'}</button>
+        <div class="kicker">${item.ph==='judge'?'Recall · 回忆':'Reinforce · 巩固'}</div>
+        <div class="en ${term.e.length>40?'l':term.e.length>26?'m':''}">${esc(term.e)}</div>
+        ${term.p&&term.p!=='/'?`<div class="ph">${esc(term.p)}</div>`:''}
+        <span class="ill illcorner">${ILL[bid==='cell'?'petri':'dna']}</span>
+      </div>
+      <div class="slot">${slot}</div>
+      <div class="spacer" style="height:12px"></div>
+    </div>
+    ${foot}`;
+}
+
+/* ============ 结果 / 空状态页 ============ */
 function renderDone(){
-  const bid=sess.bid; const b=DATA[bid];
+  const bid=sess.bid, b=DATA[bid];
+  setView("");
   let correct=0,total=0;
   sess.queue.forEach(id=>{ const a=sess.answered[id]; if(a){ total++; if(a.correct) correct++; } });
   const acc = total? Math.round(correct/total*100):0;
   const m = masteryOf(bid);
   app.innerHTML = `
     <div class="scroll"><div class="done">
-      <div class="em">🌿</div>
+      <div class="em"><span class="ill" style="width:62px;height:62px;color:var(--green);margin:0 auto">${ILL.leaf}</span></div>
       <h2>本轮完成！</h2>
-      <p>${b.title} · ${sess.mode==='review'?'复习':sess.mode==='fav'?'收藏夹':sess.mode==='wrong'?'错词重练':'学习'}模式</p>
-      <p>本次答对 ${correct}/${total}（${acc}%）　·　全书掌握度 ${m}%</p>
+      <p>${b.title} · 本次答对 ${correct}/${total}（${acc}%）</p>
+      <p>全书掌握度 ${m}%　·　答对的词下次不会再从头背</p>
       <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
-        ${wrongStat(bid).n?`<div class="btn primary" style="border-radius:14px 5px 14px 5px/5px 14px 5px 14px;background:var(--orange);box-shadow:0 3px 0 #b8571f" data-act="study-wrong" data-bid="${bid}">📕 再练错词 (${wrongStat(bid).n})</div>`:''}
-        <div class="paper btn sec" style="border-radius:14px" data-act="chapters" data-bid="${bid}">返回目录</div>
-        <div class="paper btn sec" style="border-radius:14px" data-act="home">🏠 首页</div>
+        <div class="btn primary" data-act="new" data-bid="${bid}">继续背新词 ›</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="review" data-bid="${bid}">去复习</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">首页</div>
       </div>
-    </div></div>
-  `;
+    </div></div>`;
 }
-
-/* 复习为空（没有错词）时的提示页 */
+function renderAllDone(bid){
+  const b=DATA[bid]; setView("");
+  app.innerHTML = `
+    <div class="scroll"><div class="done">
+      <div class="em"><span class="ill" style="width:62px;height:62px;color:var(--green);margin:0 auto">${ILL.leaf}</span></div>
+      <h2>这本词书都背过啦</h2>
+      <p>${b.title} 的词都答对过一遍了，没有待背的新词。</p>
+      <p style="font-size:13px">可以去复习巩固，或换另一本词书继续。</p>
+      <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
+        <div class="btn primary" data-act="review" data-bid="${bid}">去复习</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="pick-book">换词书</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">首页</div>
+      </div>
+    </div></div>`;
+}
+function renderReviewDone(){
+  const bid=sess.bid; setView("");
+  const d=dueIds(bid).length;
+  app.innerHTML = `
+    <div class="scroll"><div class="done">
+      <div class="em"><span class="ill" style="width:62px;height:62px;color:var(--green);margin:0 auto">${ILL.leaf}</span></div>
+      <h2>今日复习完成</h2>
+      <p>本轮通过 ${sess.passed} 词 · 循环巩固 ${sess.loops} 次</p>
+      <p style="font-size:13px">记住的词已按遗忘曲线排到以后的日子；<br>今天没复习完的会自动顺延，不会丢失。</p>
+      <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
+        <div class="btn primary" data-act="new" data-bid="${bid}">继续背新词 ›</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">首页</div>
+      </div>
+    </div></div>`;
+}
 function renderEmptyReview(bid){
-  setAccent(bid);
-  const b=DATA[bid];
+  setView(""); setAccent(bid);
   app.innerHTML = `
     <div class="topbar">
-      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
-      <div class="title">🔁 ${b.title} · 复习</div>
-      <div class="meta">0</div>
+      <button class="back" data-act="home">‹</button>
+      <div class="title">今日复习</div>
+      <div class="meta">0 词</div>
     </div>
     <div class="scroll"><div class="done">
-      <div class="em">🌿</div>
-      <h2>没有需要复习的词</h2>
-      <p>答错或点「我选不会」的词会自动收进这里。</p>
-      <p style="font-size:13px">去任意章节学习，遇到不会的词点「我选不会」，<br>它就会出现在复习清单里啦。</p>
+      <div class="em"><span class="ill" style="width:62px;height:62px;color:var(--green);margin:0 auto">${ILL.leaf}</span></div>
+      <h2>今天没有到期的词</h2>
+      <p>按遗忘曲线，学过的词会在第 1、2、4、7、15、30 天回来找你。</p>
+      <p style="font-size:13px">先去背点新词吧；昨天没复习完的会自动累加到今天。</p>
       <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
-        <div class="btn primary" style="border-radius:14px 5px 14px 5px/5px 14px 5px 14px" data-act="chapters" data-bid="${bid}">去学习新词</div>
-        <div class="paper btn sec" style="border-radius:14px" data-act="home">🏠 首页</div>
+        <div class="btn primary" data-act="new" data-bid="${bid}">去背新词 ›</div>
+        <div class="paper btn sec" style="border-radius:14px" data-act="home">首页</div>
       </div>
-    </div></div>
-  `;
+    </div></div>`;
 }
 
-function renderFav(bid){
-  setAccent(bid);
+/* ============ 保留的辅助页（收藏夹 / 错词本 / 目录，不出现在主流程） ============ */
+function renderChapters(bid){
+  setView(""); setAccent(bid);
   const b=DATA[bid];
+  let chs='';
+  b.chapters.forEach((ch,ci)=>{
+    let masteredN=0;
+    ch.terms.forEach(t=>{ if(isMastered(bid,t._id)) masteredN++; });
+    chs += `<div class="paper chap" data-act="study" data-bid="${bid}" data-ci="${ci}">
+      <span class="ill dot">${ILL.leaf}</span>
+      <div class="cn"><div class="t">${ch.name}</div><div class="s">已掌握 ${masteredN}/${ch.terms.length}</div></div>
+      <div class="go">›</div></div>`;
+  });
+  app.innerHTML = `
+    <div class="topbar"><button class="back" data-act="home">‹</button>
+      <div class="title">${b.title}</div><div class="meta">${b._terms.length} 词</div></div>
+    <div class="scroll"><div class="pad" style="padding-top:6px">${chs}</div><div class="spacer"></div></div>`;
+}
+function renderFav(bid){
+  setView(""); setAccent(bid);
   const ids=favIds(bid);
   let list='';
-  if(ids.length===0){
-    list = `<div class="center-note">还没有收藏的单词。<br>在学习时点击右上角 ☆ 即可收藏。</div>`;
-  } else {
-    ids.forEach(id=>{
-      const t=DATA[bid]._terms.find(x=>x._id===id);
-      list += `<div class="paper favitem"><div class="fe"><div class="e">${esc(t.e)}</div><div class="m">${esc(t.m)}</div></div>
-        <button class="x" data-act="fav-remove" data-bid="${bid}" data-id="${id}">✕</button></div>`;
-    });
-  }
-  app.innerHTML = `
-    <div class="topbar">
-      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
-      <div class="title">⭐ ${b.title} · 收藏夹</div>
-      <div class="meta">${ids.length}</div>
-    </div>
-    <div class="scroll">
-      ${ids.length?`<div class="pad"><div class="home-actions"><div class="paper ghost" data-act="study-fav" data-bid="${bid}">▶ 开始背诵收藏 (${ids.length})</div></div></div>`:''}
-      ${list}
-      <div class="spacer"></div>
-    </div>
-  `;
-}
-
-/* 章节已全部掌握 */
-function renderChapterDone(bid, ci){
-  setAccent(bid);
-  const b=DATA[bid];
-  const ch=b.chapters[ci];
-  app.innerHTML = `
-    <div class="topbar">
-      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
-      <div class="title">${ch.name}</div>
-      <div class="meta">${ch.terms.length}/${ch.terms.length}</div>
-    </div>
-    <div class="scroll"><div class="done">
-      <div class="em">🌱</div>
-      <h2>这一章全部掌握啦</h2>
-      <p>${ch.terms.length} 个词都答对过了，没有需要再背的。</p>
-      <p style="font-size:13px">想再巩固可以随时去错词本，或换到下一章。</p>
-      <div class="home-actions" style="max-width:360px;margin:10px auto 0;flex-direction:column;gap:10px">
-        <div class="btn primary" style="border-radius:14px 5px 14px 5px/5px 14px 5px 14px" data-act="chapters" data-bid="${bid}">返回目录 · 换下一章</div>
-        <div class="paper btn sec" style="border-radius:14px" data-act="home">🏠 首页</div>
-      </div>
-    </div></div>
-  `;
-}
-
-function renderWrong(bid){
-  setAccent(bid);
-  const b=DATA[bid];
-  const ids=wrongIds(bid);
-  // 未毕业（streak<1）的排前面，反复错的优先
-  ids.sort((a,c)=>{
-    const pa=getP(bid,a), pc=getP(bid,c);
-    return (pa.streak||0)-(pc.streak||0) || (pa.box-pc.box);
+  if(!ids.length) list = `<div class="center-note">还没有收藏的单词。<br>背词时点右上角 ☆ 即可收藏。</div>`;
+  else ids.forEach(id=>{
+    const t=DATA[bid]._terms.find(x=>x._id===id);
+    if(t) list += `<div class="paper favitem"><div class="fe"><div class="e">${esc(t.e)}</div><div class="m">${esc(t.m)}</div></div>
+      <button class="x" data-act="fav-remove" data-bid="${bid}" data-id="${id}">✕</button></div>`;
   });
-  let list='';
-  if(ids.length===0){
-    list = `<div class="center-note">错词本是空的 🎉<br>答错或点「我选不会」的词会自动收进来。</div>`;
-  } else {
-    ids.forEach(id=>{
-      const t=DATA[bid]._terms.find(x=>x._id===id);
-      const p=getP(bid,id);
-      const st=Math.min(p.streak||0,2);
-      list += `<div class="paper favitem">
-        <span class="ill" style="width:28px;height:28px;color:var(--bad);opacity:.75;flex:0 0 auto">${ILL.colony}</span>
-        <div class="fe"><div class="e">${esc(t.e)}</div><div class="m">${esc(t.m)}</div></div>
-        <div class="chip ok" style="flex:0 0 auto">已连对 <b>${st}</b>/2</div>
-      </div>`;
-    });
-  }
-  const stat=wrongStat(bid);
   app.innerHTML = `
-    <div class="topbar">
-      <button class="back" data-act="chapters" data-bid="${bid}">‹</button>
-      <div class="title">📕 ${b.title} · 错词本</div>
-      <div class="meta">${ids.length}</div>
-    </div>
+    <div class="topbar"><button class="back" data-act="pick-book">‹</button>
+      <div class="title">收藏夹</div><div class="meta">${ids.length}</div></div>
     <div class="scroll">
-      <div style="margin:14px 16px" class="sticky orange">
-        <span class="pin"></span>
-        <span class="pin-t">错词说明</span>
-        只练你答错 / 选不会的词。连续答对 2 次就自动「毕业」移出。
-        当前共 <b>${stat.n}</b> 个，其中 <b>${stat.weak}</b> 个还没答对过。
-      </div>
-      ${ids.length?`<div class="pad"><div class="home-actions"><div class="paper ghost" data-act="study-wrong" data-bid="${bid}" style="border-color:var(--orange);color:var(--orange)">▶ 只练错词 (${ids.length})</div></div></div>`:''}
-      ${list}
-      <div class="spacer"></div>
-    </div>
-  `;
+      ${ids.length?`<div class="pad"><div class="home-actions"><div class="paper ghost" data-act="study-fav" data-bid="${bid}">▶ 背诵收藏 (${ids.length})</div></div></div>`:''}
+      ${list}<div class="spacer"></div></div>`;
+}
+function renderWrong(bid){
+  setView(""); setAccent(bid);
+  const ids=wrongIds(bid);
+  let list='';
+  if(!ids.length) list = `<div class="center-note">错词本是空的 🎉<br>答错或点「我选不会」的词会自动收进来。</div>`;
+  else ids.forEach(id=>{
+    const t=DATA[bid]._terms.find(x=>x._id===id);
+    if(t) list += `<div class="paper favitem"><div class="fe"><div class="e">${esc(t.e)}</div><div class="m">${esc(t.m)}</div></div>
+      <div class="chip ok" style="flex:0 0 auto">已连对 <b>${Math.min(getP(bid,id).streak||0,2)}</b>/2</div></div>`;
+  });
+  app.innerHTML = `
+    <div class="topbar"><button class="back" data-act="pick-book">‹</button>
+      <div class="title">错词本</div><div class="meta">${ids.length}</div></div>
+    <div class="scroll">
+      <div class="sticky orange" style="margin:14px 16px"><span class="pin"></span><span class="pin-t">错词说明</span>
+        只练答错 / 选不会的词，连对 2 次自动毕业。当前 <b>${ids.length}</b> 个。</div>
+      ${ids.length?`<div class="pad"><div class="home-actions"><div class="paper ghost" data-act="study-wrong" data-bid="${bid}">▶ 只练错词 (${ids.length})</div></div></div>`:''}
+      ${list}<div class="spacer"></div></div>`;
 }
 
 /* ============ 事件 ============ */
@@ -1477,117 +1983,96 @@ app.addEventListener("click", e=>{
   const el = e.target.closest("[data-act]");
   if(!el) return;
   const act = el.dataset.act;
-  const bid = el.dataset.bid;
+  const bid = el.dataset.bid || curBook();
 
-  if(act==="open"){ renderChapters(el.dataset.bid); }
-  else if(act==="home"){ renderHome(); }
-  else if(act==="chapters"){ renderChapters(bid); }
+  /* —— 首页 / 词书 —— */
+  if(act==="pick-book"){ renderBookPicker(); return; }
+  if(act==="set-book"){
+    state.curBook = el.dataset.book==="bio" ? "bio" : "cell";
+    saveState(); renderHome(); return;
+  }
+  if(act==="home"){
+    if(sess && sess.recheck) doRecheck(false);   // 离开前自动保持原判，不丢进度
+    else if(sess && sess.mode==="study") savePos();
+    renderHome(); return;
+  }
+  if(act==="undo"){ openRecheck(); return; }
+  if(act==="recheck-keep"){ doRecheck(false); return; }
+  if(act==="recheck-miss"){ doRecheck(true); return; }
+  if(act==="new"){ startNew(bid); return; }
+  if(act==="review"){ startReview(bid); return; }
 
-  else if(act==="study"){
-    const ci=+el.dataset.ci;
-    const plan=planChapter(bid,ci);
-    if(plan.empty){
-      renderChapterDone(bid, ci);
-      return;
-    }
-    const r=getRound(bid,ci);
-    // 断点续背：沿用原队列；新一轮：建立新队列
-    const ids = r && !r.done && r.ids && r.ids.length ? r.ids : plan.ids;
-    const pos = r && !r.done && r.ids && r.ids.length ? r.pos : 0;
-    if(!(r && !r.done && r.ids && r.ids.length)){
-      setRound(bid, ci, {ids:plan.ids, pos:0, done:false});
-    }
-    startSession(bid,"study",ids,{ci});
-    sess.pos = pos;
-    renderStudy();
-  }
-  else if(act==="review"){
-    // 复习 = 只复习答错 / 选不会的词（错词本），不含没学过的新词
-    const ids=wrongIds(bid);
-    if(ids.length===0){
-      sess={bid,mode:"review",queue:[],pos:0,answered:{},note:"没有需要复习的词啦 ✨ 答错或选不会的词会自动收进来。"};
-      // 空队列：直接显示完成页
-      renderEmptyReview(bid);
-      return;
-    }
-    // 还没答对过的（streak=0）排前面，反复错优先
-    ids.sort((a,c)=>{
-      const pa=getP(bid,a), pc=getP(bid,c);
-      return (pa.streak||0)-(pc.streak||0) || (pa.box-pc.box);
-    });
-    startSession(bid,"review",ids);
-  }
-  else if(act==="fav"){ renderFav(bid); }
-  else if(act==="wrong"){ renderWrong(bid); }
-  else if(act==="study-wrong"){
-    const ids=wrongIds(bid);
-    if(ids.length) startSession(bid,"wrong",ids);
-  }
-  else if(act==="study-fav"){
-    const ids=favIds(bid);
-    if(ids.length) startSession(bid,"fav",ids);
-  }
-  else if(act==="fav-remove"){
-    const id=el.dataset.id; const p=getP(bid,id); p.fav=false; state[bid].p[id]=p; saveState();
-    renderFav(bid);
-  }
-
-  else if(act==="choose"){
+  /* —— 背新词作答 —— */
+  if(act==="choose" || act==="skip"){
+    if(!sess || sess.mode==="review") return;
     const term=currentTerm(); const id=term._id; const b=sess.bid;
     if(sess.answered[id]) return;
-    const chosen=el.dataset.m;
-    const correct = (chosen===term.m);
-    sess.answered[id]={choice:+el.dataset.i, correct, skip:false};
-    record(b,id,correct);
-    savePos();
-    renderStudy();
+    const correct = act==="choose" ? (el.dataset.m===term.m) : false;
+    recordCard(id, { ph:"study", result:{ correct:correct, skip:act==="skip" },
+      beforeP:cp(state[b].p[id]), beforeNR:cp(state[b].newRound) });
+    if(act==="choose"){
+      sess.answered[id]={choice:+el.dataset.i, correct, skip:false};
+      record(b,id,correct);
+    } else {
+      sess.answered[id]={choice:-1, correct:false, skip:true};
+      record(b,id,false);
+    }
+    sess.cards[id].afterP = cp(state[b].p[id]);
+    savePos(); renderStudy(); return;
   }
-  else if(act==="skip"){
-    const term=currentTerm(); const id=term._id; const b=sess.bid;
-    if(sess.answered[id]) return;
-    sess.answered[id]={choice:-1, correct:false, skip:true};
-    record(b,id,false);
-    savePos();
-    renderStudy();
+  if(act==="fav-toggle"){
+    if(!sess) return;
+    const id = sess.mode==="review" ? sess.queue[0].id : currentTerm()._id;
+    const p=getP(sess.bid,id); p.fav=!p.fav; saveP(sess.bid,id,p);
+    (sess.mode==="review" ? renderReview() : renderStudy()); return;
   }
-  else if(act==="fav-toggle"){
-    const term=currentTerm(); const id=term._id; const b=sess.bid;
-    const p=getP(b,id); p.fav=!p.fav; state[b].p[id]=p; saveState();
-    renderStudy();
+  if(act==="next"){
+    if(sess && sess.mode!=="review" && sess.pos<sess.queue.length-1){ sess.pos++; savePos(); renderStudy(); }
+    return;
   }
-  else if(act==="prev"){
-    if(sess.pos>0){ sess.pos--; savePos(); renderStudy(); }
-  }
-  else if(act==="next"){
-    if(sess.pos<sess.queue.length-1){ sess.pos++; savePos(); renderStudy(); }
-  }
-  else if(act==="finish"){
-    finishRound();
-    renderDone();
+  if(act==="finish"){
+    if(sess && sess.mode!=="review"){ finishRound(); renderDone(); }
+    return;
   }
 
-  else if(act==="reset"){
-    if(confirm("确定清空两本书的全部学习进度（收藏、掌握度、复习计划）吗？此操作不可恢复。")){
-      state={cell:{p:{}},bio:{p:{}},cellVer:CELL_LIB_VER}; saveState(); renderHome();
-    }
+  /* —— 复习：阶段一 会 / 不会 —— */
+  if(act==="judge"){
+    if(!sess || sess.mode!=="review" || sess.ans) return;
+    sess.ans = { ph:"judge", know: el.dataset.v==="1" };
+    renderReview(); return;
+  }
+  /* —— 复习：记错词的强化选择题 —— */
+  if(act==="quiz-choose"){
+    if(!sess || sess.mode!=="review" || sess.ans) return;
+    const term=reviewTerm();
+    const correct = (el.dataset.m===term.m);
+    sess.ans = { ph:"quiz", correct, choice:+el.dataset.i };
+    renderReview(); return;
+  }
+  if(act==="rv-next" || act==="rv-wrong"){
+    reviewAdvance(act==="rv-next" ? "pass" : "wrong"); return;
+  }
+
+  /* —— 辅助页入口 —— */
+  if(act==="fav"){ renderFav(bid); return; }
+  if(act==="wrong"){ renderWrong(bid); return; }
+  if(act==="fav-remove"){
+    const p=getP(bid,el.dataset.id); p.fav=false; saveP(bid,el.dataset.id,p); renderFav(bid); return;
+  }
+  if(act==="study-wrong"){ const ids=wrongIds(bid); if(ids.length) startSession(bid,"wrong",ids,0); return; }
+  if(act==="study-fav"){ const ids=favIds(bid); if(ids.length) startSession(bid,"fav",ids,0); return; }
+  if(act==="study"){ startNew(bid); return; }
+  if(act==="chapters" || act==="open"){ renderHome(); return; }
+
+  if(act==="reset"){
+    const keep=state.curBook;
+    if(window.confirm && !confirm("确定清空两本书的全部学习进度（掌握度、复习计划、错词）吗？此操作不可恢复。")) return;
+    state={cell:{p:{}},bio:{p:{}},cellVer:CELL_LIB_VER,curBook:keep}; saveState(); renderHome();
   }
 });
 
-/* 复习模式无到期时注入提示条 */
-const _renderStudy = renderStudy;
-renderStudy = function(){
-  _renderStudy();
-  if(sess && sess.note){
-    const sc=app.querySelector(".scroll");
-    if(sc && !sc.querySelector(".banner")){
-      const b=document.createElement("div");
-      b.className="banner"; b.textContent="💡 "+sess.note;
-      sc.insertBefore(b, sc.firstChild);
-    }
-  }
-};
-
 renderHome();
+
 </script>
 </body>
 </html>
