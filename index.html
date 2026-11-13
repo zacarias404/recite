@@ -281,6 +281,11 @@
     background:var(--paper);border-top:1.5px dashed var(--line);}
   .footbar .btn{margin:0;height:54px;display:flex;align-items:center;justify-content:center;padding:0 12px;}
   .footbar .btn.rv-wrong{border-color:#e2a79c;color:var(--bad);}
+  /* 「记错了」已改判 / 「不会」已记下时，用状态条占位，底栏不跳动 */
+  .footbar .rvflag{flex:0 0 44%;height:54px;box-sizing:border-box;display:flex;align-items:center;
+    justify-content:center;text-align:center;padding:0 8px;font-size:12.5px;font-weight:800;
+    color:var(--bad);background:#fdf1ee;border:2px dashed #e2a79c;
+    border-radius:14px 5px 14px 5px/5px 14px 5px 14px;line-height:1.35;}
   /* 背新词：「我选不会」移进底栏，与下一题/完成同一行 */
   .footbar .btn.miss{flex:0 0 42%;background:#fffaf0;border:2px dashed var(--orange);
     color:var(--orange);font-size:14px;font-weight:800;}
@@ -305,6 +310,18 @@
   .slot > .answerbar,.slot > .defbox,.slot > .judgerow{margin:3px 0 0;}
   /* 揭晓答案后释义框上移，紧跟单词卡，别沉在页面中下部（纯视觉位移，不改文档流） */
   .slot > .defbox{transform:translateY(-44px);}
+  /* 记错强化选择题：单词卡压缩、选项区顶部对齐，4 个选项首屏可见，不用滑动 */
+  .wordcard.compact{min-height:100px;margin:8px 16px 0;padding:14px 20px 12px;}
+  .wordcard.compact .kicker{font-size:12px;letter-spacing:1.5px;}
+  .wordcard.compact .en{font-size:26px;margin:2px 0;}
+  .wordcard.compact .en.m{font-size:21px;}
+  .wordcard.compact .en.l{font-size:17px;}
+  .wordcard.compact .ph{font-size:12.5px;margin-bottom:0;}
+  .wordcard.compact .illcorner{width:40px;height:52px;right:12px;bottom:10px;}
+  .slot.quizslot{min-height:0;height:276px;margin-top:8px;justify-content:flex-start;}
+  .slot.quizslot > .opt{padding:13px 18px 13px 24px;font-size:16px;margin-bottom:8px;}
+  .slot.quizslot > .opt::before{width:22px;height:22px;line-height:22px;font-size:13px;}
+  .slot.quizslot > .answerbar{height:44px;}
   /* 选完后只剩一个展示框，高度固定，避免撑开页面 */
   .defbox.study-def{min-height:176px;display:flex;flex-direction:column;justify-content:center;}
   .defbox .extra{font-size:12px;color:var(--ink-soft);margin-top:10px;line-height:1.6;
@@ -412,6 +429,9 @@
     .defbox.study-def{min-height:196px;}
     .slot > .defbox{transform:translateY(-52px);}
     .rvstat{margin:12px 30px 0;}
+    .wordcard.compact{margin:8px 30px 0;padding:14px 28px 12px;}
+    .slot.quizslot{margin:8px 30px 0;}
+    .slot.quizslot > .opt{padding:13px 22px;}
     .pickerhead,.pickerlist,.pickernote{padding-left:40px;padding-right:40px;}
   }
 </style>
@@ -1416,7 +1436,8 @@ function renderRecheck(){
   if(!term){ doRecheck(false); return; }
   const card=sess.cards[id]||{}, r=card.result||{};
   const orig = sess.mode==="review"
-    ? (r.kind==="wrong" ? '↻ 当时标了「记错了」' : r.know===false ? '✗ 当时点了「不会」' : '✓ 当时点了「会」')
+    ? (r.kind==="wrong" ? (r.know===false ? '✗ 当时点了「不会」· 本轮自动强化' : '↻ 当时标了「记错了」')
+                        : r.know===false ? '✗ 当时点了「不会」' : '✓ 当时点了「会」')
     : (r.correct ? '✓ 当时答对了' : r.skip ? '✎ 当时选了「不会」' : '✗ 当时答错了');
   setAccent(bid); setView("sess");
   // 复习页原有统计条保留占位，进入/退出改判态不发生上下位移
@@ -1458,12 +1479,15 @@ function renderRecheck(){
     </div>`;
 }
 
-/* kind: "pass"(下一张) | "wrong"(记错了) */
-function reviewAdvance(kind){
+/* 只有「下一张」推进队列；「↻ 记错了」只改判（sess.ans.miss），不翻页。
+   点「不会」本身就是记错，无需再点一次按钮，本轮自动进强化循环。 */
+function reviewAdvance(){
   if(!sess || sess.mode!=="review" || !sess.queue.length || !sess.ans) return;
   const bid = sess.bid;
   const item = sess.queue.shift();
   const a = sess.ans;
+  const miss = !!a.miss || (item.ph==="judge" && a.know===false);
+  const kind = miss ? "wrong" : "pass";
   recordCard(item.id, { ph:item.ph,
     result:{ know:a.know, correct:a.correct, kind:kind },
     beforeP:cp(state[bid].p[item.id]) });
@@ -1476,7 +1500,7 @@ function reviewAdvance(kind){
       sess.queue.push({ id:item.id, ph:"quiz", miss:true, quizDone:false }); // 记错词必须先考选择题
       sess.loops++;
     }
-  } else { // quiz：只有「选对 + 下一张」才放行到 judge；选错 / 记错一律继续 quiz
+  } else { // quiz：只有「选对 + 没被改判 + 下一张」才放行到 judge
     if(kind==="pass" && a.correct) sess.queue.push({ id:item.id, ph:"judge", miss:true, quizDone:true });
     else sess.queue.push({ id:item.id, ph:"quiz", miss:true, quizDone:false });
     sess.loops++;
@@ -1686,6 +1710,11 @@ function renderReview(){
   const ans=sess.ans;
   const keys=['A','B','C','D'];
   let slot='', foot='', modeLabel='';
+  const isQuiz = item.ph==="quiz";
+  const statLine = '按遗忘曲线按天安排'
+    + (sess.overdue ? ' · 含往日顺延 <b>'+sess.overdue+'</b> 词' : '')
+    + (sess.loops ? ' · 循环巩固 '+sess.loops+' 次' : '');
+  const rvstat = isQuiz ? '' : '<div class="rvstat">'+statLine+'</div>';
 
   if(item.ph==="judge"){
     modeLabel = "纯判断 · 只想单词";
@@ -1696,16 +1725,23 @@ function renderReview(){
       </div>`;
       foot = `<div class="footbar"><div class="footnote">先自己想，再对答案 · 不显示释义与选项</div></div>`;
     } else {
+      const marked = !!ans.miss;                       // 已把「蒙对了」改判成记错了
+      const canMark = ans.know && !marked;             // 只有点「会」才需要改判；点「不会」已经是记错
+      const rst = marked ? '↻ 已改成「记错了」· 等会儿先考你选择题'
+        : ans.know ? '✓ 记得没错，继续保持'
+                   : '✗ 没想起来 · 本轮稍后先考你选择题';
       // 释义就地展开在原判断按钮的位置
       slot = `<div class="defbox">
         <div class="dk">DEFINITION · 释义</div>
         <div class="zh"><mark>${esc(term.m)}</mark></div>
         <div class="tip">${esc(term.e)} ${esc(term.p&&term.p!=='/'?term.p:'')}</div>
-        <div class="rst ${ans.know?'':'bad'}">${ans.know?'✓ 记得没错，继续保持':'✗ 记错了，等会儿再考你一次'}</div>
+        <div class="rst ${(ans.know&&!marked)?'':'bad'}">${rst}</div>
         <div class="extra"><b>✎ 小注</b> ${briefNote(term)}</div>
       </div>`;
       foot = `<div class="footbar">
-        <button class="btn sec rv-wrong" data-act="rv-wrong">↻ 记错了</button>
+        ${canMark
+          ? `<button class="btn sec rv-wrong" data-act="rv-mark-miss">↻ 记错了</button>`
+          : `<div class="rvflag">${marked?'↻ 已改判 · 不翻页':'✗ 已记下 · 稍后强化'}</div>`}
         <button class="btn primary" data-act="rv-next">下一张 ›</button>
       </div>`;
     }
@@ -1725,12 +1761,14 @@ function renderReview(){
         else cls+=' dim';
         slot += `<button class="${cls}" data-k="${keys[i]}" disabled>${esc(o)}</button>`;
       });
-      slot += `<div class="answerbar ${ans.correct?'':'bad'}">
+      slot += `<div class="answerbar ${(ans.correct&&!ans.miss)?'':'bad'}">
         <span class="lbl">释义</span><span class="val"><mark>${esc(term.m)}</mark></span>
-        <span class="st ${ans.correct?'ok':'bad'}">${ans.correct?'✓ 选对了，再默想一次':'✗ 再看一眼，待会儿重考'}</span></div>`;
+        <span class="st ${(ans.correct&&!ans.miss)?'ok':'bad'}">${ans.miss?'↻ 已改成记错了 · 再练一次':ans.correct?'✓ 选对了，再默想一次':'✗ 再看一眼，待会儿重考'}</span></div>`;
       foot = `<div class="footbar">
-        <button class="btn sec rv-wrong" data-act="rv-wrong">↻ 记错了</button>
-        <button class="btn primary" data-act="rv-next">${ans.correct?'进入回忆 ›':'再练一次 ›'}</button>
+        ${ans.miss
+          ? `<div class="rvflag">↻ 已改判 · 不翻页</div>`
+          : `<button class="btn sec rv-wrong" data-act="rv-mark-miss">↻ 记错了</button>`}
+        <button class="btn primary" data-act="rv-next">${(ans.correct&&!ans.miss)?'进入回忆 ›':'再练一次 ›'}</button>
       </div>`;
     }
   }
@@ -1746,9 +1784,9 @@ function renderReview(){
       <div class="prog"><span class="mode">${modeLabel}</span><span>已完成 ${sess.passed}/${sess.total}</span></div>
       <div class="bar"><i style="width:${Math.round(sess.passed/Math.max(sess.total,1)*100)}%"></i></div>
     </div>
-    <div class="rvstat">按遗忘曲线按天安排${sess.overdue?` · 含往日顺延 <b>${sess.overdue}</b> 词`:''}${sess.loops?` · 循环巩固 ${sess.loops} 次`:''}</div>
+    ${rvstat}
     <div class="scroll">
-      <div class="paper wordcard">
+      <div class="paper wordcard${isQuiz?' compact':''}">
         <span class="tape o"></span>
         <button class="star ${p.fav?'on':''}" data-act="fav-toggle" title="收藏">${p.fav?'★':'☆'}</button>
         <div class="kicker">${item.ph==='judge'?'Recall · 回忆':'Reinforce · 巩固'}</div>
@@ -1756,8 +1794,8 @@ function renderReview(){
         ${term.p&&term.p!=='/'?`<div class="ph">${esc(term.p)}</div>`:''}
         <span class="ill illcorner">${ILL[bid==='cell'?'petri':'dna']}</span>
       </div>
-      <div class="slot">${slot}</div>
-      <div class="spacer" style="height:12px"></div>
+      <div class="slot${isQuiz?' quizslot':''}">${slot}</div>
+      <div class="spacer" style="height:${isQuiz?4:12}px"></div>
     </div>
     ${foot}`;
 }
@@ -1959,9 +1997,14 @@ app.addEventListener("click", e=>{
     sess.ans = { ph:"quiz", correct, choice:+el.dataset.i };
     renderReview(); return;
   }
-  if(act==="rv-next" || act==="rv-wrong"){
-    reviewAdvance(act==="rv-next" ? "pass" : "wrong"); return;
+  /* 「记错了」只在当前卡片上改判，不动队列、不翻页；只有「下一张」推进 */
+  if(act==="rv-mark-miss" || act==="rv-wrong"){
+    if(!sess || sess.mode!=="review" || !sess.ans || sess.ans.miss) return;
+    if(sess.ans.ph==="judge" && sess.ans.know===false) return; // 「不会」已是记错，不再给这个按钮
+    sess.ans.miss = true;
+    renderReview(); return;
   }
+  if(act==="rv-next"){ reviewAdvance(); return; }
 
   /* —— 辅助页入口 —— */
   if(act==="fav"){ renderFav(bid); return; }
