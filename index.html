@@ -434,9 +434,151 @@
     .slot.quizslot > .opt{padding:13px 22px;}
     .pickerhead,.pickerlist,.pickernote{padding-left:40px;padding-right:40px;}
   }
+
+  /* ===== 每日统计卡 ===== */
+  .daycard{margin:16px 0 0;padding:14px 16px 12px;}
+  .daycard .dh{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .dhl{font-family:var(--hand-en);font-size:11.5px;letter-spacing:2px;color:var(--green-deep);font-weight:700;}
+  .dhr{font-size:11.5px;color:var(--orange);font-weight:700;}
+  .dnums{display:flex;gap:6px;margin-top:12px;}
+  .dn{flex:1;text-align:center;min-width:0;}
+  .dn b{display:block;font-size:21px;font-weight:900;color:var(--green-deep);line-height:1.1;}
+  .dn span{display:block;font-size:10.5px;color:var(--ink-soft);margin-top:3px;white-space:nowrap;}
+  .dn:nth-child(3) b{color:var(--orange);}
+  .week{display:flex;align-items:flex-end;gap:6px;height:62px;margin-top:12px;padding-top:6px;border-top:1.5px dashed var(--line);}
+  .wcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;}
+  .wbar{width:100%;max-width:26px;height:46px;display:flex;flex-direction:column;justify-content:flex-end;gap:1px;}
+  .wbar i{display:block;width:100%;border-radius:3px 3px 0 0;min-height:0;}
+  .wbar i.r{background:var(--orange);opacity:.75;}
+  .wbar i.n{background:var(--green);opacity:.85;}
+  .wcol .wl{font-size:9.5px;color:var(--ink-soft);margin-top:4px;white-space:nowrap;font-family:var(--hand-en);}
+  .wlegend{font-size:10px;color:var(--ink-soft);text-align:center;margin-top:5px;}
+  .wlegend b{color:var(--green-deep);}
+  .wlegend em{font-style:normal;color:var(--orange);}
+
+  /* ===== 词书词表浏览 ===== */
+  .wlsub{font-size:12px;color:var(--ink-soft);padding:4px 18px 0;}
+  .wlsearch{display:flex;gap:8px;margin:12px 18px 8px;}
+  .wlsearch input{flex:1;min-width:0;border:2px solid var(--line);border-radius:12px;background:var(--card);
+    padding:10px 12px;font-size:14px;color:var(--ink);font-family:inherit;outline:none;}
+  .wlsearch input:focus{border-color:var(--green);}
+  .wlsearch .btn{flex:0 0 84px;height:42px;font-size:13.5px;padding:0;}
+  .wllist{padding:2px 0 8px;}
+  .wlchapter{margin:10px 16px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .wlchapter .wlno{font-family:var(--hand-en);font-size:18px;color:var(--orange);font-weight:800;flex:0 0 28px;}
+  .wlchapter .wlc{flex:1;min-width:0;}
+  .wlchapter .wlc b{display:block;font-size:14px;font-weight:800;line-height:1.35;}
+  .wlchapter .wlc small{display:block;font-size:11px;color:var(--ink-soft);margin-top:3px;}
+  .wlbar{flex:0 0 62px;height:6px;border-radius:6px;background:#e7eee5;overflow:hidden;}
+  .wlbar i{display:block;height:100%;background:var(--green);}
+  .wlchapter .wlgo{font-size:20px;color:var(--green-deep);}
+  .wlrow{margin:8px 16px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
+  .wlrow .wle{flex:0 0 44%;min-width:0;}
+  .wlrow .wle b{display:block;font-size:13.5px;font-weight:800;word-break:break-word;line-height:1.3;}
+  .wlrow .wle small{display:block;font-size:10.5px;color:var(--ink-soft);font-family:var(--hand-en);margin-top:2px;}
+  .wlrow .wlm{flex:1;min-width:0;font-size:12.5px;line-height:1.35;}
+  .wlrow .wlm small{display:block;font-size:10px;color:#aab5a2;margin-top:2px;}
+  .wlst{flex:0 0 auto;font-size:10px;font-weight:800;padding:3px 7px;border-radius:10px;white-space:nowrap;}
+  .wlst.new{background:#eef1ea;color:#899487;}
+  .wlst.ok{background:#e8f4e9;color:var(--green-deep);}
+  .wlst.bad{background:#fbecea;color:var(--bad);}
+  .wlstar{flex:0 0 auto;border:none;background:none;font-size:19px;color:#c9d2c2;cursor:pointer;padding:2px 4px;}
+  .wlstar.on{color:var(--orange);}
+  .hfoot.plain{cursor:default;}
+  .dangerzone{margin:18px 16px;padding:16px;border:2px dashed #e2a79c;border-radius:14px;background:#fdf3f0;text-align:center;}
+  .dangerzone p{font-size:12px;color:var(--ink-soft);line-height:1.65;}
+  .dangerzone .btn{margin-top:10px;}
+
+  /* ===== 平板两侧装饰（手机完全隐藏，避免遮挡内容） ===== */
+  .paddeco{display:none;}
+  .homebg .bgill.d,.homebg .bgill.e{display:none;position:absolute;color:var(--green);}
+  @media (min-width:760px){
+    #app{z-index:1;}
+    .paddeco{display:block;position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+    .paddeco .pdill{position:absolute;color:var(--green);opacity:.13;}
+    .paddeco .pdill svg{width:100%;height:100%;}
+    .paddeco .pdill.a{left:clamp(6px,2.2vw,30px);top:14%;width:clamp(90px,10vw,140px);
+      height:clamp(150px,17vw,230px);transform:rotate(-8deg);}
+    .paddeco .pdill.b{right:clamp(6px,2vw,28px);top:11%;width:clamp(90px,10vw,140px);
+      height:clamp(90px,10vw,140px);color:var(--orange);opacity:.12;transform:rotate(9deg);}
+    .paddeco .pdill.c{right:clamp(14px,3vw,44px);bottom:12%;width:clamp(80px,9vw,120px);
+      height:clamp(80px,9vw,120px);opacity:.1;}
+    .paddeco .pdline{position:absolute;top:8%;bottom:8%;width:0;border-left:1.5px dashed #7ba08355;}
+    .paddeco .pdline.l{left:clamp(150px,15vw,210px);}
+    .paddeco .pdline.r{right:clamp(150px,15vw,210px);}
+    .paddeco .pdtag{position:absolute;font-family:var(--hand-en);font-size:10.5px;letter-spacing:2.5px;
+      color:var(--green-deep);opacity:.42;writing-mode:vertical-rl;white-space:nowrap;}
+    .paddeco .pdtag.l{left:clamp(158px,16vw,220px);top:18%;}
+    .paddeco .pdtag.r{right:clamp(158px,16vw,220px);bottom:20%;transform:rotate(180deg);color:var(--orange);}
+    .paddeco .pdnote{position:absolute;font-size:12.5px;color:var(--ink-soft);opacity:.5;
+      font-family:var(--hand-en);letter-spacing:1px;}
+    .paddeco .pdnote.l{left:clamp(10px,3vw,40px);bottom:22%;transform:rotate(-4deg);}
+    .paddeco .pdnote.r{right:clamp(10px,3vw,40px);top:46%;transform:rotate(4deg);}
+    .paddeco .pdframe{position:absolute;width:clamp(70px,8vw,110px);height:clamp(70px,8vw,110px);
+      border:1.5px solid #7ba08344;border-radius:50%;}
+    .paddeco .pdframe.l{left:clamp(18px,4vw,58px);top:62%;}
+    .paddeco .pdframe.r{right:clamp(18px,4vw,58px);top:30%;border-color:#e67a3844;}
+    /* 首页装饰在宽屏放大并补齐左右两侧 */
+    .homebg .bgill.a{width:150px;height:230px;left:2%;top:20%;opacity:.12;}
+    .homebg .bgill.b{width:150px;height:150px;right:3%;bottom:16%;opacity:.12;}
+    .homebg .bgill.c{width:120px;height:120px;right:9%;top:20%;opacity:.1;}
+    .homebg .bgill.d{display:block;width:110px;height:110px;left:6%;bottom:14%;color:var(--orange);opacity:.1;transform:rotate(-10deg);}
+    .homebg .bgill.e{display:block;width:96px;height:150px;right:2%;top:44%;opacity:.09;transform:rotate(8deg);}
+    .homebg .wash{width:460px;height:460px;right:-150px;top:-150px;}
+    .homebg .wash2{width:360px;height:360px;left:-120px;bottom:-110px;}
+    .daycard{padding:18px 22px 14px;}
+    .dn b{font-size:25px;}
+    .wlchapter{margin:12px 30px;padding:14px 18px;}
+    .wlrow{margin:9px 30px;}
+    .wlsearch{margin:14px 30px 10px;}
+    .wlsub{padding:4px 30px 0;}
+  }
+
+  /* 手机端首页收紧：统计卡 + 两个主按钮都留在首屏 */
+  @media (max-width:759px){
+    .hhero{margin-top:26px;}
+    .hhero h1{font-size:32px;margin:6px 0 8px;}
+    .quotecard{margin:14px 0 0;padding:13px 17px 11px;min-height:0;}
+    .quotecard .q{font-size:16.5px;}
+    .quotecard .qmark{font-size:30px;}
+    .quotecard .by{margin-top:5px;}
+    .daycard{margin:11px 0 0;padding:10px 13px 8px;}
+    .dnums{margin-top:7px;}
+    .dn b{font-size:19px;}
+    .dn span{font-size:10px;margin-top:2px;}
+    .week{height:42px;margin-top:7px;padding-top:4px;}
+    .wbar{height:30px;}
+    .wlegend{margin-top:3px;}
+    .bigbtns{margin-top:13px;gap:10px;}
+    .bigbtn{padding:12px 15px;}
+    .hfoot{padding-top:9px;}
+  }
+
+  /* 平板首页：稍收紧，两个主按钮完整落在首屏 */
+  @media (min-width:760px){
+    .hhero{margin-top:44px;}
+    .quotecard{margin-top:20px;}
+    .bigbtns{margin-top:18px;}
+    .hfoot{padding-top:12px;}
+  }
+
+  /* 词表页：固定视口，滚动只发生在列表内，底部导航常驻 */
+  #app.list{height:100vh;height:100dvh;overflow:hidden;}
+  #app.list .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;}
 </style>
 </head>
 <body>
+<div class="paddeco" aria-hidden="true">
+  <span class="pdline l"></span><span class="pdline r"></span>
+  <span class="pdframe l"></span><span class="pdframe r"></span>
+  <span class="pdill a"><svg viewBox="0 0 40 70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 4 C 30 16,10 22,26 34 C 10 46,30 52,14 66"/><path d="M26 4 C 10 16,30 22,14 34 C 30 46,10 52,26 66"/><path d="M15 10 H25"/><path d="M12 20 H28"/><path d="M12 32 H28"/><path d="M12 44 H28"/><path d="M15 54 H25"/></svg></span>
+  <span class="pdill b"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M30 8 C 36 12,36 20,30 24 C 24 20,24 12,30 8 Z"/><path d="M27 22 L 16 33"/><path d="M14 31 L 19 36"/><path d="M11 40 L 33 40"/><path d="M22 17 L 18 21"/></svg></span>
+  <span class="pdill c"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 6 H29 M21 6 V20 L12 40 a3 3 0 0 0 3 4 H33 a3 3 0 0 0 3 -4 L27 20 V6"/><path d="M16 32 H32" stroke-width="2.4"/></svg></span>
+  <span class="pdtag l">CELL · BIOCHEM · GENETICS</span>
+  <span class="pdtag r">STUDY NOTES / FIELD BOOK</span>
+  <span class="pdnote l">✎ 每天记一点点</span>
+  <span class="pdnote r">keep going ↗</span>
+</div>
 <div id="app"></div>
 <script>
 /* ============ 线描生物插画（手绘风） ============ */
@@ -1124,24 +1266,43 @@ const DATA = {
 
 /* ============ 状态（localStorage 持久化，两本书独立） ============ */
 const STORE_KEY = "bioFlashcardsState_v1";
+const BACKUP_KEY = "bioFlashcardsState_v1_bak";   // 主记录损坏时的兜底副本
 const CELL_LIB_VER = 2;   // 细胞生物学词库版本
 let state = loadState();
-function loadState(){
-  try{
-    const s = JSON.parse(localStorage.getItem(STORE_KEY));
-    if(s && s.cell && s.bio){
-      // 词库整体替换后，旧 cell 词条 id 会错位：只清空细胞进度，生化原样保留
-      if(s.cellVer !== CELL_LIB_VER){
-        s.cell = {p:{}};
-        s.cellVer = CELL_LIB_VER;
-        localStorage.setItem(STORE_KEY, JSON.stringify(s));
-      }
-      return s;
-    }
-  }catch(e){}
-  return { cell:{p:{}}, bio:{p:{}}, cellVer:CELL_LIB_VER };
+function validState(s){
+  return !!(s && typeof s==="object" && s.cell && typeof s.cell==="object"
+    && s.bio && typeof s.bio==="object");
 }
-function saveState(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+function loadState(){
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem(STORE_KEY)); }catch(e){}
+  if(!validState(s)){
+    try{ s = JSON.parse(localStorage.getItem(BACKUP_KEY)); }catch(e){}
+  }
+  if(!validState(s)) return { cell:{p:{}}, bio:{p:{}}, cellVer:CELL_LIB_VER, daily:{}, curBook:"cell" };
+  // 只补缺失的局部字段，绝不因为一处损坏就丢掉整本词书的进度
+  if(!s.cell.p || typeof s.cell.p!=="object") s.cell.p={};
+  if(!s.bio.p  || typeof s.bio.p !=="object") s.bio.p={};
+  if(s.cellVer !== CELL_LIB_VER){
+    // 只有 id 明显属于旧词库才迁移，避免版本号意外丢失时把进度误清空
+    const keys=Object.keys(s.cell.p);
+    if(keys.length && !/^cell_\d+_\d+$/.test(keys[0])) s.cell.p={};
+    s.cellVer = CELL_LIB_VER;
+  }
+  if(!s.daily || typeof s.daily!=="object") s.daily={};
+  if(s.curBook!=="cell" && s.curBook!=="bio") s.curBook="cell";
+  return s;
+}
+function saveState(){
+  try{
+    const raw = JSON.stringify(state);
+    // 体积异常时拒绝落盘，避免任何意外膨胀把配额撑爆、把进度写坏
+    if(raw.length > 1024*1024) return;
+    localStorage.setItem(STORE_KEY, raw);
+    // 每次顺手写一份副本：主记录被浏览器写坏 / 清掉时还能整本恢复
+    try{ localStorage.setItem(BACKUP_KEY, raw); }catch(e){}
+  }catch(e){}
+}
 /* 当前词书：记住上次选择，不主动重选就一直沿用 */
 if(state.curBook!=="cell" && state.curBook!=="bio"){ state.curBook="cell"; saveState(); }
 function curBook(){ return DATA[state.curBook] ? state.curBook : "cell"; }
@@ -1314,10 +1475,18 @@ function savePos(){
   if(!sess || sess.mode!=="study") return;
   // 连「已答了哪题 / 选了什么 / 选项顺序 / 可改判卡片」一起存，
   // 这样答完不翻页就退出，回来仍是已答状态，不会当成没背过。
+  const q=sess.queue, pos=sess.pos;
+  const order=(sess.cardsOrder||[]).slice(-12);
+  const cards={};
+  order.forEach(id=>{ if(sess.cards && sess.cards[id]) cards[id]=cp(sess.cards[id]); });
+  // 选项缓存只留当前题附近：刷新前后当前题顺序仍完全一致，长会话不再线性膨胀
+  const opts={};
+  for(let i=Math.max(0,pos-3); i<=Math.min(q.length-1,pos+3); i++){
+    const id=q[i]; if(sess.opts && sess.opts[id]) opts[id]=cp(sess.opts[id]);
+  }
   state[sess.bid].newRound = {
-    ids:sess.queue, pos:sess.pos, done:false,
-    answered:cp(sess.answered), opts:cp(sess.opts),
-    cards:cp(sess.cards), cardsOrder:cp(sess.cardsOrder)
+    ids:q, pos, done:false,
+    answered:cp(sess.answered), opts, cards, cardsOrder:order
   };
   saveState();
 }
@@ -1360,7 +1529,11 @@ function recordCard(id, c){
   if(!sess.cardsOrder) sess.cardsOrder=[];
   sess.cards[id]=c;
   sess.cardsOrder.push(id);            // 末项 = 最近完成的一题
-  if(sess.cardsOrder.length>300) sess.cardsOrder.shift();
+  // 撤回只可能用到最近几张，长会话里不再无限累积
+  while(sess.cardsOrder.length>12){
+    const old=sess.cardsOrder.shift();
+    if(!sess.cardsOrder.includes(old)) delete sess.cards[old];
+  }
 }
 function canUndo(){
   if(!sess || sess.recheck) return false;
@@ -1386,7 +1559,7 @@ function openRecheck(){
   sess.recheck={ id, restore:snapSess() };
   if(card.beforeP===undefined) delete state[sess.bid].p[id];
   else state[sess.bid].p[id]=cp(card.beforeP);     // 撤销该题写入的学习记录
-  if(sess.mode!=="review" && card.beforeNR!==undefined) state[sess.bid].newRound=cp(card.beforeNR);
+  // newRound 由 doRecheck() 的会话快照统一恢复，这里不再整体覆盖
   saveState();
   renderRecheck();
   return true;
@@ -1491,6 +1664,7 @@ function reviewAdvance(){
   recordCard(item.id, { ph:item.ph,
     result:{ know:a.know, correct:a.correct, kind:kind },
     beforeP:cp(state[bid].p[item.id]) });
+  logDay(bid,"rev", item.ph==="judge" ? (a.know===true && !a.miss) : !!a.correct);
   if(item.ph==="judge"){
     if(kind==="pass"){
       reviewPass(bid, item.id, a.know);
@@ -1507,6 +1681,7 @@ function reviewAdvance(){
   }
   if(sess.cards[item.id]) sess.cards[item.id].afterP = cp(state[bid].p[item.id]);
   sess.ans = null;
+  saveState();          // 复习会话不走 savePos，日志需要单独落盘
   renderReview();
 }
 
@@ -1542,6 +1717,61 @@ function pickQuote(){
 }
 
 /* ============ 首页 ============ */
+/* ---------- 每日学习日志：按天 + 按词书记「新学 / 复习 / 答对」，只留最近 30 天 ---------- */
+function logDay(bid, kind, correct){
+  const d = today();
+  if(!state.daily || typeof state.daily!=="object") state.daily={};
+  const keys=Object.keys(state.daily).map(Number).sort((a,b)=>a-b);
+  while(keys.length>=30) delete state.daily[keys.shift()];
+  const e = state.daily[d] || (state.daily[d]={});
+  const b = e[bid] || (e[bid]={n:0,r:0,ok:0});
+  if(kind==="new") b.n++; else b.r++;
+  if(correct) b.ok++;
+}
+function dayStat(bid, d){
+  const e = state.daily && state.daily[d||today()] && state.daily[d||today()][bid];
+  return { n:(e&&e.n)||0, r:(e&&e.r)||0, ok:(e&&e.ok)||0 };
+}
+function streakDays(bid){
+  let n=0;
+  for(let i=0;i<400;i++){
+    const e=state.daily && state.daily[today()-i] && state.daily[today()-i][bid];
+    const act=e ? (e.n+e.r) : 0;
+    if(act>0) n++;
+    else if(i>0) break;          // 今天还没开始学，不算断签
+  }
+  return n;
+}
+function weekBarsHtml(bid){
+  const t=today(), vals=[];
+  for(let i=6;i>=0;i--){
+    const d=t-i, e=state.daily&&state.daily[d]&&state.daily[d][bid];
+    const v={ n:(e&&e.n)||0, r:(e&&e.r)||0 };
+    const dt=new Date(d*86400000);
+    v.lbl = i===0 ? '今' : (dt.getUTCMonth()+1)+'/'+dt.getUTCDate();
+    vals.push(v);
+  }
+  const max=Math.max(1,...vals.map(v=>v.n+v.r));
+  return vals.map(v=>{
+    const nh=Math.round(v.n/max*44), rh=Math.round(v.r/max*44);
+    return `<div class="wcol"><div class="wbar" title="新学 ${v.n} · 复习 ${v.r}"><i class="r" style="height:${rh}px"></i><i class="n" style="height:${nh}px"></i></div><span class="wl">${v.lbl}</span></div>`;
+  }).join('');
+}
+function dayCardHtml(bid){
+  const d=dayStat(bid);
+  return `<div class="paper daycard">
+    <div class="dh"><span class="dhl">TODAY · 今日</span><span class="dhr">连续打卡 ${streakDays(bid)} 天</span></div>
+    <div class="dnums">
+      <div class="dn"><b>${d.n}</b><span>今日新学</span></div>
+      <div class="dn"><b>${d.r}</b><span>今日复习</span></div>
+      <div class="dn"><b>${d.ok}</b><span>今日答对</span></div>
+      <div class="dn"><b>${masteryOf(bid)}%</b><span>全书掌握</span></div>
+    </div>
+    <div class="week">${weekBarsHtml(bid)}</div>
+    <div class="wlegend">近 7 天 · <b>绿=新学</b> / <em>橘=复习</em></div>
+  </div>`;
+}
+
 function renderHome(){
   sess = null;
   setView("home");
@@ -1555,11 +1785,16 @@ function renderHome(){
       <span class="bgill a">${ILL.dna}</span>
       <span class="bgill b">${ILL.chloro}</span>
       <span class="bgill c">${ILL.microscope}</span>
+      <span class="bgill d">${ILL.petri}</span>
+      <span class="bgill e">${ILL.leaf}</span>
     </div>
     <div class="homewrap">
       <div class="hometop">
         <span class="htag">DAILY · 每日一词</span>
-        <button class="pickbtn" data-act="pick-book">选词书</button>
+        <div style="display:flex;gap:8px">
+          <button class="pickbtn" data-act="wordlist" data-bid="${bid}">词表</button>
+          <button class="pickbtn" data-act="pick-book">选词书</button>
+        </div>
       </div>
 
       <div class="hhero">
@@ -1576,6 +1811,8 @@ function renderHome(){
         <div class="by">— ${esc(q.by)}</div>
       </div>
 
+      ${dayCardHtml(bid)}
+
       <div class="bigbtns">
         <button class="bigbtn primary" data-act="new" data-bid="${bid}">
           <span class="ic"><span class="ill" style="width:26px;height:26px">${ILL.leaf}</span></span>
@@ -1589,7 +1826,7 @@ function renderHome(){
         </button>
       </div>
 
-      <div class="hfoot" data-act="reset">— 清空全部学习进度 —</div>
+      <div class="hfoot plain">进度自动保存在本机 · 换词书不会丢</div>
     </div>`;
 }
 
@@ -1610,7 +1847,7 @@ function renderBookPicker(){
         <span class="ck">${sel?'✓ 当前':''}</span>
       </div>`;
   }
-  const bid=curBook();
+  const bid=curBook(), b=DATA[bid];
   app.innerHTML = `
     <div class="pickerhead">
       <button class="back" data-act="home">‹</button>
@@ -1622,10 +1859,97 @@ function renderBookPicker(){
       两本书的进度、错词和复习计划各自独立，互不影响。
     </div>
     <div class="minorlinks">
+      <span data-act="wordlist" data-bid="${bid}">浏览词表（${b._terms.length} 词）</span>
       <span data-act="fav" data-bid="${bid}">收藏夹</span>
       <span data-act="wrong" data-bid="${bid}">错词本</span>
     </div>
+    <div class="dangerzone">
+      <p>需要清空全部学习进度？<br>会先进二次确认页，不怕误点。</p>
+      <div class="btn sec" data-act="reset">管理进度 ›</div>
+    </div>
     <div class="spacer"></div>`;
+}
+
+/* ============ 词书词表：按章节浏览 / 关键词查找 / 直接收藏 ============ */
+let wlView = { bid:"cell", ci:null, kw:"" };
+function wordRowsHtml(bid, terms){
+  return terms.map(t=>{
+    const p=getP(bid,t._id);
+    const fresh=!p.seen && !(p.c+p.w) && !p.fav;
+    const st=fresh?'未学':(p.wrong?'错词':'已学');
+    const cls=fresh?'new':(p.wrong?'bad':'ok');
+    return `<div class="paper wlrow">
+      <div class="wle"><b>${esc(t.e)}</b><small>${esc(t.p&&t.p!=='/'?t.p:'')}</small></div>
+      <div class="wlm">${esc(t.m)}<small>${esc(t._ch||'')}</small></div>
+      <span class="wlst ${cls}">${st}</span>
+      <button class="wlstar ${p.fav?'on':''}" data-act="wl-fav" data-bid="${bid}" data-id="${t._id}" title="收藏">${p.fav?'★':'☆'}</button>
+    </div>`;
+  }).join('');
+}
+function renderWordList(bid, ci, kw){
+  sess=null; setView("list"); setAccent(bid);
+  const b=DATA[bid], q=String(kw||"").trim();
+  wlView={ bid, ci:ci==null?null:ci, kw:q };
+  let title='', sub='', body='', backAct='home';
+  if(q){
+    const low=q.toLowerCase();
+    const hits=b._terms.filter(t=>t.e.toLowerCase().indexOf(low)>=0 || String(t.m).indexOf(q)>=0);
+    title='查找结果'; sub=`「${esc(q)}」· 命中 ${hits.length} 词${hits.length>60?'（只列前 60 条）':''}`;
+    body=hits.length ? wordRowsHtml(bid,hits.slice(0,60)) : `<div class="center-note">没找到这个词，换个关键词试试。</div>`;
+    backAct='wl-back';
+  } else if(ci==null){
+    title='词书词表'; sub=`${b.title} · ${b._terms.length} 词 / ${b.chapters.length} 章 · 点章节看全部单词`;
+    body=b.chapters.map((ch,i)=>{
+      const n=ch.terms.length, m=ch.terms.filter(t=>isMastered(bid,t._id)).length;
+      return `<div class="paper wlchapter" data-act="wl-chapter" data-bid="${bid}" data-ci="${i}">
+        <span class="wlno">${String(i+1).padStart(2,'0')}</span>
+        <span class="wlc"><b>${esc(ch.name)}</b><small>${n} 词 · 已掌握 ${m}</small></span>
+        <span class="wlbar"><i style="width:${n?Math.round(m/n*100):0}%"></i></span>
+        <span class="wlgo">›</span></div>`;
+    }).join('');
+  } else {
+    const ch=b.chapters[ci];
+    if(!ch){ return renderWordList(bid,null,''); }
+    title=ch.name; sub=`${ch.terms.length} 词 · 点 ☆ 可直接收藏`;
+    body=wordRowsHtml(bid,ch.terms);
+    backAct='wl-back';
+  }
+  app.innerHTML=`
+    <div class="pickerhead">
+      <button class="back" data-act="${backAct}" data-bid="${bid}">‹</button>
+      <div class="title" style="font-size:18px;font-weight:800">${esc(title)}</div>
+      <button class="pickbtn" data-act="pick-book">换词书</button>
+    </div>
+    <div class="wlsub">${sub}</div>
+    <div class="wlsearch">
+      <input id="wlq" type="text" placeholder="搜英文或中文释义…" value="${esc(q)}">
+      <button class="btn primary" data-act="wl-search" data-bid="${bid}">查找</button>
+    </div>
+    <div class="scroll"><div class="wllist">${body}</div><div class="spacer"></div></div>
+    <div class="minorlinks">
+      <span data-act="home">返回首页</span>
+      <span data-act="wl-back" data-bid="${bid}">全部章节</span>
+      <span data-act="fav" data-bid="${bid}">收藏夹</span>
+    </div>`;
+}
+
+/* ============ 清空进度：页面内二次确认，避免误触 ============ */
+function renderResetConfirm(){
+  sess=null; setView("");
+  app.innerHTML=`
+    <div class="pickerhead">
+      <button class="back" data-act="pick-book">‹</button>
+      <div class="title" style="font-size:18px;font-weight:800">清空学习进度</div>
+    </div>
+    <div class="scroll"><div class="done">
+      <h2>确定要清空吗？</h2>
+      <p>两本书的掌握度、复习计划、错词、收藏和每日统计都会删除，<b>无法恢复</b>。</p>
+      <p style="font-size:13px">只是想换词书？点左上「‹」回去用「选词书」就行，进度不会丢。</p>
+      <div class="home-actions" style="max-width:360px;margin:18px auto 0;flex-direction:column;gap:10px">
+        <div class="paper btn sec" data-act="pick-book">再想想</div>
+        <div class="btn danger" data-act="reset-yes">确认清空</div>
+      </div>
+    </div></div>`;
 }
 
 /* ============ 背新词页（选项区就地展开 + 底栏固定） ============ */
@@ -1956,8 +2280,10 @@ app.addEventListener("click", e=>{
     const term=currentTerm(); const id=term._id; const b=sess.bid;
     if(sess.answered[id]) return;
     const correct = act==="choose" ? (el.dataset.m===term.m) : false;
+    // 只存作答前的进度；绝不把整轮 newRound 快照塞进卡片，
+    // 否则快照里又套着上一轮卡片 → 每题翻倍，几十题就会撑爆 localStorage。
     recordCard(id, { ph:"study", result:{ correct:correct, skip:act==="skip" },
-      beforeP:cp(state[b].p[id]), beforeNR:cp(state[b].newRound) });
+      beforeP:cp(state[b].p[id]) });
     if(act==="choose"){
       sess.answered[id]={choice:+el.dataset.i, correct, skip:false};
       record(b,id,correct);
@@ -1965,8 +2291,9 @@ app.addEventListener("click", e=>{
       sess.answered[id]={choice:-1, correct:false, skip:true};
       record(b,id,false);
     }
+    logDay(b,"new",correct);
     sess.cards[id].afterP = cp(state[b].p[id]);
-    savePos(); renderStudy(); return;
+    renderStudy(); return;   // renderStudy() 末尾统一落盘，避免一次点击序列化两遍
   }
   if(act==="fav-toggle"){
     if(!sess) return;
@@ -2017,10 +2344,24 @@ app.addEventListener("click", e=>{
   if(act==="study"){ startNew(bid); return; }
   if(act==="chapters" || act==="open"){ renderHome(); return; }
 
-  if(act==="reset"){
+  if(act==="wordlist"){ renderWordList(bid,null,""); return; }
+  if(act==="wl-back"){ renderWordList(bid,null,""); return; }
+  if(act==="wl-chapter"){ renderWordList(bid,+el.dataset.ci,""); return; }
+  if(act==="wl-search"){
+    const inp=document.getElementById ? document.getElementById("wlq") : null;
+    const kw=inp && inp.value!=null ? String(inp.value).trim() : "";
+    renderWordList(bid,null,kw); return;
+  }
+  if(act==="wl-fav"){
+    const p=getP(bid,el.dataset.id); p.fav=!p.fav; saveP(bid,el.dataset.id,p);
+    renderWordList(bid, wlView.ci, wlView.kw); return;
+  }
+  if(act==="reset"){ renderResetConfirm(); return; }
+  if(act==="reset-yes"){
     const keep=state.curBook;
-    if(window.confirm && !confirm("确定清空两本书的全部学习进度（掌握度、复习计划、错词）吗？此操作不可恢复。")) return;
-    state={cell:{p:{}},bio:{p:{}},cellVer:CELL_LIB_VER,curBook:keep}; saveState(); renderHome();
+    state={cell:{p:{}},bio:{p:{}},cellVer:CELL_LIB_VER,curBook:keep,daily:{}};
+    try{ localStorage.removeItem(BACKUP_KEY); }catch(e){}
+    saveState(); renderHome();
   }
 });
 
